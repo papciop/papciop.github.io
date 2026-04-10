@@ -2,90 +2,45 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Szach Mat - Vantablack Edition</title>
+    <title>Szach Mat - Secret Login</title>
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-            background-color: #000000; /* Totalny mrok */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Courier New', Courier, monospace;
+            margin: 0; padding: 0; height: 100%; overflow: hidden;
+            background-color: #000; display: flex; justify-content: center;
+            align-items: center; font-family: 'Courier New', Courier, monospace;
         }
-
-        .plansza-kontener {
-            position: relative;
-            width: 90vmin;
-            height: 90vmin;
-        }
-
+        .plansza-kontener { position: relative; width: 90vmin; height: 90vmin; }
         .szachownica {
-            width: 100%;
-            height: 100%;
-            display: grid;
-            grid-template-columns: repeat(8, 1fr);
-            grid-template-rows: repeat(8, 1fr);
-            /* Delikatna ramka całej planszy */
+            width: 100%; height: 100%; display: grid;
+            grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);
             border: 1px solid #333;
         }
-
         .pole {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 8vmin;
-            /* Cienka linia wokół każdego pola, żeby było widać siatkę */
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 8vmin; border: 1px solid rgba(255, 255, 255, 0.03);
         }
-
-        /* Naprzemienne pola - zamiast szarości, dajemy bardzo głęboki grafit */
         .szachownica div:nth-child(odd) { background-color: #050505; }
-        .szachownica div:nth-child(even) { background-color: #000000; }
-
-        /* Figury BIAŁE - Teraz będą świecić jak neony */
+        .szachownica div:nth-child(even) { background-color: #000; }
+        
         .biale { 
-            color: #ffffff; 
-            filter: drop-shadow(0 0 8px #fff) drop-shadow(0 0 15px rgba(255,255,255,0.5));
-            z-index: 5;
+            color: #fff; filter: drop-shadow(0 0 8px #fff); z-index: 5; 
         }
-
-        /* Figury CZARNE - Muszą być widoczne, więc damy im ciemny błękit/szary */
         .czarne { 
-            color: #444444; 
-            text-shadow: 0 0 5px #000;
+            color: #444; text-shadow: 0 0 5px #000; cursor: default;
         }
+        /* Dodajemy kursor rączki dla króla, żeby było wiadomo, że można w niego kliknąć */
+        #czarny-krol { cursor: pointer; transition: transform 0.2s; }
+        #czarny-krol:hover { transform: scale(1.1); color: #666; }
 
-        /* Napis SZACH MAT */
         .dym-napis {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ffffff;
-            font-size: 14vmin;
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2vmin;
-            z-index: 10;
-            pointer-events: none;
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #fff; font-size: 14vmin; font-weight: 900; text-transform: uppercase;
+            letter-spacing: 2vmin; z-index: 10; pointer-events: none;
             animation: dymienie 4s infinite alternate ease-in-out;
         }
-
         @keyframes dymienie {
-            0% {
-                text-shadow: 0 0 20px #fff;
-                opacity: 0.8;
-                filter: blur(0px);
-            }
-            100% {
-                text-shadow: 0 -20px 40px #fff, 0 -40px 60px #888, 0 -60px 100px #444;
-                opacity: 0.2;
-                filter: blur(4px);
-                transform: translate(-50%, -65%) scale(1.2);
-            }
+            0% { text-shadow: 0 0 20px #fff; opacity: 0.8; }
+            100% { text-shadow: 0 -20px 40px #fff; opacity: 0.2; transform: translate(-50%, -65%) scale(1.2); }
         }
     </style>
 </head>
@@ -93,18 +48,34 @@
 
     <div class="plansza-kontener">
         <div class="dym-napis">SZACH MAT</div>
-
         <div class="szachownica">
-            <div class="pole czarne">♜</div><div class="pole czarne">♞</div><div class="pole czarne"></div><div class="pole czarne"></div><div class="pole czarne">♚</div><div class="pole czarne"></div><div class="pole czarne">♞</div><div class="pole czarne">♜</div>
-            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
+            <div class="pole czarne">♜</div><div class="pole czarne">♞</div><div class="pole czarne">♝</div><div class="pole czarne">♛</div>
+            <div class="pole czarne" id="czarny-krol">♚</div>
+            <div class="pole czarne">♝</div><div class="pole czarne">♞</div><div class="pole czarne">♜</div>
+            
+            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
             <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
             <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
             <div class="pole"></div><div class="pole"></div><div class="pole biale">♗</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
             <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
             <div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div>
-            <div class="pole biale">♖</div><div class="pole biale">♘</div><div class="pole biale">♗</div><div class="pole biale"></div><div class="pole biale">♔</div><div class="pole"></div><div class="pole biale">♘</div><div class="pole biale">♖</div>
+            <div class="pole biale">♖</div><div class="pole biale">♘</div><div class="pole"></div><div class="pole"></div><div class="pole biale">♔</div><div class="pole biale">♗</div><div class="pole biale">♘</div><div class="pole biale">♖</div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('czarny-krol').onclick = function() {
+            let haslo = prompt("Podaj tajne hasło:");
+            
+            if (haslo === "papcio") {
+                alert("Zalogowano pomyślnie! Witaj, Mistrzu.");
+                // Tutaj możesz np. przekierować na inną stronę:
+                // window.location.href = "https://google.com";
+            } else {
+                alert("Błędne hasło! Król pozostaje niewzruszony.");
+            }
+        };
+    </script>
 
 </body>
 </html>
