@@ -2,35 +2,44 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Szach Mat - Poprawny Szewski</title>
+    <title>Szach Mat - High Contrast</title>
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
             background-color: #000; display: flex; justify-content: center;
             align-items: center; font-family: 'Courier New', Courier, monospace;
         }
-        .plansza-kontener { position: relative; width: 90vmin; height: 90vmin; }
+        .plansza-kontener { position: relative; width: 92vmin; height: 92vmin; }
         .szachownica {
             width: 100%; height: 100%; display: grid;
             grid-template-columns: repeat(8, 1fr); grid-template-rows: repeat(8, 1fr);
-            border: 1px solid #333;
+            border: 2px solid #444;
         }
         .pole {
             display: flex; justify-content: center; align-items: center;
-            font-size: 8vmin; border: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 7.5vmin; border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        /* Ciemna stylistyka pól */
-        .szachownica div:nth-child(odd) { background-color: #050505; }
-        .szachownica div:nth-child(even) { background-color: #000; }
         
+        /* Pola: czarne i bardzo ciemny grafit */
+        .szachownica div:nth-child(odd) { background-color: #0a0a0a; }
+        .szachownica div:nth-child(even) { background-color: #000; }
+
+        /* BIAŁE FIGURY - Złoty Neon (teraz ich nie przegapisz) */
         .biale { 
-            color: #fff; filter: drop-shadow(0 0 8px #fff); z-index: 5; 
+            color: #fff; 
+            filter: drop-shadow(0 0 5px #ffd700) drop-shadow(0 0 15px #b8860b);
+            font-weight: bold;
+            z-index: 5;
         }
+
+        /* CZARNE FIGURY - Stalowy Błękit (odcinają się od czarnego tła) */
         .czarne { 
-            color: #444; text-shadow: 0 0 5px #000;
+            color: #5d8aa8; 
+            filter: drop-shadow(0 0 3px #000);
         }
-        #czarny-krol { cursor: pointer; transition: transform 0.2s; }
-        #czarny-krol:hover { transform: scale(1.1); color: #666; }
+
+        #czarny-krol { cursor: pointer; transition: 0.2s; }
+        #czarny-krol:hover { transform: scale(1.2); color: #fff; }
 
         .dym-napis {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
@@ -39,8 +48,8 @@
             animation: dymienie 4s infinite alternate ease-in-out;
         }
         @keyframes dymienie {
-            0% { text-shadow: 0 0 20px #fff; opacity: 0.8; }
-            100% { text-shadow: 0 -20px 40px #fff; opacity: 0.2; transform: translate(-50%, -65%) scale(1.2); }
+            0% { text-shadow: 0 0 20px #fff; opacity: 0.7; }
+            100% { text-shadow: 0 -30px 50px #fff, 0 -50px 80px #ffd700; opacity: 0.2; transform: translate(-50%, -60%) scale(1.1); }
         }
     </style>
 </head>
@@ -51,10 +60,6 @@
         <div class="szachownica">
             <div class="pole czarne">♜</div><div class="pole"></div><div class="pole czarne">♝</div><div class="pole czarne">♛</div><div class="pole czarne" id="czarny-krol">♚</div><div class="pole czarne">♝</div><div class="pole"></div><div class="pole czarne">♜</div>
             
-            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
+            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
             
-            <div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div>
-            
-            <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            
-            <div class="pole"></div><div class="pole"></div><div class
+            <div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="
