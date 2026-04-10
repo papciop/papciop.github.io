@@ -29,9 +29,21 @@
         #czarny-krol { cursor: pointer; transition: 0.2s; }
         #czarny-krol:hover { transform: scale(1.2); color: #fff; }
         .dym-napis {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #fff; font-size: 14vmin; font-weight: 900; text-transform: uppercase;
-            letter-spacing: 2vmin; z-index: 10; pointer-events: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-size: 11vmin; /* Nieco mniejszy, żeby na pewno mieścił się w rzędzie */
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2vmin;
+            z-index: 10;
+            pointer-events: none;
+            
+            /* TO JEST KLUCZ: zakaz łamania linii */
+            white-space: nowrap; 
+            
             animation: dymienie 4s infinite alternate ease-in-out;
         }
         @keyframes dymienie {
@@ -66,7 +78,7 @@
     <script>
         document.getElementById('czarny-krol').onclick = function() {
             let h = prompt("Podaj tajne hasło:");
-            if (h === "papcio") alert("Zalogowano pomyślnie!");
+            if (h === "papcio") alert("Zalogowano pomyślnie KRÓLEWICZU!!!");
             else alert("Błąd!");
         };
     </script>
