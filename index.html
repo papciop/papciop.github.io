@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Szach Mat - Secret Login</title>
+    <title>Szach Mat - Poprawny Szewski</title>
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
@@ -19,6 +19,7 @@
             display: flex; justify-content: center; align-items: center;
             font-size: 8vmin; border: 1px solid rgba(255, 255, 255, 0.03);
         }
+        /* Ciemna stylistyka pól */
         .szachownica div:nth-child(odd) { background-color: #050505; }
         .szachownica div:nth-child(even) { background-color: #000; }
         
@@ -26,9 +27,8 @@
             color: #fff; filter: drop-shadow(0 0 8px #fff); z-index: 5; 
         }
         .czarne { 
-            color: #444; text-shadow: 0 0 5px #000; cursor: default;
+            color: #444; text-shadow: 0 0 5px #000;
         }
-        /* Dodajemy kursor rączki dla króla, żeby było wiadomo, że można w niego kliknąć */
         #czarny-krol { cursor: pointer; transition: transform 0.2s; }
         #czarny-krol:hover { transform: scale(1.1); color: #666; }
 
@@ -49,33 +49,12 @@
     <div class="plansza-kontener">
         <div class="dym-napis">SZACH MAT</div>
         <div class="szachownica">
-            <div class="pole czarne">♜</div><div class="pole czarne">♞</div><div class="pole czarne">♝</div><div class="pole czarne">♛</div>
-            <div class="pole czarne" id="czarny-krol">♚</div>
-            <div class="pole czarne">♝</div><div class="pole czarne">♞</div><div class="pole czarne">♜</div>
+            <div class="pole czarne">♜</div><div class="pole"></div><div class="pole czarne">♝</div><div class="pole czarne">♛</div><div class="pole czarne" id="czarny-krol">♚</div><div class="pole czarne">♝</div><div class="pole"></div><div class="pole czarne">♜</div>
             
-            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
-            <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
+            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
+            
+            <div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div>
+            
             <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            <div class="pole"></div><div class="pole"></div><div class="pole biale">♗</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            <div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div>
-            <div class="pole biale">♖</div><div class="pole biale">♘</div><div class="pole"></div><div class="pole"></div><div class="pole biale">♔</div><div class="pole biale">♗</div><div class="pole biale">♘</div><div class="pole biale">♖</div>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('czarny-krol').onclick = function() {
-            let haslo = prompt("Podaj tajne hasło:");
             
-            if (haslo === "papcio") {
-                alert("Zalogowano pomyślnie! Witaj, Mistrzu.");
-                // Tutaj możesz np. przekierować na inną stronę:
-                // window.location.href = "https://google.com";
-            } else {
-                alert("Błędne hasło! Król pozostaje niewzruszony.");
-            }
-        };
-    </script>
-
-</body>
-</html>
+            <div class="pole"></div><div class="pole"></div><div class
