@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Szach Mat - Poprawny Laufer na c4</title>
+    <title>Szach Mat - Poprawny Skład</title>
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
@@ -19,27 +19,15 @@
             display: flex; justify-content: center; align-items: center;
             font-size: 7.5vmin; border: 1px solid rgba(255, 255, 255, 0.05);
         }
-        
-        /* Pola szachownicy */
         .szachownica div:nth-child(odd) { background-color: #0d0d0d; }
         .szachownica div:nth-child(even) { background-color: #000; }
-
-        /* BIAŁE FIGURY - Złoty blask */
         .biale { 
-            color: #fff; 
-            filter: drop-shadow(0 0 5px #ffcc00) drop-shadow(0 0 15px #ffaa00);
+            color: #fff; filter: drop-shadow(0 0 5px #ffcc00) drop-shadow(0 0 15px #ffaa00);
             font-weight: bold; z-index: 5;
         }
-
-        /* CZARNE FIGURY - Jasny błękit (stalowy) */
-        .czarne { 
-            color: #87ceeb; 
-            filter: drop-shadow(0 0 5px #000);
-        }
-
+        .czarne { color: #87ceeb; filter: drop-shadow(0 0 5px #000); }
         #czarny-krol { cursor: pointer; transition: 0.2s; }
         #czarny-krol:hover { transform: scale(1.2); color: #fff; }
-
         .dym-napis {
             position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
             color: #fff; font-size: 14vmin; font-weight: 900; text-transform: uppercase;
@@ -71,7 +59,7 @@
             
             <div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div>
             
-            <div class="pole biale">♜</div><div class="pole biale">♘</div><div class="pole"></div><div class="pole"></div><div class="pole biale">♔</div><div class="pole biale"></div><div class="pole biale">♘</div><div class="pole biale">♖</div>
+            <div class="pole biale">♖</div><div class="pole biale">♘</div><div class="pole biale">♗</div><div class="pole"></div><div class="pole biale">♔</div><div class="pole"></div><div class="pole biale">♘</div><div class="pole biale">♖</div>
         </div>
     </div>
 
