@@ -2,13 +2,28 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <title>Szach Mat - Poprawny Skład</title>
+    <title>Szach Mat - Mechanizm Podstron</title>
     <style>
         body, html {
             margin: 0; padding: 0; height: 100%; overflow: hidden;
             background-color: #000; display: flex; justify-content: center;
             align-items: center; font-family: 'Courier New', Courier, monospace;
         }
+
+        /* Kontenery widoków */
+        #widok-szachownicy, .widok-obrazu {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        .ukryty { display: none !important; }
+
+        /* Szachownica */
         .plansza-kontener { position: relative; width: 92vmin; height: 92vmin; }
         .szachownica {
             width: 100%; height: 100%; display: grid;
@@ -21,65 +36,100 @@
         }
         .szachownica div:nth-child(odd) { background-color: #0d0d0d; }
         .szachownica div:nth-child(even) { background-color: #000; }
+
+        /* Figury */
         .biale { 
-            color: #fff; filter: drop-shadow(0 0 5px #ffcc00) drop-shadow(0 0 15px #ffaa00);
-            font-weight: bold; z-index: 5;
+            color: #fff; filter: drop-shadow(0 0 5px #ffcc00); 
+            cursor: pointer; transition: 0.3s;
         }
-        .czarne { color: #87ceeb; filter: drop-shadow(0 0 5px #000); }
-        #czarny-krol { cursor: pointer; transition: 0.2s; }
-        #czarny-krol:hover { transform: scale(1.2); color: #fff; }
+        .czarne { color: #87ceeb; cursor: pointer; transition: 0.3s; }
+        
+        .biale:hover, .czarne:hover { transform: scale(1.2); filter: brightness(1.5); }
+
+        /* Styl napisu */
         .dym-napis {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ffffff;
-            font-size: 11vmin; /* Nieco mniejszy, żeby na pewno mieścił się w rzędzie */
-            font-weight: 900;
-            text-transform: uppercase;
-            letter-spacing: 2vmin;
-            z-index: 10;
-            pointer-events: none;
-            
-            /* TO JEST KLUCZ: zakaz łamania linii */
-            white-space: nowrap; 
-            
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #ffffff; font-size: 11vmin; font-weight: 900;
+            text-transform: uppercase; letter-spacing: 2vmin; z-index: 10;
+            pointer-events: none; white-space: nowrap; 
             animation: dymienie 4s infinite alternate ease-in-out;
         }
+
         @keyframes dymienie {
             0% { text-shadow: 0 0 20px #fff; opacity: 0.7; }
             100% { text-shadow: 0 -30px 50px #fff, 0 -50px 80px #ffcc00; opacity: 0.2; transform: translate(-50%, -60%) scale(1.1); }
+        }
+
+        /* Styl wyświetlania obrazów */
+        .pelny-obraz {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            cursor: pointer; /* Kliknij obraz, by wrócić */
         }
     </style>
 </head>
 <body>
 
-    <div class="plansza-kontener">
-        <div class="dym-napis">SZACH MAT</div>
-        <div class="szachownica">
-            <div class="pole czarne">♜</div><div class="pole"></div><div class="pole czarne">♝</div><div class="pole czarne">♛</div><div class="pole czarne" id="czarny-krol">♚</div><div class="pole czarne">♝</div><div class="pole"></div><div class="pole czarne">♜</div>
-            
-            <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
-            
-            <div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div>
-            
-            <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            
-            <div class="pole"></div><div class="pole"></div><div class="pole biale">♗</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            
-            <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
-            
-            <div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div>
-            
-            <div class="pole biale">♖</div><div class="pole biale">♘</div><div class="pole biale">♗</div><div class="pole"></div><div class="pole biale">♔</div><div class="pole"></div><div class="pole biale">♘</div><div class="pole biale">♖</div>
+    <div id="widok-szachownicy">
+        <div class="plansza-kontener">
+            <div class="dym-napis">SZACH MAT</div>
+            <div class="szachownica">
+                <div class="pole czarne">♜</div><div class="pole"></div><div class="pole czarne">♝</div><div class="pole czarne">♛</div>
+                <div class="pole czarne" id="czarny-krol">♚</div> <div class="pole czarne">♝</div><div class="pole"></div><div class="pole czarne">♜</div>
+                
+                <div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
+                <div class="pole"></div><div class="pole biale">♕</div><div class="pole czarne">♟</div><div class="pole czarne">♟</div>
+                
+                <div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♞</div><div class="pole"></div><div class="pole"></div>
+                <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole czarne">♟</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
+                <div class="pole"></div><div class="pole"></div><div class="pole biale">♗</div><div class="pole"></div><div class="pole biale">♙</div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
+                <div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div><div class="pole"></div>
+                
+                <div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div>
+                <div class="pole"></div><div class="pole biale">♙</div><div class="pole biale">♙</div><div class="pole biale">♙</div>
+                
+                <div class="pole biale">♖</div><div class="pole biale">♘</div><div class="pole biale">♗</div><div class="pole"></div>
+                <div class="pole biale" id="bialy-krol">♔</div> <div class="pole"></div><div class="pole biale">♘</div><div class="pole biale">♖</div>
+            </div>
         </div>
     </div>
 
+    <div id="widok-obraz-1" class="widok-obrazu ukryty">
+        <img src="Gemini_Generated_Image_rz8aocrz8aocrz8a.jpg" alt="Widok 1" class="pelny-obraz" onclick="powrot()">
+    </div>
+
+    <div id="widok-obraz-2" class="widok-obrazu ukryty">
+        <img src="Gemini_Generated_Image_avi7obavi7obavi7.jpg" alt="Widok 2" class="pelny-obraz" onclick="powrot()">
+    </div>
+
     <script>
+        const szachownica = document.getElementById('widok-szachownicy');
+        const obraz1 = document.getElementById('widok-obraz-1');
+        const obraz2 = document.getElementById('widok-obraz-2');
+
+        // Funkcja powrotu do szachownicy
+        function powrot() {
+            szachownica.classList.remove('ukryty');
+            obraz1.classList.add('ukryty');
+            obraz2.classList.add('ukryty');
+        }
+
+        // Obsługa Czarnego Króla (Obraz 1)
         document.getElementById('czarny-krol').onclick = function() {
             let h = prompt("Podaj tajne hasło:");
-            if (h === "papcio") alert("Zalogowano pomyślnie KRÓLEWICZU!!!");
-            else alert("Błąd!");
+            if (h === "papcio") {
+                szachownica.classList.add('ukryty');
+                obraz1.classList.remove('ukryty');
+            } else {
+                alert("Błąd!");
+            }
+        };
+
+        // Obsługa Białego Króla (Obraz 2)
+        document.getElementById('bialy-krol').onclick = function() {
+            szachownica.classList.add('ukryty');
+            obraz2.classList.remove('ukryty');
         };
     </script>
 
