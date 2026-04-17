@@ -2,19 +2,16 @@
 <html lang="pl">
 <head>
 <meta charset="UTF-8">
-<title>Szach Mat - Wersja Finalna</title>
+<title>Szach Mat - Wersja Poprawiona</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 body,html{width:100%;height:100%;overflow:hidden;background:#080604;font-family:'Cinzel',serif;display:flex;justify-content:center;align-items:center;}
-
 .view{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity .4s;}
 .view.hidden{opacity:0;pointer-events:none;}
-
 .smoke-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3.5vmin,2.1rem);color:#d4b866;letter-spacing:.38em;text-shadow:0 0 16px #d4b86699,0 0 45px #d4b86644;white-space:nowrap;margin-bottom:10px;animation:dym 3.5s ease-in-out infinite alternate;flex-shrink:0;}
 @keyframes dym{0%{opacity:.95;transform:translateY(0) scale(1);}100%{opacity:.3;transform:translateY(-5px) scale(1.04);}}
-
 .board-outer{display:grid;grid-template-columns:16px 1fr 16px;grid-template-rows:1fr 16px;width:min(62vmin,420px);height:min(62vmin,420px);flex-shrink:0;}
 .labels-rank,.labels-rank-r{display:flex;flex-direction:column;justify-content:space-around;align-items:center;}
 .labels-file{grid-column:2/3;grid-row:2/3;display:flex;flex-direction:row;justify-content:space-around;align-items:center;}
@@ -25,21 +22,17 @@ body,html{width:100%;height:100%;overflow:hidden;background:#080604;font-family:
 .wp{color:#f0ece2;text-shadow:1px 1px 0 #7a5520,-1px -1px 0 #7a5520,1px -1px 0 #7a5520,-1px 1px 0 #7a5520,0 2px 5px #0009;}
 .bp{color:#100e06;text-shadow:1px 1px 0 #c8a84b,-1px -1px 0 #c8a84b,1px -1px 0 #c8a84b,-1px 1px 0 #c8a84b,0 0 6px #c8a84b44;}
 .sq span.clickable{cursor:pointer;transition:transform .18s;}
-.sq span.clickable:hover{transform:scale(1.2);filter:brightness(1.4);}
-
-/* Widoczniejsze ramki */
-canvas, .ttt-board { border: 3px solid #d4b866; box-shadow: 0 0 15px rgba(212,184,102,0.4); }
-
+.sq span.clickable:hover{transform:scale(1.25);filter:brightness(1.5);}
+canvas, .ttt-board{border:3px solid #d4b866;box-shadow:0 0 20px rgba(212,184,102,0.4);image-rendering:pixelated;}
+.btn-back{position:absolute;top:15px;left:15px;background:rgba(212,184,102,0.1);border:1px solid #d4b866;color:#d4b866;padding:8px 15px;cursor:pointer;z-index:100;font-family:'Cinzel';}
+.art-img{max-width:90%;max-height:70vh;border:2px solid #d4b866;box-shadow:0 0 20px #000;}
+.game-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
 .clocks-strip{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:min(62vmin,420px);margin-top:9px;}
 .clock-mini{background:#0e0904;border:1px solid #3a2a0c;padding:5px;text-align:center;}
-.cm-time{color:#d4b866;font-weight:600;font-size:0.9rem;}
-
-.btn-back{position:absolute;top:15px;left:15px;background:rgba(212,184,102,0.1);border:1px solid #d4b866;color:#d4b866;padding:8px 15px;cursor:pointer;z-index:100;}
-.art-img{max-width:90%;max-height:70vh;border:2px solid #d4b866;box-shadow:0 0 30px rgba(212,184,102,0.2);}
-
-.game-wrap{display:flex;flex-direction:column;align-items:center;gap:10px;}
+.cm-time{color:#d4b866;font-size:0.85rem;font-weight:600;}
 .ttt-board{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;background:#3a2a0c;padding:4px;}
-.ttt-cell{width:80px;height:80px;background:#0e0904;display:flex;align-items:center;justify-content:center;font-size:2.5rem;cursor:pointer;color:#d4b866;}
+.ttt-cell{width:75px;height:75px;background:#0e0904;display:flex;align-items:center;justify-content:center;font-size:2.5rem;cursor:pointer;color:#d4b866;}
+.weather-card{background:#100b04;border:2px solid #d4b866;padding:30px;text-align:center;color:#d4b866;}
 </style>
 </head>
 <body>
@@ -55,50 +48,46 @@ canvas, .ttt-board { border: 3px solid #d4b866; box-shadow: 0 0 15px rgba(212,18
   <div class="clocks-strip" id="clocks-strip"></div>
 </div>
 
-<div id="v-art1" class="view hidden">
+<div id="v-art1" class="view hidden"><button class="btn-back" onclick="showBoard()">← Powrót</button><h2 class="smoke-title">Mechanizm Nieba</h2><img src="Gemini_Generated_Image_rz8aocrz8aocrz8a.jpg" class="art-img"></div>
+<div id="v-art2" class="view hidden"><button class="btn-back" onclick="showBoard()">← Powrót</button><h2 class="smoke-title">Stycznik Główny</h2><img src="Gemini_Generated_Image_avi7obavi7obavi7.jpg" class="art-img"></div>
+
+<div id="v-weather" class="view hidden">
   <button class="btn-back" onclick="showBoard()">← Powrót</button>
-  <h2 class="smoke-title">Mechanizm Nieba</h2>
-  <img src="Gemini_Generated_Image_rz8aocrz8aocrz8a.jpg" class="art-img">
+  <div class="weather-card" id="weather-card">Pobieranie danych pogodowych...</div>
 </div>
 
-<div id="v-art2" class="view hidden">
-  <button class="btn-back" onclick="showBoard()">← Powrót</button>
-  <h2 class="smoke-title">Stycznik Główny</h2>
-  <img src="Gemini_Generated_Image_avi7obavi7obavi7.jpg" class="art-img">
-</div>
-
-<div id="v-snake" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><canvas id="snake-canvas"></canvas></div></div>
-<div id="v-pong" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><canvas id="pong-canvas"></canvas></div></div>
-<div id="v-ttt" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><div id="ttt-board" class="ttt-board"></div></div></div>
-<div id="v-wr" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><canvas id="wr-canvas"></canvas></div></div>
+<div id="v-snake" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><div class="smoke-title">Wąż</div><canvas id="snake-canvas"></canvas><div id="snake-status" style="color:#d4b866">Wynik: 0</div></div></div>
+<div id="v-pong" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><div class="smoke-title">Ping Pong</div><canvas id="pong-canvas"></canvas><div id="pong-status" style="color:#d4b866">0 : 0</div></div></div>
+<div id="v-ttt" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><div class="smoke-title">Kółko i Krzyżyk</div><div id="ttt-board" class="ttt-board"></div></div></div>
+<div id="v-wr" class="view hidden"><button class="btn-back" onclick="showBoard()">←</button><div class="game-wrap"><div class="smoke-title">Wilk i Zając</div><canvas id="wr-canvas"></canvas></div></div>
 
 <script>
 const ROWS=[
-  ['♜','','♝','♛','♚','♝','','♜'],
-  ['♟','♟','♟','♟','','♕','♟','♟'],
-  ['','','♞','','','♞','',''], // Tu są skoczki (c6, f6)
+  ['♜','','♝','♛','♚','♝','','♜'], // d8: 0,3 (Czarna Królowa)
+  ['','♟','♟','♟','','♕','♟','♟'], // d2: 1,5 (Biała Królowa)
+  ['','','♞','','','♞','',''],   // c6: 2,2 | f6: 2,5 (Czarne Skoczki)
   ['','','','','♟','','',''],
   ['','','♗','','♙','','',''],
   ['','','','','','','',''],
   ['♙','♙','♙','♙','','♙','♙','♙'],
-  ['♖','♞','♗','','♔','','♞','♖'], // Skoczki białe (b1, g1)
+  ['♖','♘','♗','','♔','','♘','♖'], // b1: 7,1 | g1: 7,6 (Białe Skoczki) | e1: 7,4 (Król)
 ];
 
 const ACTIONS = {
   '7-1': () => { goTo('v-snake'); snakeRestart(); },
   '7-6': () => { goTo('v-pong'); pongRestart(); },
-  '2-2': () => { goTo('v-ttt'); tttRestart(); }, // Czarny skoczek c6
-  '2-5': () => { goTo('v-wr'); wrRestart(); },   // Czarny skoczek f6
-  '1-5': () => goTo('v-art1'), // Biała Królowa d2 (indeks 1,5 w ROWS)
-  '0-3': () => goTo('v-art2')  // Czarna Królowa d8 (indeks 0,3 w ROWS)
+  '2-2': () => { goTo('v-ttt'); tttRestart(); },
+  '2-5': () => { goTo('v-wr'); wrRestart(); },
+  '1-5': () => goTo('v-art1'),
+  '0-3': () => goTo('v-art2'),
+  '7-4': () => showWeather()
 };
 
 function buildBoard(){
   const board=document.getElementById('chess-board');
-  const RL=document.getElementById('rank-left'), RR=document.getElementById('rank-right'), FL=document.getElementById('file-labels');
-  RL.innerHTML=RR.innerHTML=[8,7,6,5,4,3,2,1].map(n=>`<span class="lbl">${n}</span>`).join('');
+  const RL=document.getElementById('rank-left'), FL=document.getElementById('file-labels');
+  RL.innerHTML=[8,7,6,5,4,3,2,1].map(n=>`<span class="lbl">${n}</span>`).join('');
   FL.innerHTML=['a','b','c','d','e','f','g','h'].map(l=>`<span class="lbl">${l}</span>`).join('');
-  
   ROWS.forEach((row,r)=>{
     row.forEach((piece,c)=>{
       const sq=document.createElement('div');
@@ -106,7 +95,7 @@ function buildBoard(){
       if(piece){
         const sp=document.createElement('span');
         sp.textContent=piece;
-        sp.className=(r > 3) ? 'wp' : 'bp'; 
+        sp.className=(r > 3 || (r===1 && c===5)) ? 'wp' : 'bp'; 
         if(ACTIONS[`${r}-${c}`]){
           sp.classList.add('clickable');
           sp.onclick = ACTIONS[`${r}-${c}`];
@@ -122,40 +111,102 @@ function goTo(id){
   document.querySelectorAll('.view').forEach(v=>v.classList.add('hidden'));
   document.getElementById(id).classList.remove('hidden');
 }
-function showBoard(){ goTo('v-board'); }
+function showBoard(){ goTo('v-board'); stopGames(); }
 
-/* --- LOGIKA GIER (SNAKE, PONG, TTT, WR) - SKRÓCONA DLA CZYTELNOŚCI --- */
-// (W pełnej wersji tutaj ląduje kod z Twojego pliku dotyczący mechaniki)
+function showWeather(){
+  goTo('v-weather');
+  document.getElementById('weather-card').innerHTML = "📍 Nielepice<br>Temp: 12°C<br>Niebo: Przejrzyste";
+}
 
-// PRZYKŁAD RESTARTU TTT
+let snakeInt, pongInt, wrInt;
+function stopGames(){ clearInterval(snakeInt); cancelAnimationFrame(pongInt); cancelAnimationFrame(wrInt); }
+
+/* SNAKE */
+function snakeRestart(){
+  const c=document.getElementById('snake-canvas'), ctx=c.getContext('2d');
+  c.width=300; c.height=300;
+  let s=[{x:5,y:5}], d={x:1,y:0}, f={x:10,y:10}, sc=0;
+  window.onkeydown=e=>{
+    const k=e.key;
+    if((k==='ArrowUp'||k==='w')&&d.y===0)d={x:0,y:-1};
+    if((k==='ArrowDown'||k==='s')&&d.y===0)d={x:0,y:1};
+    if((k==='ArrowLeft'||k==='a')&&d.x===0)d={x:-1,y:0};
+    if((k==='ArrowRight'||k==='d')&&d.x===0)d={x:1,y:0};
+  };
+  clearInterval(snakeInt);
+  snakeInt=setInterval(()=>{
+    let h={x:s[0].x+d.x,y:s[0].y+d.y};
+    if(h.x<0||h.x>14||h.y<0||h.y>14||s.some(p=>p.x===h.x&&p.y===h.y)) return snakeRestart();
+    s.unshift(h);
+    if(h.x===f.x&&h.y===f.y){sc++; f={x:Math.floor(Math.random()*15),y:Math.floor(Math.random()*15)};} else s.pop();
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,300,300);
+    ctx.fillStyle='#ff0000'; ctx.fillRect(f.x*20,f.y*20,18,18);
+    ctx.fillStyle='#00ff44'; s.forEach(p=>ctx.fillRect(p.x*20,p.y*20,18,18));
+    document.getElementById('snake-status').textContent=`Wynik: ${sc}`;
+  },150);
+}
+
+/* PONG */
+function pongRestart(){
+  const c=document.getElementById('pong-canvas'), ctx=c.getContext('2d');
+  c.width=400; c.height=200;
+  let b={x:200,y:100,vx:4,vy:3}, p1=80, p2=80, s1=0, s2=0;
+  window.onkeydown=e=>{
+    if(e.key==='w')p1-=20; if(e.key==='s')p1+=20;
+    if(e.key==='ArrowUp')p2-=20; if(e.key==='ArrowDown')p2+=20;
+  };
+  function loop(){
+    b.x+=b.vx; b.y+=b.vy;
+    if(b.y<0||b.y>195) b.vy*=-1;
+    if((b.x<20&&b.y>p1&&b.y<p1+40)||(b.x>370&&b.y>p2&&b.y<p2+40)) b.vx*=-1.1;
+    if(b.x<0){s2++; b={x:200,y:100,vx:4,vy:3};}
+    if(b.x>400){s1++; b={x:200,y:100,vx:-4,vy:3};}
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,400,200);
+    ctx.fillStyle='#d4b866'; ctx.fillRect(10,p1,10,40); ctx.fillRect(380,p2,10,40);
+    ctx.fillStyle='#fff'; ctx.fillRect(b.x,b.y,8,8);
+    document.getElementById('pong-status').textContent=`${s1} : ${s2}`;
+    pongInt=requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+/* WILK I ZAJĄC (Pełna grafika) */
+function wrRestart(){
+  const c=document.getElementById('wr-canvas'), ctx=c.getContext('2d');
+  c.width=480; c.height=250;
+  let rx=50, wx=400;
+  window.onkeydown=e=>{ if(e.key==='ArrowLeft')rx-=20; if(e.key==='ArrowRight')rx+=20; };
+  function loop(){
+    ctx.fillStyle='#0a0818'; ctx.fillRect(0,0,480,250);
+    // Zając rysowany
+    ctx.fillStyle='#d0d0c8'; ctx.fillRect(rx,180,20,22); // body
+    ctx.fillStyle='#e0e0d8'; ctx.fillRect(rx+5,170,12,12); // head
+    ctx.fillRect(rx+7,160,3,10); ctx.fillRect(rx+13,160,3,10); // ears
+    // Wilk rysowany
+    ctx.fillStyle='#5a5060'; ctx.fillRect(wx,175,25,28); // body
+    ctx.fillStyle='#ff2020'; ctx.fillRect(wx+18,182,4,4); // eye
+    if(wx>rx) wx-=1.5; else wx+=1.5;
+    wrInt=requestAnimationFrame(loop);
+  }
+  loop();
+}
+
+/* TTT */
 function tttRestart(){
   const b=document.getElementById('ttt-board'); b.innerHTML='';
-  for(let i=0; i<9; i++){
+  let p='X', cells=Array(9).fill('');
+  for(let i=0;i<9;i++){
     const c=document.createElement('div'); c.className='ttt-cell';
-    c.onclick=()=> { if(!c.textContent) c.textContent='X'; };
+    c.onclick=()=>{ if(!cells[i]){ cells[i]=p; c.textContent=p; p=p==='X'?'O':'X'; } };
     b.appendChild(c);
   }
 }
 
-// PRZYKŁAD RESTARTU WR (Wilk i Zając)
-function wrRestart(){
-  const c=document.getElementById('wr-canvas'); c.width=400; c.height=250;
-  const ctx=c.getContext('2d');
-  function draw(){
-    ctx.fillStyle='#050510'; ctx.fillRect(0,0,400,250);
-    // Zając
-    ctx.fillStyle='#d0d0c8'; ctx.fillRect(50,180,20,20); // Głowa
-    ctx.fillRect(55,165,4,15); ctx.fillRect(61,165,4,15); // Uszy
-    // Wilk
-    ctx.fillStyle='#5a5060'; ctx.fillRect(300,180,25,25);
-    ctx.fillStyle='#ff2020'; ctx.fillRect(318,185,3,3); // Oko
-    requestAnimationFrame(draw);
-  }
-  draw();
-}
-
-// Inicjalizacja
 buildBoard();
+setInterval(()=>{
+  const now=new Date();
+  document.getElementById('clocks-strip').innerHTML=`<div class="clock-mini"><div class="cm-time">${now.toLocaleTimeString()}</div></div>`.repeat(4);
+},1000);
 </script>
 </body>
 </html>
