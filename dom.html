@@ -5,6 +5,140 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dom — Nexus</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: rgba(5, 10, 20, 0.84);
+      border: 1px solid rgba(0, 212, 255, 0.2);
+      border-radius: 10px;
+      padding: 22px 24px;
+      backdrop-filter: blur(14px);
+      position: relative;
+      overflow: hidden;
+      animation: fadeUp 0.7s ease both;
+    }
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(to right, var(--cyan), transparent);
+    }
+    .card.gold::before  { background: linear-gradient(to right, var(--gold), transparent); }
+    .card.green::before { background: linear-gradient(to right, #4caf50, transparent); }
+    .card.red::before   { background: linear-gradient(to right, #ef5350, transparent); }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      color: var(--cyan);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card.gold  .card-title { color: var(--gold); }
+    .card.green .card-title { color: #4caf50; }
+    .card.red   .card-title { color: #ef5350; }
+
+    /* Temperatura grid */
+    .temp-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 6px;
+    }
+    .temp-item { display: flex; flex-direction: column; gap: 2px; }
+    .temp-label { font-size: 11px; color: var(--text-dim); }
+    .temp-value {
+      font-family: 'Cinzel', serif;
+      font-size: 17px;
+      color: var(--text-main);
+    }
+    .warm { color: #ff8c42; }
+    .hot  { color: #ef5350; }
+    .cool { color: #42a5f5; }
+    .cold { color: #7986cb; }
+    .na   { color: #555; font-size: 13px; }
+
+    /* Wiersze stat */
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 13px;
+      gap: 8px;
+    }
+    .stat-row:last-child { border-bottom: none; }
+    .stat-label { color: var(--text-dim); flex-shrink: 0; }
+    .stat-value { font-family: 'Cinzel', serif; font-size: 12px; color: var(--text-main); text-align: right; }
+
+    /* Odznaki */
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 20px;
+      font-size: 10px;
+      font-family: 'Cinzel', serif;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .b-on      { background: rgba(76,175,80,.18);  color: #4caf50; border: 1px solid #388e3c; }
+    .b-off     { background: rgba(97,97,97,.18);   color: #757575; border: 1px solid #424242; }
+    .b-disarm  { background: rgba(33,150,243,.18); color: #42a5f5; border: 1px solid #1565c0; }
+    .b-armed   { background: rgba(244,67,54,.18);  color: #ef5350; border: 1px solid #b71c1c; }
+    .b-unknown { background: rgba(60,60,60,.18);   color: #555;    border: 1px solid #333; }
+
+    /* Pasek postępu */
+    .bar-bg   { height: 5px; background: rgba(255,255,255,0.07); border-radius: 3px; margin-top: 5px; }
+    .bar-fill { height: 100%; border-radius: 3px; transition: width 1s ease; }
+    .bar-cyan { background: linear-gradient(to right, var(--cyan), #42a5f5); }
+    .bar-gold { background: linear-gradient(to right, var(--gold), #ff8c42); }
+    .bar-red  { background: linear-gradient(to right, #ef5350, #ff8c42); }
+
+    /* Duża wartość */
+    .big-val {
+      font-family: 'Cinzel', serif;
+      font-size: 30px;
+      color: var(--gold-light);
+      text-shadow: 0 0 18px rgba(200,146,42,.4);
+      line-height: 1;
+      margin: 6px 0 3px;
+    }
+    .big-unit { font-size: 13px; color: var(--text-dim); }
+
+    /* Pasek aktualizacji */
+    .update-bar {
+      background: rgba(0,212,255,.06);
+      border: 1px solid rgba(0,212,255,.15);
+      border-radius: 6px;
+      padding: 10px 16px;
+      margin-bottom: 22px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+    .upd-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan); box-shadow: 0 0 8px var(--cyan);
+      animation: blink 2s infinite; flex-shrink: 0;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
+
+    .alarm-ok   { color: #4caf50; font-size: 13px; }
+    .alarm-warn { color: #ef5350; font-size: 13px; }
+
+    .loading-msg { color: var(--text-dim); font-style: italic; font-size: 15px; padding: 20px 0; }
+  </style>
 </head>
 <body>
 
@@ -36,38 +170,234 @@
     </div>
   </nav>
 
-  <main class="subpage-content">
+  <main class="subpage-content" style="max-width:1200px; padding-right: 80px;">
     <a class="back-btn" onclick="history.back()">← Powrót</a>
 
     <div class="page-header">
-      <p class="page-category">Kategoria</p>
+      <p class="page-category">Smart Home</p>
       <h1 class="page-title">DOM</h1>
       <div class="page-divider"></div>
     </div>
 
-    <div class="content-panel">
-      <h2>🏠 Pomysły na dom</h2>
-      <p>Tu możesz przechowywać swoje notatki, inspiracje i listy dotyczące domu. Edytuj ten plik, aby dostosować zawartość do swoich potrzeb.</p>
-      <ul>
-        <li>Salon</li>
-        <li>Kuchnia</li>
-        <li>Sypialnia</li>
-        <li>Łazienka</li>
-        <li>Piwnica</li>
-        <li>Garaż</li>
-      </ul>
+    <div class="update-bar">
+      <div class="upd-dot"></div>
+      <span>Ostatnia aktualizacja danych: <strong id="updateTime">ładowanie…</strong></span>
+    </div>
+
+    <div id="dashboard" class="dashboard">
+      <p class="loading-msg">⏳ Pobieranie danych…</p>
     </div>
   </main>
 
   <script>
     function toggleNav() {
-      const panel = document.getElementById('navPanel');
-      const arrow = document.getElementById('navArrow');
-      const nav = document.getElementById('sideNav');
-      panel.classList.toggle('open');
-      arrow.classList.toggle('rotated');
-      nav.classList.toggle('expanded');
+      document.getElementById('navPanel').classList.toggle('open');
+      document.getElementById('navArrow').classList.toggle('rotated');
+      document.getElementById('sideNav').classList.toggle('expanded');
     }
+
+    /* ── helpers ─────────────────────────────────────── */
+    function tc(v) {
+      const n = parseFloat(v);
+      if (isNaN(n)) return 'na';
+      if (n >= 27) return 'hot';
+      if (n >= 23) return 'warm';
+      if (n <= 14) return 'cold';
+      if (n <= 18) return 'cool';
+      return '';
+    }
+
+    function fmt(v, unit) {
+      const n = parseFloat(v);
+      if (isNaN(n) || v === '—' || v === 'unknown' || v === 'unavailable') return '—';
+      return n.toFixed(1) + (unit ? ' ' + unit : '');
+    }
+
+    function badge(v) {
+      const s = (v || '').toLowerCase();
+      if (s === 'on')  return `<span class="badge b-on">ON</span>`;
+      if (s === 'off') return `<span class="badge b-off">OFF</span>`;
+      if (s === 'disarmed') return `<span class="badge b-disarm">ROZBROJENA</span>`;
+      if (s.startsWith('armed')) return `<span class="badge b-armed">UZBROJONA</span>`;
+      return `<span class="badge b-unknown">${v || '—'}</span>`;
+    }
+
+    function tRow(label, val) {
+      const cls = tc(val);
+      const disp = (val && val !== '—' && val !== 'unknown' && val !== 'unavailable')
+        ? parseFloat(val).toFixed(1) + ' °C' : '<span class="na">—</span>';
+      return `<div class="temp-item">
+        <span class="temp-label">${label}</span>
+        <span class="temp-value ${cls}">${disp}</span>
+      </div>`;
+    }
+
+    function sRow(label, val) {
+      return `<div class="stat-row">
+        <span class="stat-label">${label}</span>
+        <span class="stat-value">${val}</span>
+      </div>`;
+    }
+
+    function bar(pct, cls) {
+      return `<div class="bar-bg"><div class="bar-fill ${cls}" style="width:${Math.min(Math.max(pct,0),100)}%"></div></div>`;
+    }
+
+    /* ── render ─────────────────────────────────────── */
+    function render(d) {
+      const t  = d.temperatury  || {};
+      const w  = d.wilgotnosc   || {};
+      const e  = d.esphome      || {};
+      const a  = d.alarm        || {};
+      const r  = d.rekuperator  || {};
+      const z  = d.zmiekczacz   || {};
+      const wo = d.wyjscia_aktywne  || [];
+      const wa = d.wejscia_naruszone || [];
+
+      const alarmStatus = wa.length === 0
+        ? `<span class="alarm-ok">✓ Wszystkie wejścia normalne</span>`
+        : wa.map(w => `<span class="alarm-warn">⚠ ${w}: NARUSZONY</span>`).join('<br>');
+
+      const wyjsciaInfo = wo.length === 0
+        ? '<span style="color:#555;font-size:12px;">Brak aktywnych wyjść</span>'
+        : wo.map(w => `<div class="stat-row"><span class="stat-label">${w}</span><span class="badge b-on">ON</span></div>`).join('');
+
+      return `
+      <!-- TEMPERATURY POKOJE -->
+      <div class="card">
+        <div class="card-title">🌡 TEMPERATURY — POKOJE</div>
+        <div class="temp-grid">
+          ${tRow('Sypialnia', t.sypialnia)}
+          ${tRow('Pokój Franka', t.pokoj_franka)}
+          ${tRow('Pokój z Jaskółką', t.pokoj_z_jaskolka)}
+          ${tRow('Salon', t.salon)}
+          ${tRow('Łazienka', t.lazienka)}
+          ${tRow('Wiatrołap', t.wiatrolap)}
+          ${tRow('Salon (klima)', t.salon_klima)}
+          ${tRow('Sypialnia (klima)', t.sypialnia_klima)}
+        </div>
+      </div>
+
+      <!-- TEMPERATURY TECHNICZNE -->
+      <div class="card">
+        <div class="card-title">🌡 TEMPERATURY — TECHNICZNE</div>
+        <div class="temp-grid">
+          ${tRow('Piwnica', t.piwnica)}
+          ${tRow('Kotłownia', t.kotlownia)}
+          ${tRow('Strych', t.strych)}
+          ${tRow('Garaż', t.garaz)}
+          ${tRow('Zew. północ', t.zewnetrzna_polnoc)}
+          ${tRow('Zew. wschód', t.zewnetrzna_wschod)}
+          ${tRow('Nagrzewnica', t.nagrzewnica)}
+          ${tRow('CPU HA', t.cpu_ha)}
+          ${tRow('Parownica', t.parownica)}
+          ${tRow('Stacja 1', t.stacja_1)}
+          ${tRow('Stacja 2', t.stacja_2)}
+        </div>
+      </div>
+
+      <!-- WENTYLACJA TEMPERATURY -->
+      <div class="card">
+        <div class="card-title">💨 TEMPERATURY — WENTYLACJA</div>
+        <div class="temp-grid">
+          ${tRow('Czerpnia', t.czerpnia)}
+          ${tRow('Nawiew', t.nawiew)}
+          ${tRow('Wyciąg', t.wyciag)}
+          ${tRow('Wyrzutnia', t.wyrzutnia)}
+          ${tRow('Rekuperator', t.rekuperator)}
+        </div>
+      </div>
+
+      <!-- WILGOTNOŚĆ -->
+      <div class="card">
+        <div class="card-title">💧 WILGOTNOŚĆ</div>
+        ${[
+          ['Łazienka', w.lazienka],
+          ['Piwnica',  w.piwnica],
+          ['Powietrze', w.powietrze],
+          ['Stacja pogodowa', w.stacja]
+        ].map(([lbl, val]) => {
+          const n = parseFloat(val) || 0;
+          const valid = !isNaN(parseFloat(val)) && val !== '—';
+          const cls = n > 70 ? 'bar-red' : 'bar-cyan';
+          return `<div style="margin-bottom:12px">
+            <div style="display:flex;justify-content:space-between">
+              <span class="stat-label">${lbl}</span>
+              <span class="stat-value">${valid ? n+'%' : '—'}</span>
+            </div>
+            ${valid ? bar(n, cls) : ''}
+          </div>`;
+        }).join('')}
+      </div>
+
+      <!-- REKUPERATOR -->
+      <div class="card gold">
+        <div class="card-title">♻ REKUPERATOR</div>
+        ${sRow('Status', badge(r.status))}
+        ${sRow('Tryb', r.tryb || '—')}
+        ${sRow('Nawiew', fmt(r.nawiew, 'm³/h'))}
+        ${sRow('Wyciąg', fmt(r.wyciag, 'm³/h'))}
+        ${sRow('ByPass', r.bypass || '—')}
+        ${sRow('CO₂', fmt(r.co2, 'ppm'))}
+        ${sRow('Błąd', r.blad || '—')}
+        ${sRow('Filtry', r.filtry ? r.filtry + ' dni' : '—')}
+      </div>
+
+      <!-- ALARM -->
+      <div class="card ${wa.length > 0 ? 'red' : 'green'}">
+        <div class="card-title">🔒 STREFY ALARMOWE</div>
+        ${sRow('Strefa 1', badge(a.strefa_1))}
+        ${sRow('Strefa 2', badge(a.strefa_2))}
+        <div style="margin-top:12px; line-height:1.8; font-size:13px">${alarmStatus}</div>
+      </div>
+
+      <!-- WYJŚCIA -->
+      <div class="card">
+        <div class="card-title">⚡ WYJŚCIA AKTYWNE</div>
+        ${wyjsciaInfo}
+      </div>
+
+      <!-- ESP HOME -->
+      <div class="card">
+        <div class="card-title">📡 ESP HOME</div>
+        ${sRow('Łazienka rost', badge(e.lazienka_rost))}
+        ${sRow('Piwnica status', badge(e.piwnica_status))}
+        ${sRow('Ciepła woda', badge(e.ciepla_woda))}
+        ${sRow('Rekup. przewietrzanie', badge(e.rekup_przewietrzanie))}
+        ${sRow('Rekup. wietrzenie', badge(e.rekup_wietrzenie))}
+        ${sRow('Ciśnienie', fmt(e.stacja_cisnienie, 'hPa'))}
+        ${sRow('WiFi stacja', e.stacja_wifi ? e.stacja_wifi + '%' : '—')}
+      </div>
+
+      <!-- ZMIĘKCZACZ -->
+      <div class="card gold">
+        <div class="card-title">💧 ZMIĘKCZACZ WODY</div>
+        <div style="margin-bottom:14px">
+          <div class="big-val">${parseFloat(z.poziom_soli)||0}<span class="big-unit"> %</span></div>
+          <div class="stat-label" style="margin-bottom:6px">Poziom soli</div>
+          ${bar(parseFloat(z.poziom_soli)||0, parseFloat(z.poziom_soli) < 20 ? 'bar-red' : 'bar-gold')}
+        </div>
+        ${sRow('Dni do końca soli', z.dni_do_konca ? z.dni_do_konca + ' dni' : '—')}
+      </div>
+      `;
+    }
+
+    /* ── fetch ─────────────────────────────────────── */
+    async function loadData() {
+      try {
+        const res = await fetch('dane.json?t=' + Date.now());
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const d = await res.json();
+        document.getElementById('updateTime').textContent = d.aktualizacja || '—';
+        document.getElementById('dashboard').innerHTML = render(d);
+      } catch(err) {
+        document.getElementById('dashboard').innerHTML =
+          `<p class="loading-msg">⚠ Nie można pobrać danych.<br><small>${err.message}</small></p>`;
+      }
+    }
+
+    loadData();
+    setInterval(loadData, 5 * 60 * 1000); // odśwież co 5 minut
   </script>
 </body>
 </html>

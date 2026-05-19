@@ -1,0 +1,25 @@
+{
+  "aktualizacja": "oczekiwanie na dane...",
+  "temperatury": {
+    "sypialnia": "—", "pokoj_franka": "—", "pokoj_z_jaskolka": "—",
+    "salon": "—", "lazienka": "—", "piwnica": "—", "parownica": "—",
+    "salon_klima": "—", "sypialnia_klima": "—", "rekuperator": "—",
+    "czerpnia": "—", "nawiew": "—", "wyciag": "—", "wyrzutnia": "—",
+    "nagrzewnica": "—", "wiatrolap": "—", "zewnetrzna_polnoc": "—",
+    "kotlownia": "—", "strych": "—", "garaz": "—", "zewnetrzna_wschod": "—",
+    "cpu_ha": "—", "stacja_1": "—", "stacja_2": "—"
+  },
+  "wilgotnosc": { "lazienka": "—", "piwnica": "—", "powietrze": "—", "stacja": "—" },
+  "esphome": {
+    "lazienka_rost": "unknown", "piwnica_status": "unknown",
+    "ciepla_woda": "unknown", "rekup_przewietrzanie": "unknown",
+    "rekup_wietrzenie": "unknown", "stacja_cisnienie": "—", "stacja_wifi": "—"
+  },
+  "alarm": { "strefa_1": "unknown", "strefa_2": "unknown", "wejscia_naruszone": [] },
+  "rekuperator": {
+    "status": "unknown", "tryb": "—", "nawiew": "—", "wyciag": "—",
+    "bypass": "—", "co2": "—", "blad": "—", "filtry": "—"
+  },
+  "zmiekczacz": { "poziom_soli": "—", "dni_do_konca": "—" },
+  "wyjscia_aktywne": []
+}
