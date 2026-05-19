@@ -1,25 +1,64 @@
 {
-  "aktualizacja": "oczekiwanie na dane...",
+  "aktualizacja": "19.05.2026 23:44",
   "temperatury": {
-    "sypialnia": "—", "pokoj_franka": "—", "pokoj_z_jaskolka": "—",
-    "salon": "—", "lazienka": "—", "piwnica": "—", "parownica": "—",
-    "salon_klima": "—", "sypialnia_klima": "—", "rekuperator": "—",
-    "czerpnia": "—", "nawiew": "—", "wyciag": "—", "wyrzutnia": "—",
-    "nagrzewnica": "—", "wiatrolap": "—", "zewnetrzna_polnoc": "—",
-    "kotlownia": "—", "strych": "—", "garaz": "—", "zewnetrzna_wschod": "—",
-    "cpu_ha": "—", "stacja_1": "—", "stacja_2": "—"
+    "sypialnia": "23.33",
+    "pokoj_franka": "23.23",
+    "pokoj_z_jaskolka": "22.84",
+    "salon": "23.08",
+    "lazienka": "24.6",
+    "piwnica": "18.3",
+    "parownica": "unavailable",
+    "salon_klima": "25",
+    "sypialnia_klima": "25",
+    "rekuperator": "15.3",
+    "czerpnia": "11.8",
+    "nawiew": "15.3",
+    "wyciag": "23.6",
+    "wyrzutnia": "17.1",
+    "nagrzewnica": "0.3",
+    "wiatrolap": "unknown",
+    "zewnetrzna_polnoc": "unknown",
+    "kotlownia": "unknown",
+    "strych": "unknown",
+    "garaz": "unknown",
+    "zewnetrzna_wschod": "unknown",
+    "cpu_ha": "54.0",
+    "stacja_1": "unavailable",
+    "stacja_2": "unavailable"
   },
-  "wilgotnosc": { "lazienka": "—", "piwnica": "—", "powietrze": "—", "stacja": "—" },
+  "wilgotnosc": {
+    "lazienka": "54",
+    "piwnica": "62",
+    "powietrze": "45.0",
+    "stacja": "unavailable"
+  },
   "esphome": {
-    "lazienka_rost": "unknown", "piwnica_status": "unknown",
-    "ciepla_woda": "unknown", "rekup_przewietrzanie": "unknown",
-    "rekup_wietrzenie": "unknown", "stacja_cisnienie": "—", "stacja_wifi": "—"
+    "lazienka_rost": "off",
+    "piwnica_status": "unavailable",
+    "ciepla_woda": "off",
+    "rekup_przewietrzanie": "off",
+    "rekup_wietrzenie": "off",
+    "stacja_cisnienie": "unavailable",
+    "stacja_wifi": "unavailable"
   },
-  "alarm": { "strefa_1": "unknown", "strefa_2": "unknown", "wejscia_naruszone": [] },
+  "alarm": {
+    "strefa_1": "disarmed",
+    "strefa_2": "disarmed",
+    "wejscia_naruszone": []
+  },
   "rekuperator": {
-    "status": "unknown", "tryb": "—", "nawiew": "—", "wyciag": "—",
-    "bypass": "—", "co2": "—", "blad": "—", "filtry": "—"
+    "status": "on",
+    "tryb": "Tryb inteligentny",
+    "nawiew": "100.0",
+    "wyciag": "60.0",
+    "bypass": "Otwarty (auto)",
+    "co2": "500.0",
+    "blad": "0.0",
+    "filtry": "23.0"
   },
-  "zmiekczacz": { "poziom_soli": "—", "dni_do_konca": "—" },
+  "zmiekczacz": {
+    "poziom_soli": "20.0",
+    "dni_do_konca": "4"
+  },
   "wyjscia_aktywne": []
 }
