@@ -1,192 +1,89 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-<meta charset="UTF-8">
-<title>Szach Mat - Elektronika Edition</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body,html{width:100%;height:100%;overflow:hidden;background:#080604;font-family:'Cinzel',serif;display:flex;justify-content:center;align-items:center;}
-.view{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;transition:opacity .4s;}
-.view.hidden{opacity:0;pointer-events:none;}
-.smoke-title{font-family:'Cinzel Decorative',serif;font-size:clamp(1.1rem,3.5vmin,2.1rem);color:#d4b866;letter-spacing:.38em;text-shadow:0 0 16px #d4b86699,0 0 45px #d4b86644;white-space:nowrap;margin-bottom:10px;animation:dym 3.5s ease-in-out infinite alternate;}
-@keyframes dym{0%{opacity:.95;transform:translateY(0) scale(1);}100%{opacity:.3;transform:translateY(-5px) scale(1.04);}}
-.board-outer{display:grid;grid-template-columns:16px 1fr 16px;grid-template-rows:1fr 16px;width:min(62vmin,420px);height:min(62vmin,420px);}
-.labels-rank,.labels-rank-r{display:flex;flex-direction:column;justify-content:space-around;align-items:center;}
-.labels-file{grid-column:2/3;grid-row:2/3;display:flex;flex-direction:row;justify-content:space-around;align-items:center;}
-.lbl{font-size:clamp(.38rem,1.1vmin,.6rem);color:#7a6030;user-select:none;}
-.chess-wrap{grid-column:2/3;grid-row:1/2;display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);border:2px solid #5a3e18;box-shadow:0 0 28px #000a;}
-.sq{display:flex;justify-content:center;align-items:center;font-size:clamp(.85rem,3.4vmin,1.9rem);}
-.sq.light{background:#d4b483;}.sq.dark{background:#4a2c0a;}
-.wp{color:#f0ece2;text-shadow:1px 1px 0 #7a5520, 0 2px 5px #0009;}
-.bp{color:#100e06;text-shadow:1px 1px 0 #c8a84b;}
-.sq span.clickable{cursor:pointer;transition:transform .18s;}
-.sq span.clickable:hover{transform:scale(1.25);filter:brightness(1.4);}
-
-/* ELEKTRONIKA CONSOLE SHELL */
-.konsola{
-  display:flex;flex-direction:column;align-items:center;
-  background:linear-gradient(170deg,#c8c0b0 0%,#a8a098 40%,#888078 100%);
-  border-radius:22px 22px 40px 40px; padding:14px 18px 20px;
-  box-shadow: 0 6px 30px rgba(0,0,0,.7), 0 2px 0 rgba(255,255,255,.3) inset;
-  width:360px; user-select:none;
-}
-.lcd-outer{
-  width:100%; background:#1a1a0a; border-radius:8px; padding:6px;
-  box-shadow:0 2px 8px rgba(0,0,0,.8) inset; border:2px solid #2a2a1a;
-}
-.lcd-bezel{ background:#8fa840; border-radius:5px; padding:4px; position:relative; overflow:hidden;}
-#wr-canvas{ display:block; image-rendering:pixelated; background:#8fa840; width:100%; height:auto;}
-.lcd-score-row{ display:flex; justify-content:space-between; padding:3px 10px; background:#7a9438; color:#1a2608; font-family:monospace; font-weight:bold; font-size:12px;}
-
-.buttons-area{ width:100%; margin-top:12px; display:flex; flex-direction:column; gap:10px;}
-.btn-row{ display:flex; gap:14px; justify-content:center;}
-.konsola-btn{
-  width:46px; height:46px; border-radius:50%; background:radial-gradient(circle at 35% 30%,#e04030,#901010);
-  border:none; box-shadow:0 4px 0 #600808; cursor:pointer; color:white; font-weight:bold;
-}
-.konsola-btn:active{ transform:translateY(3px); box-shadow:0 1px 0 #600808;}
-.btn-blue{ background:radial-gradient(circle at 35% 30%,#4060d0,#1030a0); box-shadow:0 4px 0 #082080;}
-.btn-back{ position:absolute; top:20px; left:20px; color:#d4b866; background:none; border:1px solid; padding:5px 10px; cursor:pointer;}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moja Strona</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 </head>
 <body>
 
-<div id="v-board" class="view">
-  <div class="smoke-title">SZACH MAT</div>
-  <div class="board-outer">
-    <div class="labels-rank" id="rank-left"></div>
-    <div class="chess-wrap" id="chess-board"></div>
-    <div class="labels-rank-r" id="rank-right"></div>
-    <div class="labels-file" id="file-labels"></div>
-  </div>
-</div>
+  <div class="bg"></div>
+  <div class="overlay"></div>
 
-<div id="v-wr" class="view hidden">
-  <button class="btn-back" onclick="location.reload()">← POWRÓT</button>
-  <div class="konsola">
-    <div style="font-size:10px; color:#444; margin-bottom:5px;">ЭЛЕКТРОНИКА ИМ-02</div>
-    <div class="lcd-outer">
-      <div class="lcd-score-row">
-        <span>SCORE: <span id="wr-score">000</span></span>
-        <span>MISS: <span id="wr-miss">0</span></span>
-      </div>
-      <div class="lcd-bezel">
-        <canvas id="wr-canvas" width="300" height="180"></canvas>
+  <header class="top-bar">
+    <div class="logo">
+      <span class="logo-glyph">⚙</span>
+      <span class="logo-text">NEXUS</span>
+    </div>
+  </header>
+
+  <!-- RIGHT SIDE NAV -->
+  <nav class="side-nav" id="sideNav">
+    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+      <span class="toggle-icon">⚙</span>
+      <span class="toggle-label">MENU</span>
+      <span class="arrow" id="navArrow">▶</span>
+    </div>
+
+    <div class="nav-panel" id="navPanel">
+      <div class="nav-panel-inner">
+        <ul class="nav-list">
+          <li>
+            <a href="dom.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Dom</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="ogrod.html" class="nav-link">
+              <span class="nav-icon">🌿</span>
+              <span>Ogród</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="praca.html" class="nav-link">
+              <span class="nav-icon">⚙</span>
+              <span>Praca</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="gry.html" class="nav-link">
+              <span class="nav-icon">🎮</span>
+              <span>Gry</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
-    <div class="buttons-area">
-      <div class="btn-row">
-        <button class="konsola-btn" onmousedown="moveWolf(0)">I</button>
-        <button class="konsola-btn" onmousedown="moveWolf(3)">II</button>
-        <button class="konsola-btn" onmousedown="moveWolf(1)">III</button>
-        <button class="konsola-btn" onmousedown="moveWolf(2)">IV</button>
-      </div>
-      <div class="btn-row">
-        <button class="konsola-btn btn-blue" onclick="startGame(0)">GAME A</button>
-        <button class="konsola-btn btn-blue" onclick="startGame(1)">GAME B</button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="hero">
+      <div class="hero-inner">
+        <p class="hero-sub">Witaj w świecie</p>
+        <h1 class="hero-title">NEXUS</h1>
+        <p class="hero-desc">Wybierz kategorię z menu po prawej stronie, aby rozpocząć eksplorację.</p>
+        <div class="hero-line"></div>
       </div>
     </div>
-  </div>
-</div>
+  </main>
 
-<script>
-const boardEl = document.getElementById('chess-board');
-const RANKS = ['8','7','6','5','4','3','2','1'], FILES = ['a','b','c','d','e','f','g','h'];
-const boardState = [
-  ['♜','♞','♝','♛','♚','♝','♞','♜'],
-  ['♟','♟','♟','♟','♟','♟','♟','♟'],
-  ['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],['','','','','','','',''],
-  ['♙','♙','♙','♙','♙','♙','♙','♙'],
-  ['♖','♘','♗','♕','♔','♗','♘','♖']
-];
-
-function initBoard() {
-  document.getElementById('rank-left').innerHTML = RANKS.map(r=>`<span class="lbl">${r}</span>`).join('');
-  document.getElementById('file-labels').innerHTML = FILES.map(f=>`<span class="lbl">${f}</span>`).join('');
-  boardState.forEach((row, r) => {
-    row.forEach((p, c) => {
-      const sq = document.createElement('div');
-      sq.className = `sq ${(r+c)%2===0?'dark':'light'}`;
-      if(p) {
-        const span = document.createElement('span');
-        span.textContent = p;
-        span.className = r > 4 ? 'wp' : 'bp';
-        if(p === '♔' && r === 7) { // Biała Królowa (uproszczony wybór króla jako startu)
-            span.classList.add('clickable');
-            span.onclick = () => { document.getElementById('v-board').classList.add('hidden'); document.getElementById('v-wr').classList.remove('hidden'); };
-        }
-        sq.appendChild(span);
-      }
-      boardEl.appendChild(sq);
-    });
-  });
-}
-
-// GAME LOGIC: NU POGODI
-const canvas = document.getElementById('wr-canvas');
-const ctx = canvas.getContext('2d');
-let score = 0, misses = 0, wolfPos = 0, eggs = [], gameActive = false, speed = 1000;
-
-function moveWolf(p) { wolfPos = p; draw(); }
-
-function startGame(mode) {
-  score = 0; misses = 0; eggs = []; gameActive = true;
-  speed = mode === 0 ? 800 : 500;
-  tick();
-}
-
-function tick() {
-  if(!gameActive) return;
-  if(Math.random() > 0.6) eggs.push({lane: Math.floor(Math.random()*4), step: 0});
-  
-  eggs.forEach((egg, i) => {
-    egg.step++;
-    if(egg.step === 5) {
-      if(wolfPos === egg.lane) { score++; } 
-      else { misses++; if(misses >= 4) gameActive = false; }
+  <script>
+    function toggleNav() {
+      const panel = document.getElementById('navPanel');
+      const arrow = document.getElementById('navArrow');
+      const nav = document.getElementById('sideNav');
+      panel.classList.toggle('open');
+      arrow.classList.toggle('rotated');
+      nav.classList.toggle('expanded');
     }
-  });
-  eggs = eggs.filter(e => e.step < 6);
-  
-  document.getElementById('wr-score').textContent = score.toString().padStart(3, '0');
-  document.getElementById('wr-miss').textContent = misses;
-  
-  draw();
-  setTimeout(tick, speed - (score * 0.5));
-}
-
-function draw() {
-  ctx.clearRect(0, 0, 300, 180);
-  ctx.fillStyle = '#1a2608';
-  
-  // Wilczek
-  const wX = [60, 60, 210, 210][wolfPos];
-  const wY = [60, 110, 110, 60][wolfPos];
-  ctx.fillRect(wX, wY, 30, 30); // Uproszczony wilk jako kwadrat kosza
-  ctx.fillText("WILK", 130, 100);
-
-  // Jajka
-  eggs.forEach(e => {
-    let ex, ey;
-    if(e.lane === 0) { ex = 20 + e.step*15; ey = 40 + e.step*10; }
-    if(e.lane === 1) { ex = 20 + e.step*15; ey = 140 - e.step*10; }
-    if(e.lane === 2) { ex = 280 - e.step*15; ey = 140 - e.step*10; }
-    if(e.lane === 3) { ex = 280 - e.step*15; ey = 40 + e.step*10; }
-    ctx.beginPath(); ctx.arc(ex, ey, 5, 0, Math.PI*2); ctx.fill();
-  });
-}
-
-window.addEventListener('keydown', e => {
-  if(e.key === '1') moveWolf(0);
-  if(e.key === '2') moveWolf(3);
-  if(e.key === '3') moveWolf(1);
-  if(e.key === '4') moveWolf(2);
-});
-
-initBoard();
-draw();
-</script>
+  </script>
 </body>
 </html>
