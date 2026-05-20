@@ -1,20 +1,20 @@
 {
-  "aktualizacja": "20.05.2026 11:00",
+  "aktualizacja": "20.05.2026 11:15",
   "temperatury": {
     "sypialnia": "23.04",
-    "pokoj_franka": "23.83",
-    "pokoj_z_jaskolka": "22.61",
+    "pokoj_franka": "23.77",
+    "pokoj_z_jaskolka": "22.63",
     "salon": "22.78",
     "lazienka": "23.6",
-    "piwnica": "18.9",
+    "piwnica": "18.7",
     "parownica": "unavailable",
     "salon_klima": "25",
     "sypialnia_klima": "25",
-    "rekuperator": "24.2",
+    "rekuperator": "21.6",
     "czerpnia": "21.5",
-    "nawiew": "24.2",
+    "nawiew": "21.6",
     "wyciag": "23.9",
-    "wyrzutnia": "22.7",
+    "wyrzutnia": "23.6",
     "nagrzewnica": "0.3",
     "wiatrolap": "unknown",
     "zewnetrzna_polnoc": "unknown",
@@ -27,9 +27,9 @@
     "stacja_2": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "68",
-    "piwnica": "61",
-    "powietrze": "46.0",
+    "lazienka": "67",
+    "piwnica": "62",
+    "powietrze": "45.0",
     "stacja": "unavailable"
   },
   "esphome": {
@@ -37,22 +37,20 @@
     "piwnica_status": "unavailable",
     "ciepla_woda": "off",
     "rekup_przewietrzanie": "off",
-    "rekup_wietrzenie": "off",
+    "rekup_wietrzenie": "on",
     "stacja_cisnienie": "unavailable",
     "stacja_wifi": "unavailable"
   },
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": [
-      "Wejście 1"
-    ]
+    "wejscia_naruszone": []
   },
   "rekuperator": {
     "status": "on",
     "tryb": "Tryb inteligentny",
-    "nawiew": "100.0",
-    "wyciag": "90.0",
+    "nawiew": "310.0",
+    "wyciag": "290.0",
     "bypass": "Otwarty (auto)",
     "co2": "500.0",
     "blad": "0.0",
