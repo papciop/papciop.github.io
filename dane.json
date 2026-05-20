@@ -1,20 +1,20 @@
 {
-  "aktualizacja": "20.05.2026 14:30",
+  "aktualizacja": "20.05.2026 14:45",
   "temperatury": {
-    "sypialnia": "23.14",
-    "pokoj_franka": "23.77",
-    "pokoj_z_jaskolka": "22.74",
+    "sypialnia": "23.19",
+    "pokoj_franka": "23.81",
+    "pokoj_z_jaskolka": "22.78",
     "salon": "22.86",
-    "lazienka": "24.0",
+    "lazienka": "24.7",
     "piwnica": "18.2",
     "parownica": "unavailable",
     "salon_klima": "25",
     "sypialnia_klima": "25",
-    "rekuperator": "21.8",
-    "czerpnia": "21.6",
-    "nawiew": "21.8",
+    "rekuperator": "24.0",
+    "czerpnia": "21.9",
+    "nawiew": "24.0",
     "wyciag": "24.1",
-    "wyrzutnia": "23.7",
+    "wyrzutnia": "23.0",
     "nagrzewnica": "0.3",
     "wiatrolap": "unknown",
     "zewnetrzna_polnoc": "unknown",
@@ -22,14 +22,14 @@
     "strych": "unknown",
     "garaz": "unknown",
     "zewnetrzna_wschod": "unknown",
-    "cpu_ha": "51.6",
+    "cpu_ha": "52.1",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "66",
+    "lazienka": "59",
     "piwnica": "63",
-    "powietrze": "43.0",
+    "powietrze": "44.0",
     "stacja": "unavailable"
   },
   "esphome": {
@@ -44,15 +44,13 @@
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": [
-      "Wejście 4"
-    ]
+    "wejscia_naruszone": []
   },
   "rekuperator": {
     "status": "on",
     "tryb": "Tryb inteligentny",
-    "nawiew": "300.0",
-    "wyciag": "290.0",
+    "nawiew": "100.0",
+    "wyciag": "90.0",
     "bypass": "Otwarty (auto)",
     "co2": "500.0",
     "blad": "0.0",
