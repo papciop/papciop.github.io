@@ -1,20 +1,20 @@
 {
-  "aktualizacja": "20.05.2026 19:00",
+  "aktualizacja": "20.05.2026 19:15",
   "temperatury": {
-    "sypialnia": "23.81",
-    "pokoj_franka": "23.96",
-    "pokoj_z_jaskolka": "23.17",
+    "sypialnia": "23.83",
+    "pokoj_franka": "24.12",
+    "pokoj_z_jaskolka": "23.19",
     "salon": "23.23",
-    "lazienka": "24.8",
+    "lazienka": "25.2",
     "piwnica": "18.2",
     "parownica": "unavailable",
     "salon_klima": "25",
     "sypialnia_klima": "26",
-    "rekuperator": "24.4",
-    "czerpnia": "20.7",
-    "nawiew": "24.4",
+    "rekuperator": "24.2",
+    "czerpnia": "19.3",
+    "nawiew": "24.2",
     "wyciag": "24.3",
-    "wyrzutnia": "22.6",
+    "wyrzutnia": "21.8",
     "nagrzewnica": "0.3",
     "wiatrolap": "unknown",
     "zewnetrzna_polnoc": "unknown",
@@ -27,9 +27,9 @@
     "stacja_2": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "60",
+    "lazienka": "57",
     "piwnica": "63",
-    "powietrze": "46.0",
+    "powietrze": "47.0",
     "stacja": "unavailable"
   },
   "esphome": {
