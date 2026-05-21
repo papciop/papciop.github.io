@@ -1,20 +1,20 @@
 {
-  "aktualizacja": "21.05.2026 15:45",
+  "aktualizacja": "21.05.2026 16:00",
   "temperatury": {
-    "sypialnia": "22.35",
+    "sypialnia": "22.61",
     "pokoj_franka": "23.44",
     "pokoj_z_jaskolka": "22.61",
     "salon": "22.5",
-    "lazienka": "24.1",
+    "lazienka": "24.4",
     "piwnica": "18.3",
     "parownica": "unavailable",
-    "salon_klima": "24",
+    "salon_klima": "25",
     "sypialnia_klima": "25",
-    "rekuperator": "23.8",
-    "czerpnia": "19.7",
-    "nawiew": "23.8",
+    "rekuperator": "23.9",
+    "czerpnia": "20.4",
+    "nawiew": "23.9",
     "wyciag": "23.7",
-    "wyrzutnia": "21.4",
+    "wyrzutnia": "21.7",
     "nagrzewnica": "0.3",
     "wiatrolap": "unknown",
     "zewnetrzna_polnoc": "unknown",
@@ -22,20 +22,20 @@
     "strych": "unknown",
     "garaz": "unknown",
     "zewnetrzna_wschod": "unknown",
-    "cpu_ha": "53.1",
+    "cpu_ha": "52.6",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "51",
+    "lazienka": "50",
     "piwnica": "62",
-    "powietrze": "46.0",
+    "powietrze": "47.0",
     "stacja": "unavailable"
   },
   "esphome": {
     "lazienka_rost": "off",
     "piwnica_status": "unavailable",
-    "ciepla_woda": "off",
+    "ciepla_woda": "on",
     "rekup_przewietrzanie": "off",
     "rekup_wietrzenie": "off",
     "stacja_cisnienie": "unavailable",
@@ -44,7 +44,9 @@
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": []
+    "wejscia_naruszone": [
+      "Wejście 1"
+    ]
   },
   "rekuperator": {
     "status": "on",
