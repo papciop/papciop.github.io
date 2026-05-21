@@ -1,17 +1,17 @@
 {
-  "aktualizacja": "21.05.2026 17:15",
+  "aktualizacja": "21.05.2026 17:30",
   "temperatury": {
-    "sypialnia": "22.8",
+    "sypialnia": "22.89",
     "pokoj_franka": "23.49",
     "pokoj_z_jaskolka": "22.8",
     "salon": "22.71",
-    "lazienka": "24.5",
+    "lazienka": "24.4",
     "piwnica": "18.3",
     "parownica": "unavailable",
     "salon_klima": "25",
     "sypialnia_klima": "25",
     "rekuperator": "23.7",
-    "czerpnia": "18.8",
+    "czerpnia": "19.0",
     "nawiew": "23.7",
     "wyciag": "23.7",
     "wyrzutnia": "21.0",
@@ -44,7 +44,9 @@
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": []
+    "wejscia_naruszone": [
+      "Wejście 1"
+    ]
   },
   "rekuperator": {
     "status": "on",
