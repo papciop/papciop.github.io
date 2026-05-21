@@ -1,20 +1,20 @@
 {
-  "aktualizacja": "21.05.2026 05:45",
+  "aktualizacja": "21.05.2026 06:00",
   "temperatury": {
-    "sypialnia": "23.62",
+    "sypialnia": "23.6",
     "pokoj_franka": "23.45",
     "pokoj_z_jaskolka": "22.97",
-    "salon": "22.58",
+    "salon": "22.54",
     "lazienka": "24.6",
     "piwnica": "18.3",
     "parownica": "unavailable",
     "salon_klima": "24",
     "sypialnia_klima": "26",
-    "rekuperator": "20.5",
-    "czerpnia": "14.1",
-    "nawiew": "20.5",
-    "wyciag": "23.7",
-    "wyrzutnia": "18.2",
+    "rekuperator": "22.2",
+    "czerpnia": "14.4",
+    "nawiew": "22.2",
+    "wyciag": "23.6",
+    "wyrzutnia": "18.3",
     "nagrzewnica": "0.3",
     "wiatrolap": "unknown",
     "zewnetrzna_polnoc": "unknown",
@@ -22,7 +22,7 @@
     "strych": "unknown",
     "garaz": "unknown",
     "zewnetrzna_wschod": "unknown",
-    "cpu_ha": "51.1",
+    "cpu_ha": "52.6",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable"
   },
@@ -44,16 +44,18 @@
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": []
+    "wejscia_naruszone": [
+      "Wejście 1"
+    ]
   },
   "rekuperator": {
     "status": "on",
     "tryb": "Tryb inteligentny",
     "nawiew": "100.0",
-    "wyciag": "50.0",
+    "wyciag": "90.0",
     "bypass": "Otwarty (auto)",
     "co2": "500.0",
-    "blad": "28.0",
+    "blad": "0.0",
     "filtry": "21.0"
   },
   "zmiekczacz": {
