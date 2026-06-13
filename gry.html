@@ -42,9 +42,7 @@
       transition: opacity 0.3s;
     }
 
-    .game-card:hover::before {
-      opacity: 1;
-    }
+    .game-card:hover::before { opacity: 1; }
 
     .game-preview {
       width: 100%;
@@ -65,9 +63,7 @@
       background: radial-gradient(ellipse at center, rgba(0,212,255,0.08) 0%, transparent 70%);
     }
 
-    .game-info {
-      padding: 20px;
-    }
+    .game-info { padding: 20px; }
 
     .game-title {
       font-family: 'Cinzel', serif;
@@ -142,6 +138,88 @@
     .corner-deco.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
     .corner-deco.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
     .corner-deco.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+
+    /* ── GAME OVERLAY ─────────────────────────────────── */
+    #game-overlay {
+      display: none;
+      position: fixed;
+      inset: 56px 0 0 0;
+      z-index: 200;
+      background: rgba(5, 8, 15, 0.96);
+      backdrop-filter: blur(8px);
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    #game-overlay.active { display: flex; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.97); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    .console-wrap {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .console-bar {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      background: rgba(5, 10, 20, 0.9);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-bottom: none;
+      border-radius: 4px 4px 0 0;
+    }
+
+    .console-bar-title {
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      color: var(--gold-light);
+    }
+
+    .close-btn {
+      background: none;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      color: var(--cyan);
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      padding: 4px 12px;
+      cursor: pointer;
+      border-radius: 2px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .close-btn:hover {
+      background: rgba(0, 212, 255, 0.15);
+      box-shadow: 0 0 10px rgba(0, 212, 255, 0.3);
+    }
+
+    .game-frame {
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 0 0 4px 4px;
+      display: block;
+      width: min(936px, 95vw);
+      height: min(607px, 80vh);
+      background: #000;
+    }
+
+    .console-glow {
+      position: absolute;
+      inset: -1px;
+      border-radius: 4px;
+      box-shadow: 0 0 40px rgba(0, 212, 255, 0.15), 0 0 80px rgba(0, 212, 255, 0.08);
+      pointer-events: none;
+    }
   </style>
 </head>
 <body>
@@ -210,8 +288,7 @@
       <p class="section-title">🎮 &nbsp; Arcade</p>
       <div class="games-grid">
 
-        <!-- Wilk i Zając -->
-        <a href="wilk-i-zajac/index.html" class="game-card" target="_blank">
+        <div class="game-card" onclick="openGame('wilk-i-zajac/index.html', 'Wilk i Zając')">
           <div class="corner-deco tl"></div>
           <div class="corner-deco tr"></div>
           <div class="corner-deco bl"></div>
@@ -224,11 +301,23 @@
             <span class="game-tag">Retro</span>
             <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
           </div>
-        </a>
+        </div>
 
       </div>
     </div>
   </main>
+
+  <!-- GAME OVERLAY -->
+  <div id="game-overlay">
+    <div class="console-wrap">
+      <div class="console-glow"></div>
+      <div class="console-bar">
+        <span class="console-bar-title" id="overlay-title">🎮 &nbsp; GRA</span>
+        <button class="close-btn" onclick="closeGame()">✕ &nbsp; ZAMKNIJ</button>
+      </div>
+      <iframe id="game-frame" class="game-frame" src="" allow="autoplay"></iframe>
+    </div>
+  </div>
 
   <script>
     function toggleNav() {
@@ -239,6 +328,23 @@
       arrow.classList.toggle('rotated');
       nav.classList.toggle('expanded');
     }
+
+    function openGame(src, title) {
+      document.getElementById('game-frame').src = src;
+      document.getElementById('overlay-title').textContent = '🎮  ' + title;
+      document.getElementById('game-overlay').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeGame() {
+      document.getElementById('game-overlay').classList.remove('active');
+      document.getElementById('game-frame').src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeGame();
+    });
   </script>
 </body>
 </html>
