@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gry — NEXUS</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 28px;
+      margin-top: 32px;
+    }
+
+    .game-card {
+      position: relative;
+      background: rgba(5, 10, 20, 0.85);
+      border: 1px solid rgba(0, 212, 255, 0.25);
+      border-radius: 4px;
+      overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+    }
+
+    .game-card:hover {
+      border-color: var(--cyan);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.25), inset 0 0 20px rgba(0, 212, 255, 0.05);
+      transform: translateY(-4px);
+    }
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .game-card:hover::before {
+      opacity: 1;
+    }
+
+    .game-preview {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, rgba(0,30,50,0.9) 0%, rgba(5,10,20,0.95) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-preview::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, rgba(0,212,255,0.08) 0%, transparent 70%);
+    }
+
+    .game-info {
+      padding: 20px;
+    }
+
+    .game-title {
+      font-family: 'Cinzel', serif;
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      color: var(--gold-light);
+      margin-bottom: 8px;
+    }
+
+    .game-desc {
+      font-family: 'Crimson Pro', serif;
+      font-size: 15px;
+      color: var(--text-dim);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .game-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 2px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-right: 6px;
+    }
+
+    .play-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 14px;
+      padding: 8px 18px;
+      background: rgba(0, 212, 255, 0.1);
+      border: 1px solid rgba(0, 212, 255, 0.4);
+      color: var(--cyan);
+      font-family: 'Cinzel', serif;
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      border-radius: 2px;
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+
+    .game-card:hover .play-btn {
+      background: rgba(0, 212, 255, 0.2);
+      box-shadow: 0 0 14px rgba(0, 212, 255, 0.3);
+    }
+
+    .section-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: 0.25em;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.15);
+      padding-bottom: 10px;
+      margin-bottom: 4px;
+    }
+
+    .corner-deco {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border-color: var(--gold);
+      border-style: solid;
+      opacity: 0.5;
+    }
+    .corner-deco.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+    .corner-deco.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
+    .corner-deco.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
+    .corner-deco.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
+  </style>
+</head>
+<body>
+
+  <div class="bg"></div>
+  <div class="overlay"></div>
+
+  <header class="top-bar">
+    <div class="logo">
+      <span class="logo-glyph">⚙</span>
+      <span class="logo-text">NEXUS</span>
+    </div>
+  </header>
+
+  <nav class="side-nav" id="sideNav">
+    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+      <span class="toggle-icon">⚙</span>
+      <span class="toggle-label">MENU</span>
+      <span class="arrow" id="navArrow">▶</span>
+    </div>
+    <div class="nav-panel" id="navPanel">
+      <div class="nav-panel-inner">
+        <ul class="nav-list">
+          <li>
+            <a href="index.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Strona główna</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="dom.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Dom</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="ogrod.html" class="nav-link">
+              <span class="nav-icon">🌿</span>
+              <span>Ogród</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="praca.html" class="nav-link">
+              <span class="nav-icon">⚙</span>
+              <span>Praca</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="gry.html" class="nav-link active-link">
+              <span class="nav-icon">🎮</span>
+              <span>Gry</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="subpage-content">
+    <div class="content-section">
+      <p class="section-title">🎮 &nbsp; Arcade</p>
+      <div class="games-grid">
+
+        <!-- Wilk i Zając -->
+        <a href="wilk-i-zajac/index.html" class="game-card" target="_blank">
+          <div class="corner-deco tl"></div>
+          <div class="corner-deco tr"></div>
+          <div class="corner-deco bl"></div>
+          <div class="corner-deco br"></div>
+          <div class="game-preview">🐺🥚🐔</div>
+          <div class="game-info">
+            <div class="game-title">Wilk i Zając</div>
+            <p class="game-desc">Klasyczna gra z radzieckiego automatu — zbieraj jajka jako wilk z bajki "Nu, pogodi!". Ile zdążysz uzbierać?</p>
+            <span class="game-tag">Arcade</span>
+            <span class="game-tag">Retro</span>
+            <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </main>
+
+  <script>
+    function toggleNav() {
+      const panel = document.getElementById('navPanel');
+      const arrow = document.getElementById('navArrow');
+      const nav = document.getElementById('sideNav');
+      panel.classList.toggle('open');
+      arrow.classList.toggle('rotated');
+      nav.classList.toggle('expanded');
+    }
+  </script>
+</body>
+</html>
