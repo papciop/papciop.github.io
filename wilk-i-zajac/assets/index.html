@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Nu, Pogodi! - Wersja Klasyczna LCD</title>
+    <style>
+        body {
+            background-color: #1a1a1a;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            user-select: none;
+            overflow: hidden;
+        }
+
+        /* Obudowa konsoli na bazie dostarczonego tła */
+        #console-case {
+            width: 800px;
+            height: 480px;
+            background-image: url('game-pad-background.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 24px;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8);
+        }
+
+        /* Ekran gry - idealnie szary ekran LCD, odwzorowujący proporcje z ruskie jajka_2.jpg */
+        #game-screen {
+            width: 440px;
+            height: 290px;
+            background-color: #b8c3c2; /* Klasyczny szary odcień ciekłokrystalicznego ekranu */
+            position: absolute;
+            top: 92px;
+            left: 180px;
+            border: 4px solid #222;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.4);
+            overflow: hidden;
+        }
+
+        /* Tło z rynnami i kurami - jeśli masz plik background.jpg/svg, użyj go, 
+           w przeciwnym razie domyślnie symulujemy układ z ruskie jajka_2.jpg */
+        #lcd-matrix {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-image: url('background.svg'); /* Tu powinny być rynny i domki kur z obrazka */
+            background-size: cover;
+        }
+
+        /* Cyfrowy wyświetlacz punktów na środku u góry */
+        #score-display {
+            position: absolute;
+            top: 15px;
+            right: 40px;
+            font-family: 'monospace';
+            font-size: 36px;
+            font-weight: bold;
+            color: #2b3331;
+            letter-spacing: 4px;
+        }
+
+        /* Ikony żyć (małe kurczaczki z life.svg reprezentujące skuchy) */
+        #lives-container {
+            position: absolute;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+        }
+
+        .lcd-life {
+            width: 25px;
+            height: 25px;
+            background-image: url('life.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 0.1; /* Efekt "zgaszonego" segmentu LCD */
+        }
+
+        .lcd-life.active {
+            opacity: 0.9; /* Zapalony segment */
+        }
+
+        /* Stylizacja Wilka - zamiast jednego ruchomego elementu, robimy cztery stałe segmenty LCD,
+           które zapalają się i gasną, dokładnie tak jak w fizycznej gierce! */
+        .wolf-segment {
+            position: absolute;
+            width: 115px;
+            height: 125px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            display: none; /* Domyślnie niewidoczne (zgaszone) */
+        }
+
+        /* Precyzyjne pozycjonowanie lewej i prawej strony Wilka według ruskie jajka_2.jpg */
+        #wolf-TL { left: 110px; top: 90px; background-image: url('wolf_LeftUp.svg'); }
+        #wolf-BL { left: 110px; top: 125px; background-image: url('wolf_LeftDown.svg'); }
+        #wolf-TR { right: 110px; top: 90px; background-image: url('wolf_RightUp.svg'); }
+        #wolf-BR { right: 110px; top: 125px; background-image: url('wolf_RightDown.svg'); }
+
+
+        /* JAJKA - Segmenty na rynienkach */
+        .egg-segment {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            background-color: #2b3331;
+            border-radius: 50%;
+            display: none;
+        }
+
+        /* Przycisk sterowania na obudowie (niewidzialne strefy nad oryginalnymi guzikami ze zdjęcia) */
+        .pad-btn {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        #btn-tl { top: 150px; left: 55px; }
+        #btn-bl { top: 290px; left: 55px; }
+        #btn-tr { top: 150px; left: 680px; }
+        #btn-br { top: 290px; left: 680px; }
+
+        #controls-hint {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #aaa;
+            text-align: center;
+        }
+        b { color: #ff5555; }
+    </style>
+</head>
+<body>
+
+    <div id="console-case">
+        <div id="game-screen">
+            <div id="lcd-matrix">
+                <!-- Cyfrowy licznik punktów -->
+                <div id="score-display">0000</div>
+
+                <!-- Licznik skuch (życia) -->
+                <div id="lives-container">
+                    <div id="life-1" class="lcd-life"></div>
+                    <div id="life-2" class="lcd-life"></div>
+                    <div id="life-3" class="lcd-life"></div>
+                </div>
+
+                <!-- Cztery fizyczne stany wilka jako osobne segmenty LCD -->
+                <div id="wolf-TL" class="wolf-segment"></div>
+                <div id="wolf-BL" class="wolf-segment"></div>
+                <div id="wolf-TR" class="wolf-segment"></div>
+                <div id="wolf-BR" class="wolf-segment"></div>
+            </div>
+        </div>
+
+        <!-- Przyciski fizyczne na padzie -->
+        <div id="btn-tl" class="pad-btn" onclick="setWolfPosition('TL')"></div>
+        <div id="btn-bl" class="pad-btn" onclick="setWolfPosition('BL')"></div>
+        <div id="btn-tr" class="pad-btn" onclick="setWolfPosition('TR')"></div>
+        <div id="btn-br" class="pad-btn" onclick="setWolfPosition('BR')"></div>
+    </div>
+
+    <div id="controls-hint">
+        Klawisze: <b>Q</b> (Góra Lewo) | <b>A</b> (Dół Lewo) | <b>P</b> (Góra Prawo) | <b>L</b> (Dół Prawo)
+    </div>
+
+<script>
+    let score = 0;
+    let misses = 0;
+    let currentPosition = 'TL';
+    let gameLoopInterval;
+    let activeEggs = [];
+    let speed = 800;
+
+    // Definicje kroków (segmentów LCD), po których toczą się jajka z czterech stron do koszyka
+    const eggPaths = {
+        TL: [{x:40, y:100}, {x:60, y:110}, {x:80, y:120}, {x:100, y:130}, {x:120, y:140}],
+        BL: [{x:40, y:180}, {x:60, y:190}, {x:80, y:200}, {x:100, y:210}, {x:120, y:220}],
+        TR: [{x:385, y:100}, {x:365, y:110}, {x:345, y:120}, {x:325, y:130}, {x:305, y:140}],
+        BR: [{x:385, y:180}, {x:365, y:190}, {x:345, y:200}, {x:325, y:210}, {x:305, y:220}]
+    };
+
+    // Funkcja przełączająca segmenty Wilka (gasi wszystkie, zapala jeden właściwy)
+    function setWolfPosition(pos) {
+        currentPosition = pos;
+        document.querySelectorAll('.wolf-segment').forEach(el => el.style.display = 'none');
+        
+        const activeSegment = document.getElementById(`wolf-${pos}`);
+        if (activeSegment) activeSegment.style.display = 'block';
+    }
+
+    // Sterowanie klawiaturą
+    window.addEventListener('keydown', (e) => {
+        switch(e.key.toLowerCase()) {
+            case 'q': setWolfPosition('TL'); break;
+            case 'a': setWolfPosition('BL'); break;
+            case 'p': setWolfPosition('TR'); break;
+            case 'l': setWolfPosition('BR'); break;
+        }
+    });
+
+    function renderEggs() {
+        // Usuń stare fizyczne jajka z DOM, aby narysować zaktualizowane pozycje
+        document.querySelectorAll('.egg-segment').forEach(el => el.remove());
+
+        activeEggs.forEach(egg => {
+            const coords = eggPaths[egg.lane][egg.step];
+            const eggEl = document.createElement('div');
+            eggEl.className = 'egg-segment';
+            eggEl.style.left = coords.x + 'px';
+            eggEl.style.top = coords.y + 'px';
+            eggEl.style.display = 'block';
+            document.getElementById('lcd-matrix').appendChild(eggEl);
+        });
+    }
+
+    function spawnEgg() {
+        if (Math.random() > 0.4 && activeEggs.length > 0) return;
+
+        const lanes = ['TL', 'BL', 'TR', 'BR'];
+        const randomLane = lanes[Math.floor(Math.random() * lanes.length)];
+
+        // Blokada, żeby jajka nie nakładały się na tym samym pierwszym segmencie
+        if (activeEggs.some(e => e.lane === randomLane && e.step === 0)) return;
+
+        activeEggs.push({ lane: randomLane, step: 0 });
+    }
+
+    function updateMissesDisplay() {
+        for (let i = 1; i <= 3; i++) {
+            const lifeEl = document.getElementById(`life-${i}`);
+            if (i <= misses) {
+                lifeEl.classList.add('active'); // Zapal kurczaczka jako skuchę
+            } else {
+                lifeEl.classList.remove('active');
+            }
+        }
+    }
+
+    function tick() {
+        for (let i = activeEggs.length - 1; i >= 0; i--) {
+            activeEggs[i].step++;
+
+            // Jajko doszło do ostatniego segmentu (punkt łapania)
+            if (activeEggs[i].step >= 5) {
+                if (currentPosition === activeEggs[i].lane) {
+                    score++;
+                    document.getElementById('score-display').innerText = String(score).padStart(4, '0');
+                    
+                    // Przyspieszenie gry przy wielokrotnościach 5 punktów
+                    if (score % 5 === 0 && speed > 250) {
+                        speed -= 50;
+                        clearInterval(gameLoopInterval);
+                        gameLoopInterval = setInterval(tick, speed);
+                    }
+                } else {
+                    misses++;
+                    updateMissesDisplay();
+                    if (misses >= 3) {
+                        clearInterval(gameLoopInterval);
+                        alert(`Koniec gry! Twój wynik to: ${score}`);
+                        resetGame();
+                        return;
+                    }
+                }
+                activeEggs.splice(i, 1);
+            }
+        }
+
+        spawnEgg();
+        renderEggs();
+    }
+
+    function resetGame() {
+        score = 0;
+        misses = 0;
+        speed = 800;
+        activeEggs = [];
+        document.getElementById('score-display').innerText = '0000';
+        updateMissesDisplay();
+        setWolfPosition('TL');
+        clearInterval(gameLoopInterval);
+        gameLoopInterval = setInterval(tick, speed);
+    }
+
+    // Start gry
+    resetGame();
+</script>
+</body>
+</html>
