@@ -120,19 +120,15 @@ class Game {
   handleKeyDown(event) {
     switch (event.key) {
       case "ArrowLeft":
-        event.preventDefault();
         game.wolf.moveLeft();
         break;
       case "ArrowRight":
-        event.preventDefault();
         game.wolf.moveRight();
         break;
       case "ArrowUp":
-        event.preventDefault();
         game.wolf.moveUp();
         break;
       case "ArrowDown":
-        event.preventDefault();
         game.wolf.moveDown();
         break;
       default:

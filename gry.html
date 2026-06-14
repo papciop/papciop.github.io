@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gry — NEXUS</title>
+  <title>Gry — HAOS.SID</title>
   <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
   <style>
@@ -170,7 +170,7 @@
   <header class="top-bar">
     <div class="logo">
       <span class="logo-glyph">⚙</span>
-      <span class="logo-text">NEXUS</span>
+      <span class="logo-text">HAOS.SID</span>
     </div>
   </header>
 
@@ -228,6 +228,7 @@
       <p class="section-title">🎮 &nbsp; Arcade</p>
 
       <div class="games-grid" id="games-grid">
+
         <div class="game-card" onclick="openGame('wilk-i-zajac/index.html')">
           <div class="corner-deco tl"></div>
           <div class="corner-deco tr"></div>
@@ -242,9 +243,41 @@
             <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
           </div>
         </div>
+
+        <div class="game-card" onclick="openGame('snake/index.html')">
+          <div class="corner-deco tl"></div>
+          <div class="corner-deco tr"></div>
+          <div class="corner-deco bl"></div>
+          <div class="corner-deco br"></div>
+          <div class="game-preview">🐍</div>
+          <div class="game-info">
+            <div class="game-title">Wąż</div>
+            <p class="game-desc">Klasyczny wąż z telefonów Nokia — zbieraj punkty i nie wpadnij w siebie ani w ściany. Jak długi zdążysz urosnąć?</p>
+            <span class="game-tag">Klasyk</span>
+            <span class="game-tag">Nokia</span>
+            <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('tanki/index.html')">
+          <div class="corner-deco tl"></div>
+          <div class="corner-deco tr"></div>
+          <div class="corner-deco bl"></div>
+          <div class="corner-deco br"></div>
+          <div class="game-preview">🪖⚔️🪖</div>
+          <div class="game-info">
+            <div class="game-title">Tanki</div>
+            <p class="game-desc">Klasyczna bitwa czołgów — zniszcz wszystkich wrogów i chroń swoją bazę. Inspirowane Battle City z NES.</p>
+            <span class="game-tag">Akcja</span>
+            <span class="game-tag">Battle City</span>
+            <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
+          </div>
+        </div>
+
       </div>
 
       <div id="game-container">
+        <button onclick="closeGame()" style="margin-bottom:12px;padding:6px 18px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;cursor:pointer;border-radius:2px;">◀ &nbsp; LISTA GIER</button>
         <iframe id="game-frame" class="game-frame" src="" allow="autoplay" allowtransparency="true"></iframe>
       </div>
     </div>
@@ -264,6 +297,12 @@
       document.getElementById('games-grid').style.display = 'none';
       document.getElementById('game-frame').src = src;
       document.getElementById('game-container').classList.add('active');
+    }
+
+    function closeGame() {
+      document.getElementById('game-frame').src = '';
+      document.getElementById('game-container').classList.remove('active');
+      document.getElementById('games-grid').style.display = '';
     }
 
     document.addEventListener('keydown', function(e) {
