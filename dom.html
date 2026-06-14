@@ -385,7 +385,7 @@
     /* ── fetch ─────────────────────────────────────── */
     async function loadData() {
       try {
-        const res = await fetch('dane.json?t=' + Date.now());
+        const res = await fetch('https://raw.githubusercontent.com/papciop/papciop.github.io/main/dane.json?t=' + Date.now());
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const d = await res.json();
         document.getElementById('updateTime').textContent = d.aktualizacja || '—';
@@ -397,7 +397,7 @@
     }
 
     loadData();
-    setInterval(loadData, 5 * 60 * 1000); // odśwież co 5 minut
+    setInterval(loadData, 30 * 1000); // odśwież co 30 sekund
   </script>
 </body>
 </html>
