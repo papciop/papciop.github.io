@@ -383,17 +383,136 @@
     }
 
     /* ── fetch ─────────────────────────────────────── */
+    let firstLoad = true;
+
     async function loadData() {
       try {
         const res = await fetch('https://api.github.com/repos/papciop/papciop.github.io/contents/dane.json?t=' + Date.now());
         if (!res.ok) throw new Error('HTTP ' + res.status);
-        const meta = await res.json(); const d = JSON.parse(atob(meta.content.replace(/\n/g, '')));
+        const meta = await res.json();
+        const d = JSON.parse(atob(meta.content.replace(/\n/g, '')));
         document.getElementById('updateTime').textContent = d.aktualizacja || '—';
-        document.getElementById('dashboard').innerHTML = render(d);
+        if (firstLoad) {
+          document.getElementById('dashboard').innerHTML = render(d);
+          firstLoad = false;
+        } else {
+          updateValues(d);
+        }
       } catch(err) {
-        document.getElementById('dashboard').innerHTML =
-          `<p class="loading-msg">⚠ Nie można pobrać danych.<br><small>${err.message}</small></p>`;
+        if (firstLoad) {
+          document.getElementById('dashboard').innerHTML =
+            `<p class="loading-msg">⚠ Nie można pobrać danych.<br><small>${err.message}</small></p>`;
+        }
       }
+    }
+
+    function updateValues(d) {
+      const t  = d.temperatury  || {};
+      const w  = d.wilgotnosc   || {};
+      const e  = d.esphome      || {};
+      const a  = d.alarm        || {};
+      const r  = d.rekuperator  || {};
+      const z  = d.zmiekczacz   || {};
+      const wo = d.wyjscia_aktywne   || [];
+      const wa = d.wejscia_naruszone || [];
+
+      // helper — update text in element if it exists
+      function set(sel, val) {
+        const el = document.querySelector(sel);
+        if (el) el.innerHTML = val;
+      }
+
+      // helper — update stat-value in row by label text
+      function setRow(label, val) {
+        const rows = document.querySelectorAll('.stat-row');
+        for (const row of rows) {
+          if (row.querySelector('.stat-label')?.textContent?.trim() === label) {
+            const v = row.querySelector('.stat-value');
+            if (v) v.innerHTML = val;
+            break;
+          }
+        }
+      }
+
+      // helper — update temp-item by label
+      function setTemp(label, val) {
+        const items = document.querySelectorAll('.temp-item');
+        for (const item of items) {
+          if (item.querySelector('.temp-label')?.textContent?.trim() === label) {
+            const v = item.querySelector('.temp-value');
+            if (!v) break;
+            const n = parseFloat(val);
+            const cls = isNaN(n) ? 'na' : (n>=27?'hot':n>=23?'warm':n<=14?'cold':n<=18?'cool':'');
+            const disp = (!isNaN(n) && val !== 'unknown' && val !== 'unavailable')
+              ? n.toFixed(1) + ' °C' : '<span class="na">—</span>';
+            v.className = 'temp-value ' + cls;
+            v.innerHTML = disp;
+            break;
+          }
+        }
+      }
+
+      // Temperatury pokoje
+      setTemp('Sypialnia', t.sypialnia);
+      setTemp('Pokój Franka', t.pokoj_franka);
+      setTemp('Pokój z Jaskółką', t.pokoj_z_jaskolka);
+      setTemp('Salon', t.salon);
+      setTemp('Łazienka', t.lazienka);
+      setTemp('Wiatrołap', t.wiatrolap);
+      setTemp('Salon (klima)', t.salon_klima);
+      setTemp('Sypialnia (klima)', t.sypialnia_klima);
+      // Techniczne
+      setTemp('Piwnica', t.piwnica);
+      setTemp('Kotłownia', t.kotlownia);
+      setTemp('Strych', t.strych);
+      setTemp('Garaż', t.garaz);
+      setTemp('Zew. północ', t.zewnetrzna_polnoc);
+      setTemp('Zew. wschód', t.zewnetrzna_wschod);
+      setTemp('Nagrzewnica', t.nagrzewnica);
+      setTemp('CPU HA', t.cpu_ha);
+      setTemp('Parownica', t.parownica);
+      setTemp('Stacja 1', t.stacja_1);
+      setTemp('Stacja 2', t.stacja_2);
+      // Wentylacja
+      setTemp('Czerpnia', t.czerpnia);
+      setTemp('Nawiew', t.nawiew);
+      setTemp('Wyciąg', t.wyciag);
+      setTemp('Wyrzutnia', t.wyrzutnia);
+      setTemp('Rekuperator', t.rekuperator);
+
+      // Rekuperator rows
+      setRow('Status', badge(r.status));
+      setRow('Tryb', r.tryb || '—');
+      setRow('Nawiew', fmt(r.nawiew, 'm³/h'));
+      setRow('Wyciąg', fmt(r.wyciag, 'm³/h'));
+      setRow('ByPass', r.bypass || '—');
+      setRow('CO₂', fmt(r.co2, 'ppm'));
+      setRow('Błąd', r.blad || '—');
+      setRow('Filtry', r.filtry ? r.filtry + ' dni' : '—');
+
+      // Alarm rows
+      setRow('Strefa 1', badge(a.strefa_1));
+      setRow('Strefa 2', badge(a.strefa_2));
+
+      // ESP rows
+      setRow('Łazienka rost', badge(e.lazienka_rost));
+      setRow('Piwnica status', badge(e.piwnica_status));
+      setRow('Ciepła woda', badge(e.ciepla_woda));
+      setRow('Rekup. przewietrzanie', badge(e.rekup_przewietrzanie));
+      setRow('Rekup. wietrzenie', badge(e.rekup_wietrzenie));
+      setRow('Ciśnienie', fmt(e.stacja_cisnienie, 'hPa'));
+      setRow('WiFi stacja', e.stacja_wifi ? e.stacja_wifi + '%' : '—');
+
+      // Zmiękczacz
+      const solPct = parseFloat(z.poziom_soli) || 0;
+      const bigVal = document.querySelector('.big-val');
+      if (bigVal) bigVal.innerHTML = solPct + '<span class="big-unit"> %</span>';
+      const barFill = document.querySelector('.bar-fill');
+      if (barFill) {
+        barFill.style.width = Math.min(Math.max(solPct,0),100) + '%';
+        barFill.className = 'bar-fill ' + (solPct < 20 ? 'bar-red' : 'bar-gold');
+      }
+      setRow('Dni do końca soli', z.dni_do_konca ? z.dni_do_konca + ' dni' : '—');
     }
 
     loadData();
