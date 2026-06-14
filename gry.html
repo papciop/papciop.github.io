@@ -265,6 +265,12 @@
       document.getElementById('game-frame').src = src;
       document.getElementById('game-container').classList.add('active');
     }
+
+    document.addEventListener('keydown', function(e) {
+      if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+      }
+    });
   </script>
 </body>
 </html>
