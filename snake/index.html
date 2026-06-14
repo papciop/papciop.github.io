@@ -7,56 +7,48 @@
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       background: transparent;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
       min-height: 100vh;
       font-family: 'Courier New', monospace;
     }
     #ui {
-      display: flex;
-      gap: 40px;
-      margin-bottom: 12px;
-      color: #00d4ff;
-      font-size: 16px;
-      letter-spacing: 0.15em;
+      display: flex; gap: 32px; margin-bottom: 10px;
+      color: #00d4ff; font-size: 15px; letter-spacing: 0.13em;
     }
+    #speedbar {
+      display: flex; gap: 8px; align-items: center;
+      margin-bottom: 8px; color: #8899aa; font-size: 12px; letter-spacing: 0.1em;
+    }
+    #speedbar span { color: #c8a84b; font-size: 13px; letter-spacing: 0.15em; }
     canvas {
-      border: 2px solid rgba(0,212,255,0.4);
-      border-radius: 4px;
-      box-shadow: 0 0 30px rgba(0,212,255,0.15);
-      background: #050a14;
-      display: block;
+      border: 2px solid rgba(0,212,255,0.4); border-radius: 4px;
+      box-shadow: 0 0 30px rgba(0,212,255,0.15); background: #050a14; display: block;
     }
     #overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      color: #00d4ff;
-      text-align: center;
-      background: rgba(5,10,20,0.85);
-      border-radius: 4px;
+      position: absolute; top:0; left:0; right:0; bottom:0;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 14px;
+      color: #00d4ff; text-align: center;
+      background: rgba(5,10,20,0.88); border-radius: 4px;
     }
-    #overlay h2 { font-size: 28px; letter-spacing: 0.2em; color: #c8a84b; }
-    #overlay p { font-size: 14px; letter-spacing: 0.1em; color: #8899aa; }
-    button {
-      padding: 10px 28px;
-      background: rgba(0,212,255,0.1);
-      border: 1px solid rgba(0,212,255,0.5);
-      color: #00d4ff;
-      font-family: 'Courier New', monospace;
-      font-size: 14px;
-      letter-spacing: 0.15em;
-      cursor: pointer;
-      border-radius: 2px;
-      transition: all 0.2s;
+    #overlay h2 { font-size: 26px; letter-spacing: 0.2em; color: #c8a84b; }
+    #overlay p { font-size: 13px; letter-spacing: 0.08em; color: #8899aa; line-height: 1.8; }
+    .speed-btns { display: flex; gap: 10px; }
+    .spd-btn {
+      padding: 8px 20px;
+      background: rgba(0,212,255,0.07);
+      border: 1px solid rgba(0,212,255,0.35);
+      color: #00d4ff; font-family: 'Courier New', monospace;
+      font-size: 13px; letter-spacing: 0.12em;
+      cursor: pointer; border-radius: 2px; transition: all 0.2s;
     }
-    button:hover { background: rgba(0,212,255,0.2); box-shadow: 0 0 14px rgba(0,212,255,0.3); }
+    .spd-btn:hover, .spd-btn.active {
+      background: rgba(0,212,255,0.2);
+      box-shadow: 0 0 12px rgba(0,212,255,0.35);
+      border-color: #00d4ff;
+    }
+    .spd-btn.active { color: #fff; }
     #wrap { position: relative; display: inline-block; }
   </style>
 </head>
@@ -64,55 +56,92 @@
   <div id="ui">
     <span>WYNIK: <b id="score">0</b></span>
     <span>REKORD: <b id="best">0</b></span>
+    <span>PRĘDKOŚĆ: <b id="curspeed">1</b></span>
+  </div>
+  <div id="speedbar">
+    POZIOM STARTOWY:
+    <button class="spd-btn active" id="s1" onclick="setStartSpeed(1)">1 — WOLNO</button>
+    <button class="spd-btn" id="s2" onclick="setStartSpeed(2)">2 — ŚREDNIO</button>
+    <button class="spd-btn" id="s3" onclick="setStartSpeed(3)">3 — SZYBKO</button>
   </div>
   <div id="wrap">
     <canvas id="c" width="400" height="400"></canvas>
     <div id="overlay">
       <h2>WĄŻ</h2>
-      <p>Strzałki = ruch &nbsp;|&nbsp; Esc = pauza</p>
-      <button id="startBtn">▶ ZAGRAJ</button>
+      <p>Strzałki = ruch &nbsp;|&nbsp; Esc = pauza<br>Prędkość rośnie co 5 punktów</p>
+      <div class="speed-btns">
+        <button class="spd-btn active" id="o1" onclick="setStartSpeed(1)">1 — WOLNO</button>
+        <button class="spd-btn" id="o2" onclick="setStartSpeed(2)">2 — ŚREDNIO</button>
+        <button class="spd-btn" id="o3" onclick="setStartSpeed(3)">3 — SZYBKO</button>
+      </div>
+      <button class="spd-btn" style="margin-top:6px" id="startBtn">▶ ZAGRAJ</button>
     </div>
   </div>
 
 <script>
-const COLS = 20, ROWS = 20, CELL = 20;
-const canvas = document.getElementById('c');
-const ctx = canvas.getContext('2d');
-const overlay = document.getElementById('overlay');
-const scoreEl = document.getElementById('score');
-const bestEl = document.getElementById('best');
+const COLS=20, ROWS=20, CELL=20;
+const canvas=document.getElementById('c'), ctx=canvas.getContext('2d');
+const overlay=document.getElementById('overlay');
+const scoreEl=document.getElementById('score'), bestEl=document.getElementById('best'), curSpeedEl=document.getElementById('curspeed');
 
-let snake, dir, nextDir, food, score, best = 0, loop, running = false, paused = false;
+// Speed levels: interval in ms
+const SPEED_BASE = [null, 160, 110, 70]; // index 1,2,3
+const SPEED_STEP = [null,  15,  10,  6]; // how much to reduce per 5 pts
+const SPEED_MIN  = [null,  60,  45,  30];
+
+let snake, dir, nextDir, food, score, best=0, loop, running=false, paused=false;
+let startSpeed=1, currentInterval, speedLevel;
+
+function setStartSpeed(n) {
+  startSpeed=n;
+  [1,2,3].forEach(i => {
+    document.getElementById('s'+i)?.classList.toggle('active', i===n);
+    document.getElementById('o'+i)?.classList.toggle('active', i===n);
+  });
+}
+
+function getInterval(sc) {
+  const reduced = Math.floor(sc/5) * SPEED_STEP[startSpeed];
+  return Math.max(SPEED_MIN[startSpeed], SPEED_BASE[startSpeed] - reduced);
+}
 
 function init() {
-  snake = [{x:10,y:10},{x:9,y:10},{x:8,y:10}];
-  dir = {x:1,y:0};
-  nextDir = {x:1,y:0};
-  score = 0;
-  scoreEl.textContent = 0;
+  snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
+  dir={x:1,y:0}; nextDir={x:1,y:0};
+  score=0; scoreEl.textContent=0;
+  speedLevel=startSpeed; curSpeedEl.textContent=startSpeed;
   placeFood();
 }
 
 function placeFood() {
   let pos;
-  do {
-    pos = {x: Math.floor(Math.random()*COLS), y: Math.floor(Math.random()*ROWS)};
-  } while (snake.some(s => s.x===pos.x && s.y===pos.y));
-  food = pos;
+  do { pos={x:Math.floor(Math.random()*COLS), y:Math.floor(Math.random()*ROWS)}; }
+  while (snake.some(s=>s.x===pos.x&&s.y===pos.y));
+  food=pos;
+}
+
+function restartLoop() {
+  clearInterval(loop);
+  loop=setInterval(step, getInterval(score));
 }
 
 function step() {
-  dir = nextDir;
-  const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
-  if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS ||
-      snake.some(s => s.x===head.x && s.y===head.y)) {
+  dir=nextDir;
+  const head={x:snake[0].x+dir.x, y:snake[0].y+dir.y};
+  if (head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||snake.some(s=>s.x===head.x&&s.y===head.y)) {
     gameOver(); return;
   }
   snake.unshift(head);
-  if (head.x === food.x && head.y === food.y) {
-    score++;
-    scoreEl.textContent = score;
-    if (score > best) { best = score; bestEl.textContent = best; }
+  if (head.x===food.x&&head.y===food.y) {
+    score++; scoreEl.textContent=score;
+    if (score>best) { best=score; bestEl.textContent=best; }
+    // speed up every 5 points
+    if (score%5===0) {
+      const newInterval=getInterval(score);
+      const displayLevel=Math.min(3+Math.floor(score/5), 10);
+      curSpeedEl.textContent=displayLevel;
+      restartLoop(); return; // restart interval at new speed
+    }
     placeFood();
   } else {
     snake.pop();
@@ -121,61 +150,60 @@ function step() {
 }
 
 function draw() {
-  ctx.fillStyle = '#050a14';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.strokeStyle = 'rgba(0,212,255,0.04)';
-  ctx.lineWidth = 0.5;
-  for (let x=0;x<=COLS;x++) { ctx.beginPath(); ctx.moveTo(x*CELL,0); ctx.lineTo(x*CELL,canvas.height); ctx.stroke(); }
-  for (let y=0;y<=ROWS;y++) { ctx.beginPath(); ctx.moveTo(0,y*CELL); ctx.lineTo(canvas.width,y*CELL); ctx.stroke(); }
-  ctx.fillStyle = '#c8a84b';
-  ctx.shadowColor = '#c8a84b';
-  ctx.shadowBlur = 10;
-  ctx.fillRect(food.x*CELL+2, food.y*CELL+2, CELL-4, CELL-4);
-  ctx.shadowBlur = 0;
-  snake.forEach((s, i) => {
-    const ratio = 1 - i/snake.length;
-    ctx.fillStyle = i===0 ? '#00d4ff' : `rgba(0,${Math.floor(150*ratio+50)},${Math.floor(200*ratio+55)},${0.4+ratio*0.6})`;
-    ctx.shadowColor = i===0 ? '#00d4ff' : 'transparent';
-    ctx.shadowBlur = i===0 ? 8 : 0;
-    ctx.fillRect(s.x*CELL+1, s.y*CELL+1, CELL-2, CELL-2);
+  ctx.fillStyle='#050a14'; ctx.fillRect(0,0,canvas.width,canvas.height);
+  ctx.strokeStyle='rgba(0,212,255,0.04)'; ctx.lineWidth=0.5;
+  for(let x=0;x<=COLS;x++){ctx.beginPath();ctx.moveTo(x*CELL,0);ctx.lineTo(x*CELL,canvas.height);ctx.stroke();}
+  for(let y=0;y<=ROWS;y++){ctx.beginPath();ctx.moveTo(0,y*CELL);ctx.lineTo(canvas.width,y*CELL);ctx.stroke();}
+  // food
+  ctx.fillStyle='#c8a84b'; ctx.shadowColor='#c8a84b'; ctx.shadowBlur=10;
+  ctx.fillRect(food.x*CELL+2,food.y*CELL+2,CELL-4,CELL-4);
+  ctx.shadowBlur=0;
+  // snake
+  snake.forEach((s,i)=>{
+    const ratio=1-i/snake.length;
+    ctx.fillStyle=i===0?'#00d4ff':`rgba(0,${Math.floor(150*ratio+50)},${Math.floor(200*ratio+55)},${0.4+ratio*0.6})`;
+    ctx.shadowColor=i===0?'#00d4ff':'transparent'; ctx.shadowBlur=i===0?8:0;
+    ctx.fillRect(s.x*CELL+1,s.y*CELL+1,CELL-2,CELL-2);
   });
-  ctx.shadowBlur = 0;
+  ctx.shadowBlur=0;
 }
 
 function gameOver() {
-  clearInterval(loop);
-  running = false;
-  overlay.innerHTML = `
+  clearInterval(loop); running=false;
+  overlay.innerHTML=`
     <h2>KONIEC</h2>
     <p>Wynik: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
-    <button onclick="startGame()">▶ ZAGRAJ PONOWNIE</button>
+    <div class="speed-btns">
+      <button class="spd-btn ${startSpeed===1?'active':''}" onclick="setStartSpeed(1)">1 — WOLNO</button>
+      <button class="spd-btn ${startSpeed===2?'active':''}" onclick="setStartSpeed(2)">2 — ŚREDNIO</button>
+      <button class="spd-btn ${startSpeed===3?'active':''}" onclick="setStartSpeed(3)">3 — SZYBKO</button>
+    </div>
+    <button class="spd-btn" onclick="startGame()">▶ ZAGRAJ PONOWNIE</button>
   `;
-  overlay.style.display = 'flex';
+  overlay.style.display='flex';
 }
 
 function startGame() {
-  init();
-  overlay.style.display = 'none';
-  running = true; paused = false;
-  clearInterval(loop);
-  loop = setInterval(step, 120);
+  init(); overlay.style.display='none';
+  running=true; paused=false;
+  placeFood(); draw();
+  restartLoop();
 }
 
-document.addEventListener('keydown', e => {
-  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
-  if (e.key === 'Escape' && running) {
-    paused = !paused;
-    if (paused) clearInterval(loop);
-    else loop = setInterval(step, 120);
+document.addEventListener('keydown',e=>{
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
+  if(e.key==='Escape'&&running){
+    paused=!paused;
+    if(paused) clearInterval(loop); else restartLoop();
     return;
   }
-  if (!running || paused) return;
-  const map = { ArrowUp:{x:0,y:-1}, ArrowDown:{x:0,y:1}, ArrowLeft:{x:-1,y:0}, ArrowRight:{x:1,y:0} };
-  const d = map[e.key];
-  if (d && !(d.x===-dir.x && d.y===-dir.y)) nextDir = d;
+  if(!running||paused) return;
+  const map={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
+  const d=map[e.key];
+  if(d&&!(d.x===-dir.x&&d.y===-dir.y)) nextDir=d;
 });
 
-document.getElementById('startBtn').addEventListener('click', startGame);
+document.getElementById('startBtn').addEventListener('click',startGame);
 init(); draw();
 </script>
 </body>
