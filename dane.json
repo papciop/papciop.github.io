@@ -1,1 +1,54 @@
-{"aktualizacja": "15.06.2026 03:55:00", "alarm": {"strefa_1": "disarmed", "strefa_2": "disarmed"}, "esphome": {"ciepla_woda": "off", "lazienka_rost": "off", "piwnica_status": "unavailable", "rekup_przewietrzanie": "off", "rekup_wietrzenie": "off", "stacja_cisnienie": "unavailable", "stacja_wifi": "unavailable"}, "rekuperator": {"blad": "0.0", "bypass": "Otwarty (auto)", "co2": "500.0", "filtry": "86.0", "nawiew": "100.0", "status": "on", "tryb": "Tryb inteligentny", "wyciag": "90.0"}, "temperatury": {"cpu_ha": "49.7", "czerpnia": "13.6", "garaz": "0.3", "kotlownia": "0.0", "lazienka": "23.8", "nagrzewnica": "0.3", "nawiew": "19.3", "parownica": "unavailable", "piwnica": "18.8", "pokoj_franka": "22.99", "pokoj_z_jaskolka": "22.54", "rekuperator": "19.3", "salon": "22.69", "salon_klima": "25", "stacja_1": "unavailable", "stacja_2": "unavailable", "strych": "0.0", "sypialnia": "23.34", "sypialnia_klima": "25", "wiatrolap": "0.0", "wyciag": "23.0", "wyrzutnia": "19.5", "zewnetrzna_polnoc": "unavailable", "zewnetrzna_wschod": "unavailable"}, "wejscia_naruszone": [], "wilgotnosc": {"lazienka": "58", "piwnica": "66", "powietrze": "50.0", "stacja": "unavailable"}, "wyjscia_aktywne": [], "zmiekczacz": {"dni_do_konca": "30", "poziom_soli": "60.0"}}
+{
+  "aktualizacja": "15.06.2026 22:01",
+  "alarm": {
+    "strefa_1": "disarmed",
+    "strefa_2": "disarmed",
+    "wejscia_naruszone": []
+  },
+  "rekuperator": {
+    "bypass": "Otwarty (auto)",
+    "co2": "510.0",
+    "error_code": "0.0",
+    "filtry_dni": "86.0",
+    "nawiew": "100.0",
+    "status": "on",
+    "tryb": "Tryb inteligentny",
+    "wyciag": "90.0"
+  },
+  "temperatury": {
+    "cpu_ha": "52.1",
+    "czerpnia": "16.1",
+    "garaz": "unknown",
+    "kotlownia": "unknown",
+    "lazienka": "unavailable",
+    "nagrzewnica": "0.3",
+    "nawiew": "21.0",
+    "parownica": "unknown",
+    "piwnica": "18.8",
+    "pokoj_franka": "unknown",
+    "pokoj_z_jaskolka": "unknown",
+    "rekuperator": "21.0",
+    "salon": "unknown",
+    "salon_klima": "24",
+    "stacja_1": "unavailable",
+    "stacja_2": "unavailable",
+    "strych": "unknown",
+    "sypialnia": "unknown",
+    "sypialnia_klima": "25",
+    "wiatrolap": "unknown",
+    "wyciag": "23.3",
+    "wyrzutnia": "20.4",
+    "zewnetrzna_polnoc": "unknown",
+    "zewnetrzna_wschod": "unknown"
+  },
+  "wilgotnosc": {
+    "lazienka": "unavailable",
+    "piwnica": "66",
+    "powietrze": "55.0",
+    "stacja": "unavailable"
+  },
+  "zmiekczacz": {
+    "dni_do_konca": "30",
+    "sol_procent": "60.0"
+  }
+}
