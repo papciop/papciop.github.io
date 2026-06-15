@@ -85,9 +85,9 @@ const overlay=document.getElementById('overlay');
 const scoreEl=document.getElementById('score'), bestEl=document.getElementById('best'), curSpeedEl=document.getElementById('curspeed');
 
 // Speed levels: interval in ms
-const SPEED_BASE = [null, 160, 110, 70]; // index 1,2,3
+const SPEED_BASE = [null, 224, 154, 98]; // index 1,2,3
 const SPEED_STEP = [null,  15,  10,  6]; // how much to reduce per 5 pts
-const SPEED_MIN  = [null,  60,  45,  30];
+const SPEED_MIN  = [null,  84,  63,  42];
 
 let snake, dir, nextDir, food, score, best=0, loop, running=false, paused=false;
 let startSpeed=1, currentInterval, speedLevel;

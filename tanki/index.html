@@ -98,7 +98,7 @@ function makeTank(col,row,isPlayer) {
   const armour=isPlayer?0:pickArmour(level);
   return {
     x:col*CELL, y:row*CELL,
-    dir:'up', speed:isPlayer?2.5:1.5,
+    dir:'up', speed:isPlayer?1.75:1.05,
     hp: armour+1,
     armour,          // 0=green,1=yellow,2=white,3=red
     isPlayer,
@@ -135,7 +135,7 @@ function isSolid(px,py,hasPonton){
 }
 
 function canMove(tank,dx,dy){
-  const s=CELL-2, nx=tank.x+dx, ny=tank.y+dy;
+  const s=CELL-8, nx=tank.x+dx, ny=tank.y+dy;
   return [[nx,ny],[nx+s,ny],[nx,ny+s],[nx+s,ny+s]].every(([px,py])=>!isSolid(px,py,tank.hasPonton));
 }
 
@@ -333,7 +333,7 @@ function resetGame(){
 // ── DRAW ────────────────────────────────────────────────
 function drawTank(tank){
   if(!tank.alive) return;
-  const x=tank.x,y=tank.y,s=CELL;
+  const x=tank.x,y=tank.y,s=CELL-6;
   const color=tank.isPlayer?'#00d4ff':TANK_COLORS[tank.armour];
   ctx.save();
   ctx.translate(x+s/2,y+s/2);
