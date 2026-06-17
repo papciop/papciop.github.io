@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Ranking — HAOS.SID</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+  <style>
+    .ranking-wrap { max-width: 700px; margin: 0 auto; }
+    .game-section { margin-bottom: 40px; }
+    .game-section h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      letter-spacing: 0.2em;
+      color: var(--cyan);
+      border-bottom: 1px solid rgba(0,212,255,0.15);
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .rank-table { width: 100%; border-collapse: collapse; }
+    .rank-table tr { border-bottom: 1px solid rgba(255,255,255,0.04); }
+    .rank-table td { padding: 10px 8px; font-size: 14px; }
+    .rank-pos { font-family: 'Cinzel', serif; color: var(--text-dim); width: 40px; }
+    .rank-pos.gold   { color: #ffd700; }
+    .rank-pos.silver { color: #c0c0c0; }
+    .rank-pos.bronze { color: #cd7f32; }
+    .rank-nick { color: var(--text-main); font-family: 'Cinzel', serif; letter-spacing: 0.1em; }
+    .rank-score { color: var(--gold-light); font-family: 'Cinzel', serif; text-align: right; }
+    .rank-date { color: var(--text-dim); font-size: 12px; text-align: right; }
+    .empty-msg { color: var(--text-dim); font-style: italic; font-size: 14px; padding: 16px 0; }
+    .clear-btn {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: #ef5350;
+      background: rgba(239,83,80,0.08);
+      border: 1px solid rgba(239,83,80,0.3);
+      padding: 4px 12px;
+      cursor: pointer;
+      border-radius: 2px;
+      float: right;
+      margin-top: -2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="overlay"></div>
+
+  <header class="top-bar">
+    <div class="logo">
+      <span class="logo-glyph">⚙</span>
+      <span class="logo-text">HAOS.SID</span>
+    </div>
+  </header>
+
+  <nav class="side-nav" id="sideNav">
+    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+      <span class="toggle-icon">⚙</span>
+      <span class="toggle-label">MENU</span>
+      <span class="arrow" id="navArrow">▶</span>
+    </div>
+    <div class="nav-panel" id="navPanel">
+      <div class="nav-panel-inner">
+        <ul class="nav-list">
+          <li><a href="index.html" class="nav-link"><span class="nav-icon">🏠</span><span>Strona główna</span></a></li>
+          <li><a href="dom.html" class="nav-link"><span class="nav-icon">🏠</span><span>Dom</span></a></li>
+          <li><a href="ogrod.html" class="nav-link"><span class="nav-icon">🌿</span><span>Ogród</span></a></li>
+          <li><a href="praca.html" class="nav-link"><span class="nav-icon">⚙</span><span>Praca</span></a></li>
+          <li><a href="gry.html" class="nav-link"><span class="nav-icon">🎮</span><span>Gry</span></a></li>
+          <li><a href="ranking.html" class="nav-link active-link"><span class="nav-icon">🏆</span><span>Ranking</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="subpage-content">
+    <div class="page-header">
+      <p class="page-category">Hall of Fame</p>
+      <h1 class="page-title">RANKING</h1>
+      <div class="page-divider"></div>
+    </div>
+
+    <div class="ranking-wrap" id="rankingWrap"></div>
+  </main>
+
+  <script>
+    function toggleNav() {
+      document.getElementById('navPanel').classList.toggle('open');
+      document.getElementById('navArrow').classList.toggle('rotated');
+      document.getElementById('sideNav').classList.toggle('expanded');
+    }
+
+    const GAMES = [
+      { key: 'snake',  name: '🐍 Wąż',          unit: 'pkt' },
+      { key: 'tanki',  name: '🪖 Tanki',          unit: 'pkt' },
+      { key: 'wilk',   name: '🐺 Wilk i Zając',   unit: 'pkt' },
+    ];
+
+    function getScores(key) {
+      try { return JSON.parse(localStorage.getItem('ranking_' + key) || '[]'); }
+      catch { return []; }
+    }
+
+    function clearScores(key) {
+      if(confirm('Wyczyścić ranking dla tej gry?')) {
+        localStorage.removeItem('ranking_' + key);
+        render();
+      }
+    }
+
+    function render() {
+      const wrap = document.getElementById('rankingWrap');
+      wrap.innerHTML = '';
+      GAMES.forEach(g => {
+        const scores = getScores(g.key).sort((a,b) => b.score - a.score).slice(0,10);
+        const sec = document.createElement('div');
+        sec.className = 'game-section';
+        const posClass = ['gold','silver','bronze'];
+        const rows = scores.length === 0
+          ? '<tr><td colspan="3" class="empty-msg">Brak wyników — zagraj i wpisz swój nick!</td></tr>'
+          : scores.map((s, i) => `
+            <tr>
+              <td class="rank-pos ${posClass[i]||''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.'}
+              </td>
+              <td class="rank-nick">${s.nick || 'ANONIM'}</td>
+              <td class="rank-score">${s.score} ${g.unit}</td>
+              <td class="rank-date">${s.date || ''}</td>
+            </tr>`).join('');
+        sec.innerHTML = `
+          <h2>${g.name} <button class="clear-btn" onclick="clearScores('${g.key}')">✕ Wyczyść</button></h2>
+          <table class="rank-table">${rows}</table>`;
+        wrap.appendChild(sec);
+      });
+    }
+
+    render();
+  </script>
+</body>
+</html>
