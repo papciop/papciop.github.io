@@ -83,17 +83,11 @@
     .leg{color:#8899aa;}
     button{padding:10px 25px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;cursor:pointer;border-radius:4px;}
     
-    /* PANEL MOBILNY */
-    #gamepad{
-      display:none;
-      width: 100%;
-      max-width: 600px;
-      justify-content:space-between;
-      align-items:center;
-      margin-top: 15px;
+    /* INTERFEJS MOBILNY (DOMYŚLNIE UKRYTY NA PC) */
+    #mobile-fire-panel, #mobile-move-panel {
+      display: none;
     }
     
-    .gp-left, .gp-right{display:flex;flex-direction:column;gap:8px;}
     .gp-row{display:flex;gap:8px;justify-content:center;}
     .gpbtn{
       width:65px;
@@ -110,7 +104,7 @@
       -webkit-user-select:none;
     }
     .gpbtn:active{background:rgba(0,212,255,0.35);}
-    .gpbtn.fire{width:90px;height:55px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff5555;font-size:13px;font-weight:bold;}
+    .gpbtn.fire{width:95px;height:55px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff5555;font-size:13px;font-weight:bold;}
     .gpbtn.fire:active{background:rgba(255,50,50,0.4);}
     
     #ranking{width:100%;max-width:400px;font-size:11px;}
@@ -126,11 +120,28 @@
       #wrap {
         width: 96vw;
         height: 96vw;
+        margin-bottom: 20px;
       }
-      #gamepad { display: flex; }
+      /* Układ dolny w pionie */
+      #mobile-fire-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: fixed;
+        bottom: 20px;
+        left: 15px;
+      }
+      #mobile-move-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: fixed;
+        bottom: 20px;
+        right: 15px;
+      }
     }
 
-    /* TELEFONY (POZIOMO - LANDSCAPE) - KLUCZOWE ZMIANY DLA ERGONOMII */
+    /* TELEFONY (POZIOMO - LANDSCAPE) */
     @media(max-width: 950px) and (orientation: landscape) {
       body {
         position: relative;
@@ -155,28 +166,31 @@
         height: 75vh;
         margin: 0 auto;
       }
-      #gamepad {
-        display: flex;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        max-width: none;
-        margin-top: 0;
-        padding: 0 15px; /* Margines od fizycznych krawędzi ekranu bocznego */
-        pointer-events: none; /* Żeby tło padu nie blokowało klikania */
-        justify-content: space-between;
-        align-items: center;
-      }
-      /* Przywrócenie klikalności dla samych przycisków */
-      .gp-left, .gp-right { 
-        pointer-events: auto; 
+      
+      /* SZTYWNE PRZYKLEJENIE DO LEWEJ KRAWĘDZI DLA KCIUKA */
+      #mobile-fire-panel {
         display: flex;
         flex-direction: column;
         gap: 12px;
+        position: fixed;
+        left: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
       }
-      /* Przycisk strzału bezpośrednio pod kciukiem po lewej */
+      
+      /* SZTYWNE PRZYKLEJENIE DO PRAWEJ KRAWĘDZI DLA KCIUKA */
+      #mobile-move-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        position: fixed;
+        right: 20px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+      }
+      
       .gpbtn { width: 60px; height: 52px; font-size: 22px; }
       .gpbtn.fire { width: 95px; height: 52px; }
     }
@@ -214,17 +228,15 @@
   </div>
 </div>
 
-<div id="gamepad">
-  <div class="gp-left">
-    <div class="gp-row"><button class="gpbtn fire" id="gFire">STRZAŁ</button></div>
-    <div class="gp-row"><button class="gpbtn fire" id="gFire2">🔫</button></div>
-  </div>
-  
-  <div class="gp-right">
-    <div class="gp-row"><button class="gpbtn" id="gUp">▲</button></div>
-    <div class="gp-row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
-    <div class="gp-row"><button class="gpbtn" id="gDown">▼</button></div>
-  </div>
+<div id="mobile-fire-panel">
+  <div class="gp-row"><button class="gpbtn fire" id="gFire">STRZAŁ</button></div>
+  <div class="gp-row"><button class="gpbtn fire" id="gFire2">🔫</button></div>
+</div>
+
+<div id="mobile-move-panel">
+  <div class="gp-row"><button class="gpbtn" id="gUp">▲</button></div>
+  <div class="gp-row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
+  <div class="gp-row"><button class="gpbtn" id="gDown">▼</button></div>
 </div>
 
 <script>
