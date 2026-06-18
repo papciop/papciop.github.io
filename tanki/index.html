@@ -7,27 +7,28 @@
   <title>Tanki</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;overflow:hidden;}
+    html,body{height:100%;overflow-x:hidden;overflow-y:auto;} 
     body{
       background:#050a14;
       display:flex;
       flex-direction:column;
       align-items:center;
-      justify-content:space-between;
+      justify-content:flex-start;
       font-family:'Courier New',monospace;
       touch-action:none;
-      padding: 10px;
+      padding: 20px 10px;
+      gap: 15px;
     }
     #ui{
       display:flex;
-      gap:12px;
+      gap:20px;
       color:#00d4ff;
-      font-size:12px;
+      font-size:18px; /* Duża czcionka UI dla PC */
       letter-spacing:0.1em;
       flex-wrap:wrap;
       justify-content:center;
       width: 100%;
-      max-width: 1200px; /* Zwiększone dopasowanie do góry */
+      max-width: 900px;
       flex-shrink: 0;
     }
     #ui span b{color:#c8a84b;}
@@ -37,15 +38,14 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      flex-grow: 1;
       width: 100%;
-      max-width: 1200px; /* DWA RAZY WIĘKSZY ROZMIAR NA KOMPUTERZE (było 600px) */
-      min-height: 0;
+      max-width: 900px; /* WYMUSZONY DUŻY ROZMIAR DLA KOMPUTERA */
+      height: 900px;    /* WYMUSZONY DUŻY ROZMIAR DLA KOMPUTERA */
     }
     canvas{
-      border:2px solid rgba(0,212,255,0.4);
-      border-radius:4px;
-      box-shadow:0 0 30px rgba(0,212,255,0.15);
+      border:3px solid rgba(0,212,255,0.4);
+      border-radius:6px;
+      box-shadow:0 0 40px rgba(0,212,255,0.2);
       background:#050a14;
       display:block;
       width: 100%;
@@ -59,52 +59,51 @@
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:10px;
+      gap:15px;
       text-align:center;
       background:rgba(5,10,20,0.95);
       border-radius:4px;
       overflow-y:auto;
-      padding: 10px;
+      padding: 20px;
     }
-    #overlay h2{font-size:24px;letter-spacing:0.2em;color:#c8a84b;}
-    #overlay p{font-size:13px;letter-spacing:0.06em;color:#8899aa;line-height:1.6;}
-    .legend{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:center;margin:2px 0;}
-    .leg{font-size:11px;color:#8899aa;}
-    button{padding:8px 20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:0.1em;cursor:pointer;border-radius:2px;transition:all 0.2s;}
+    #overlay h2{font-size:36px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:16px;letter-spacing:0.06em;color:#8899aa;line-height:1.6;}
+    .legend{display:flex;flex-wrap:wrap;gap:6px 15px;justify-content:center;margin:4px 0;}
+    .leg{font-size:13px;color:#8899aa;}
+    button{padding:12px 30px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:14px;letter-spacing:0.1em;cursor:pointer;border-radius:4px;transition:all 0.2s;}
     button:hover{background:rgba(0,212,255,0.2);}
     
-    /* Gamepad z odwróconymi stronami */
+    /* Panel sterowania mobilnego */
     #gamepad{
       display:none;
       width:100%;
-      max-width: 1200px; /* Dopasowane do nowego wymiaru gry */
+      max-width: 600px;
       flex-shrink:0;
-      padding-top:10px;
+      padding-top:15px;
     }
     #gamepad.visible{
       display:flex;
-      flex-direction: row-reverse; /* ZAMIANA STRON: prawo staje się lewą, lewo prawą */
       justify-content:space-between;
       align-items:center;
     }
-    .gp-left,.gp-right{display:flex;flex-direction:column;gap:4px;}
-    .gp-row{display:flex;gap:4px;justify-content:center;}
-    .gpbtn{width:54px;height:44px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+    .gp-left,.gp-right{display:flex;flex-direction:column;gap:6px;}
+    .gp-row{display:flex;gap:6px;justify-content:center;}
+    .gpbtn{width:60px;height:50px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
     .gpbtn:active{background:rgba(0,212,255,0.3);}
-    .gpbtn.fire{width:60px;height:44px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff4444;font-size:12px;}
+    .gpbtn.fire{width:80px;height:50px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff4444;font-size:13px;}
     .gpbtn.fire:active{background:rgba(255,50,50,0.35);}
     .gp-mid{display:flex;flex-direction:column;gap:6px;align-items:center;}
-    .gp-pause{width:44px;height:36px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#556;font-size:11px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+    .gp-pause{width:50px;height:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#556;font-size:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
     
     /* Ranking */
-    #ranking{margin-top:8px;width:100%;max-width:400px;}
-    #ranking table{width:100%;border-collapse:collapse;font-size:11px;color:#8899aa;}
-    #ranking th{color:#c8a84b;letter-spacing:0.1em;padding:3px 6px;border-bottom:1px solid rgba(0,212,255,0.2);}
-    #ranking td{padding:3px 6px;}
+    #ranking{margin-top:12px;width:100%;max-width:500px;}
+    #ranking table{width:100%;border-collapse:collapse;font-size:13px;color:#8899aa;}
+    #ranking th{color:#c8a84b;letter-spacing:0.1em;padding:5px 8px;border-bottom:1px solid rgba(0,212,255,0.2);}
+    #ranking td{padding:5px 8px;}
     #ranking tr.me td{color:#00d4ff;}
     
     /* Nick input */
-    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;padding:6px 12px;border-radius:2px;width:160px;text-align:center;}
+    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:15px;padding:8px 16px;border-radius:4px;width:200px;text-align:center;}
     #nickInput::placeholder{color:#445566;}
   </style>
 </head>
@@ -135,20 +134,24 @@
     <div id="ranking"></div>
   </div>
 </div>
+
 <div id="gamepad">
   <div class="gp-left">
+    <div class="gp-row"><button class="gpbtn fire" id="gFire">STRZAŁ</button></div>
+    <div class="gp-row"><button class="gpbtn fire" id="gFire2">🔫</button></div>
+  </div>
+  
+  <div class="gp-mid">
+    <div class="gp-pause" id="gPause">⏸</div>
+  </div>
+  
+  <div class="gp-right">
     <div class="gp-row"><button class="gpbtn" id="gUp">▲</button></div>
     <div class="gp-row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
     <div class="gp-row"><button class="gpbtn" id="gDown">▼</button></div>
   </div>
-  <div class="gp-mid">
-    <div class="gp-pause" id="gPause">⏸</div>
-  </div>
-  <div class="gp-right">
-    <div class="gp-row"><button class="gpbtn fire" id="gFire">STRZAŁ</button></div>
-    <div class="gp-row"><button class="gpbtn fire" id="gFire2">🔫</button></div>
-  </div>
 </div>
+
 <script>
 const CV=document.getElementById('c'), ctx=CV.getContext('2d');
 const overlay=document.getElementById('overlay');
@@ -158,28 +161,30 @@ const nickInput=document.getElementById('nickInput');
 const CELL=32, COLS=15, ROWS=15;
 CV.width=COLS*CELL; CV.height=ROWS*CELL;
 
-// ── DOPASOWANIE DO WIĘKSZYCH EKRANÓW ───────────────────
 function resizeCV(){
   const isMobile=window.innerWidth<=768;
-  const padH=isMobile?150:0;
-  const uiH=document.getElementById('ui').offsetHeight+20;
-  
-  const availW=window.innerWidth-20;
-  const availH=window.innerHeight-uiH-padH-20;
-  
-  const size=Math.min(availW,availH);
-  
   const wrap=document.getElementById('wrap');
-  wrap.style.width=size+'px'; 
-  wrap.style.height=size+'px';
-
-  if(isMobile){document.getElementById('gamepad').classList.add('visible');}
-  else{document.getElementById('gamepad').classList.remove('remove');
-       document.getElementById('gamepad').classList.remove('visible');}
+  
+  if(isMobile){
+    const padH=160;
+    const uiH=document.getElementById('ui').offsetHeight+20;
+    const availW=window.innerWidth-20;
+    const availH=window.innerHeight-uiH-padH-20;
+    const size=Math.min(availW,availH);
+    wrap.style.width=size+'px'; 
+    wrap.style.height=size+'px';
+    document.getElementById('gamepad').classList.add('visible');
+  } else {
+    // Na komputerach sztywne, wielkie 900px
+    wrap.style.width='900px';
+    wrap.style.height='900px';
+    document.getElementById('gamepad').classList.remove('visible');
+  }
 }
 window.addEventListener('resize',resizeCV);
 window.addEventListener('orientationchange',()=>setTimeout(resizeCV,200));
 
+const keys={};
 function bindTouch(id, keyName) {
   const btn = document.getElementById(id);
   if(!btn) return;
@@ -201,7 +206,7 @@ const T={EMPTY:0,BRICK:1,STEEL:2,BASE:3,BUSH:4,WATER:5};
 const TANK_COLORS=['#44bb44','#ddcc22','#cccccc','#dd3333'];
 const PICKUP_TYPES=['ponton','shield','fuel','star','rockbuster','detonator'];
 
-let map,player,enemies,bullets,pickups,mines,score,lives,level,running,frameId,keys,spawnQ,spawnTimer,paused;
+let map,player,enemies,bullets,pickups,mines,score,lives,level,running,frameId,spawnQ,spawnTimer,paused;
 
 function getScores(){ try{return JSON.parse(localStorage.getItem('tanki_scores')||'[]');}catch{return[];} }
 function saveScore(nick,sc){
@@ -329,7 +334,7 @@ function init(){
   map=makeMap(level);
   player=makeTank(0,ROWS-1,true); player.dir='up';
   enemies=[]; bullets=[]; pickups=[]; mines=[];
-  keys={}; paused=false;
+  paused=false;
   spawnQ=4+level*2; spawnTimer=100;
   uEnemies.textContent=spawnQ;
   spawnMines(Math.min(1+Math.floor(level/2), 5));
