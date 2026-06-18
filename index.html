@@ -1,105 +1,91 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Moja Strona</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
-  <style>
-    /* Dodatkowe mikro-style, żeby logo w formie obrazka wyglądało idealnie i równo z tekstem */
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .logo-img {
-      width: 24px; /* Dopasuj rozmiar grafiki według uznania */
-      height: 24px;
-      object-fit: contain;
-    }
-    /* Styl dla neonowego wyróżnienia gry wewnątrz podmenu/listy, jeśli będziesz chciał */
-    .game-highlight {
-      color: #00d4ff !important;
-      text-shadow: 0 0 8px rgba(0, 212, 255, 0.6);
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Moja Strona</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="bg"></div>
-  <div class="overlay"></div>
+  <div class="bg"></div>
+  <div class="overlay"></div>
 
-  <header class="top-bar">
-    <div class="logo">
-      <img src="labirynt.png" alt="Logo" class="logo-img">
-      <span class="logo-text">HAOS.SID</span>
-    </div>
-  </header>
+  <header class="top-bar">
+    <div class="logo">
+      <span class="logo-glyph">⚙</span>
+      <span class="logo-text">HAOS.SID</span>
+    </div>
+  </header>
 
-  <nav class="side-nav" id="sideNav">
-    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
-      <span class="toggle-icon">⚙</span>
-      <span class="toggle-label">MENU</span>
-      <span class="arrow" id="navArrow">▶</span>
-    </div>
+  <!-- RIGHT SIDE NAV -->
+  <nav class="side-nav" id="sideNav">
+    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+      <span class="toggle-icon">⚙</span>
+      <span class="toggle-label">MENU</span>
+      <span class="arrow" id="navArrow">▶</span>
+    </div>
 
-    <div class="nav-panel" id="navPanel">
-      <div class="nav-panel-inner">
-        <ul class="nav-list">
-          <li>
-            <a href="dom.html" class="nav-link">
-              <span class="nav-icon">🏠</span>
-              <span>Dom</span>
-              <span class="nav-spark"></span>
-            </a>
-          </li>
-          <li>
-            <a href="ogrod.html" class="nav-link">
-              <span class="nav-icon">🌿</span>
-              <span>Ogród</span>
-              <span class="nav-spark"></span>
-            </a>
-          </li>
-          <li>
-            <a href="praca.html" class="nav-link">
-              <span class="nav-icon">⚙</span>
-              <span>Praca</span>
-              <span class="nav-spark"></span>
-            </a>
-          </li>
-          <li>
-            <a href="labirynt/index.html" class="nav-link game-highlight">
-              <span class="nav-icon">🎮</span>
-              <span>Labirynt Pro</span>
-              <span class="nav-spark"></span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+    <div class="nav-panel" id="navPanel">
+      <div class="nav-panel-inner">
+        <ul class="nav-list">
+          <li>
+            <a href="dom.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Dom</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="ogrod.html" class="nav-link">
+              <span class="nav-icon">🌿</span>
+              <span>Ogród</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="praca.html" class="nav-link">
+              <span class="nav-icon">⚙</span>
+              <span>Praca</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="gry.html" class="nav-link">
+              <span class="nav-icon">🎮</span>
+              <span>Gry</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
 
-  <main class="main-content">
-    <div class="hero">
-      <div class="hero-inner">
-        <p class="hero-sub">Witaj w świecie</p>
-        <h1 class="hero-title">HAOS.SID</h1>
-        <p class="hero-desc">Wybierz kategorię z menu po prawej stronie, aby rozpocząć eksplorację.</p>
-        <div class="hero-line"></div>
-      </div>
-    </div>
-  </main>
+  <!-- MAIN CONTENT -->
+  <main class="main-content">
+    <div class="hero">
+      <div class="hero-inner">
+        <p class="hero-sub">Witaj w świecie</p>
+        <h1 class="hero-title">HAOS.SID</h1>
+        <p class="hero-desc">Wybierz kategorię z menu po prawej stronie, aby rozpocząć eksplorację.</p>
+        <div class="hero-line"></div>
+      </div>
+    </div>
+  </main>
 
-  <script>
-    function toggleNav() {
-      const panel = document.getElementById('navPanel');
-      const arrow = document.getElementById('navArrow');
-      const nav = document.getElementById('sideNav');
-      panel.classList.toggle('open');
-      arrow.classList.toggle('rotated');
-      nav.classList.toggle('expanded');
-    }
-  </script>
+  <script>
+    function toggleNav() {
+      const panel = document.getElementById('navPanel');
+      const arrow = document.getElementById('navArrow');
+      const nav = document.getElementById('sideNav');
+      panel.classList.toggle('open');
+      arrow.classList.toggle('rotated');
+      nav.classList.toggle('expanded');
+    }
+  </script>
 </body>
 </html>
+
+logo nazywa sie labirynt.png
