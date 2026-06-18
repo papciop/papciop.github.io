@@ -83,7 +83,7 @@
     .leg{color:#8899aa;}
     button{padding:10px 25px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;cursor:pointer;border-radius:4px;}
     
-    /* INTERFEJS MOBILNY (DOMYŚLNIE UKRYTY NA PC) */
+    /* INTERFEJS MOBILNY */
     #mobile-fire-panel, #mobile-move-panel {
       display: none;
     }
@@ -117,80 +117,18 @@
     /* TELEFONY (PIONOWO) */
     @media(max-width: 767px) and (orientation: portrait) {
       body { justify-content: flex-start; padding-top: 40px; }
-      #wrap {
-        width: 96vw;
-        height: 96vw;
-        margin-bottom: 20px;
-      }
-      /* Układ dolny w pionie */
-      #mobile-fire-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        position: fixed;
-        bottom: 20px;
-        left: 15px;
-      }
-      #mobile-move-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        position: fixed;
-        bottom: 20px;
-        right: 15px;
-      }
+      #wrap { width: 96vw; height: 96vw; margin-bottom: 20px; }
+      #mobile-fire-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; bottom: 20px; left: 15px; }
+      #mobile-move-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; bottom: 20px; right: 15px; }
     }
 
-    /* TELEFONY (POZIOMO - LANDSCAPE) */
+    /* TELEFONY (POZIOMO) */
     @media(max-width: 950px) and (orientation: landscape) {
-      body {
-        position: relative;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        padding: 5px;
-        height: 100vh;
-        width: 100vw;
-      }
-      #ui { 
-        position: absolute;
-        top: 5px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: auto; 
-        font-size: 14px; 
-        z-index: 5;
-      }
-      #wrap {
-        width: 75vh;
-        height: 75vh;
-        margin: 0 auto;
-      }
-      
-      /* SZTYWNE PRZYKLEJENIE DO LEWEJ KRAWĘDZI DLA KCIUKA */
-      #mobile-fire-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-        position: fixed;
-        left: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-      }
-      
-      /* SZTYWNE PRZYKLEJENIE DO PRAWEJ KRAWĘDZI DLA KCIUKA */
-      #mobile-move-panel {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        position: fixed;
-        right: 20px;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 10;
-      }
-      
+      body { position: relative; flex-direction: row; justify-content: center; align-items: center; padding: 5px; height: 100vh; width: 100vw; }
+      #ui { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: auto; font-size: 14px; z-index: 5; }
+      #wrap { width: 75vh; height: 75vh; margin: 0 auto; }
+      #mobile-fire-panel { display: flex; flex-direction: column; gap: 12px; position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 10; }
+      #mobile-move-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 10; }
       .gpbtn { width: 60px; height: 52px; font-size: 22px; }
       .gpbtn.fire { width: 95px; height: 52px; }
     }
@@ -273,6 +211,7 @@ const TANK_COLORS=['#44bb44','#ddcc22','#cccccc','#dd3333'];
 const PICKUP_TYPES=['ponton','shield','fuel','star','rockbuster','detonator'];
 
 let map,player,enemies,bullets,pickups,mines,score,lives,level,running,frameId,spawnQ,spawnTimer,paused;
+let menuHTML = overlay.innerHTML; // Zapamiętujemy czysty kod HTML menu startowego
 
 function getScores(){ try{return JSON.parse(localStorage.getItem('tanki_scores')||'[]');}catch{return[];} }
 function saveScore(nick,sc){
@@ -283,10 +222,10 @@ function saveScore(nick,sc){
   localStorage.setItem('tanki_scores',JSON.stringify(arr));
   return arr;
 }
-function renderRanking(highlight){
+function renderRanking(highlight, customEl){
   const arr=getScores();
-  const el=document.getElementById('ranking');
-  if(!arr.length){el.innerHTML='';return;}
+  const el=customEl || document.getElementById('ranking');
+  if(!el || !arr.length){ if(el) el.innerHTML=''; return; }
   let rows=arr.map((e,i)=>`<tr class="${i===highlight?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td><td>${e.date}</td></tr>`).join('');
   el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th><th>Data</th></tr>${rows}</table>`;
 }
@@ -394,9 +333,8 @@ function showBonus(type){
 }
 
 function init(){
-  score=parseInt(uScore.textContent)||0;
-  lives=parseInt(uLives.textContent)||3;
-  level=parseInt(uLevel.textContent)||1;
+  score=0; lives=3; level=1;
+  uScore.textContent=score; uLives.textContent=lives; uLevel.textContent=level;
   map=makeMap(level);
   player=makeTank(0,ROWS-1,true); player.dir='up';
   enemies=[]; bullets=[]; pickups=[]; mines=[];
@@ -538,30 +476,47 @@ function nextLevel(){
   spawnMines(Math.min(1+Math.floor(level/2),6));
 }
 
+function setupMainMenuBindings() {
+  const btn = document.getElementById('startBtn');
+  if(btn) {
+    btn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      init();
+    });
+  }
+}
+
 function endGame(win){
   running=false; cancelAnimationFrame(frameId);
-  const nick=nickInput.value.trim()||'???';
+  const nickInputCurrent = document.getElementById('nickInput');
+  const nick = (nickInputCurrent ? nickInputCurrent.value.trim() : '') || '???';
+  
   const arr=saveScore(nick,score);
   const hi=arr.findIndex(e=>e.nick===nick&&e.score===score);
-  renderRanking(hi);
+  
   overlay.innerHTML='';
   const div=document.createElement('div');
-  div.style.cssText='display:flex;flex-direction:column;align-items:center;gap:10px;padding:16px;';
-  div.innerHTML=`<h2 style="color:#c8a84b;letter-spacing:0.2em">${win?'WYGRANA!':'KONIEC'}</h2><p style="color:#8899aa">Wynik: <b style="color:#00d4ff">${score}</b></p>`;
+  div.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;width:100%;';
+  div.innerHTML=`<h2 style="color:#c8a84b;letter-spacing:0.2em;font-size:32px;">${win?'WYGRANA!':'KONIEC'}</h2><p style="color:#8899aa;font-size:16px;">Wynik: <b style="color:#00d4ff">${score}</b></p>`;
+  
   const rankDiv=document.createElement('div');
   rankDiv.id='ranking';
   div.appendChild(rankDiv);
+  
   const btn=document.createElement('button');
   btn.textContent='▶ ZAGRAJ PONOWNIE';
-  btn.onclick=()=>{ uScore.textContent=0;uLives.textContent=3;uLevel.textContent=1;overlay.innerHTML='';overlay.appendChild(origOverlay);overlay.style.display='flex';renderRanking(); };
+  btn.onclick=()=>{ 
+    overlay.innerHTML = menuHTML; // Przywracamy czyste menu startowe
+    setupMainMenuBindings();      // Ponownie przypisujemy kliknięcie startu
+    renderRanking(-1);            // Renderujemy domyślny ranking
+  };
+  
   div.appendChild(btn);
   overlay.appendChild(div);
   overlay.style.display='flex';
-  const arr2=getScores();
-  let rows=arr2.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td><td>${e.date}</td></tr>`).join('');
-  rankDiv.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th><th>Data</th></tr>${rows}</table>`;
+  
+  renderRanking(hi, rankDiv);
 }
-let origOverlay;
 
 function drawTank(tank){
   if(!tank.alive) return;
@@ -641,12 +596,7 @@ document.addEventListener('keydown',e=>{
 });
 document.addEventListener('keyup',e=>{keys[e.key]=false;});
 
-document.getElementById('startBtn').addEventListener('click',()=>{
-  origOverlay=overlay.cloneNode(true);
-  overlay.style.display='none';
-  init();
-});
-
+setupMainMenuBindings();
 renderRanking(-1);
 ctx.fillStyle='#050a14';ctx.fillRect(0,0,CV.width,CV.height);
 </script>
