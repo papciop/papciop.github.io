@@ -2,41 +2,96 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Tanki</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-family:'Courier New',monospace;touch-action:none;}
-    #ui{display:flex;gap:16px;margin-bottom:6px;color:#00d4ff;font-size:13px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;}
-    #ui span b{color:#c8a84b;}
-    canvas{border:2px solid rgba(0,212,255,0.4);border-radius:4px;box-shadow:0 0 30px rgba(0,212,255,0.15);background:#050a14;display:block;max-width:100%;}
-    #overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;background:rgba(5,10,20,0.92);border-radius:4px;overflow-y:auto;}
-    #overlay h2{font-size:22px;letter-spacing:0.2em;color:#c8a84b;}
-    #overlay p{font-size:11px;letter-spacing:0.06em;color:#8899aa;line-height:1.8;}
-    .legend{display:flex;flex-wrap:wrap;gap:6px 14px;justify-content:center;margin:2px 0;}
-    .leg{font-size:10px;color:#8899aa;}
-    button{padding:7px 18px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:0.1em;cursor:pointer;border-radius:2px;transition:all 0.2s;}
-    button:hover{background:rgba(0,212,255,0.2);}
-    #wrap{position:relative;display:inline-block;max-width:100%;width:100%;}
-    /* Gamepad dwa kciuki */
     html,body{height:100%;overflow:hidden;}
-    #gamepad{display:none;width:100%;flex-shrink:0;padding:6px 8px;}
+    body{
+      background:#050a14;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
+      font-family:'Courier New',monospace;
+      touch-action:none;
+      padding: 10px;
+    }
+    #ui{
+      display:flex;
+      gap:12px;
+      color:#00d4ff;
+      font-size:12px;
+      letter-spacing:0.1em;
+      flex-wrap:wrap;
+      justify-content:center;
+      width: 100%;
+      max-width: 600px;
+      flex-shrink: 0;
+    }
+    #ui span b{color:#c8a84b;}
+    
+    #wrap{
+      position:relative;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-grow: 1;
+      width: 100%;
+      max-width: 600px; /* Maksymalny rozmiar na komputerze */
+      min-height: 0; /* Ważne dla flexboxa */
+    }
+    canvas{
+      border:2px solid rgba(0,212,255,0.4);
+      border-radius:4px;
+      box-shadow:0 0 30px rgba(0,212,255,0.15);
+      background:#050a14;
+      display:block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain; /* Utrzymuje proporcje 1:1 bez rozciągania grafik */
+    }
+    #overlay{
+      position:absolute;
+      top:0;left:0;right:0;bottom:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      text-align:center;
+      background:rgba(5,10,20,0.95);
+      border-radius:4px;
+      overflow-y:auto;
+      padding: 10px;
+    }
+    #overlay h2{font-size:20px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:11px;letter-spacing:0.06em;color:#8899aa;line-height:1.6;}
+    .legend{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:center;margin:2px 0;}
+    .leg{font-size:10px;color:#8899aa;}
+    button{padding:8px 20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:0.1em;cursor:pointer;border-radius:2px;transition:all 0.2s;}
+    button:hover{background:rgba(0,212,255,0.2);}
+    
+    /* Gamepad dwa kciuki */
+    #gamepad{display:none;width:100%;max-width:600px;flex-shrink:0;padding-top:10px;}
     #gamepad.visible{display:flex;justify-content:space-between;align-items:center;}
     .gp-left,.gp-right{display:flex;flex-direction:column;gap:4px;}
     .gp-row{display:flex;gap:4px;justify-content:center;}
-    .gpbtn{width:54px;height:46px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+    .gpbtn{width:54px;height:44px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
     .gpbtn:active{background:rgba(0,212,255,0.3);}
-    .gpbtn.fire{width:54px;height:46px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff4444;font-size:13px;}
+    .gpbtn.fire{width:60px;height:44px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff4444;font-size:12px;}
     .gpbtn.fire:active{background:rgba(255,50,50,0.35);}
     .gp-mid{display:flex;flex-direction:column;gap:6px;align-items:center;}
     .gp-pause{width:44px;height:36px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#556;font-size:11px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+    
     /* Ranking */
     #ranking{margin-top:8px;width:100%;max-width:400px;}
     #ranking table{width:100%;border-collapse:collapse;font-size:11px;color:#8899aa;}
     #ranking th{color:#c8a84b;letter-spacing:0.1em;padding:3px 6px;border-bottom:1px solid rgba(0,212,255,0.2);}
     #ranking td{padding:3px 6px;}
     #ranking tr.me td{color:#00d4ff;}
+    
     /* Nick input */
     #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;padding:6px 12px;border-radius:2px;width:160px;text-align:center;}
     #nickInput::placeholder{color:#445566;}
@@ -59,7 +114,7 @@
       <span class="leg">🟩 Zielony 1♥</span><span class="leg">🟨 Żółty 2♥</span><span class="leg">⬜ Biały 3♥</span><span class="leg">🟥 Czerwony 4♥</span>
     </div>
     <div class="legend">
-      <span class="leg">🌿 Krzaki</span><span class="leg">💧 Woda</span><span class="leg">💥 Mina przeciwczołgowa</span>
+      <span class="leg">🌿 Krzaki</span><span class="leg">💧 Woda</span><span class="leg">💥 Mina</span>
     </div>
     <div class="legend">
       <span class="leg">⛵ Ponton</span><span class="leg">🛡 Pancerz</span><span class="leg">⚡ Paliwo</span><span class="leg">⭐ Gwiazda</span><span class="leg">💣 Skałobójca</span><span class="leg">🎯 Detonator</span>
@@ -90,32 +145,54 @@ const uLives=document.getElementById('ulives'),uScore=document.getElementById('u
 const nickInput=document.getElementById('nickInput');
 
 const CELL=32, COLS=15, ROWS=15;
-CV.width=COLS*CELL; CV.height=ROWS*CELL;
+CV.width=COLS*CELL; CV.height=ROWS*CELL; // Stała rozdzielczość renderowania (480x480)
 
-// ── SKALOWANIE DO OKNA ────────────────────────────────
+// ── NOWE SKALOWANIE DO OKNA VIA CSS ────────────────────
 function resizeCV(){
   const isMobile=window.innerWidth<=768;
-  const padH=isMobile?160:0;
-  const uiH=document.getElementById('ui').offsetHeight+16;
-  const availW=window.innerWidth-16;
-  const availH=window.innerHeight-uiH-padH-16;
-  const size=Math.floor(Math.min(availW,availH)/CELL)*CELL;
-  CV.style.width=size+'px'; CV.style.height=size+'px';
+  const padH=isMobile?150:0;
+  const uiH=document.getElementById('ui').offsetHeight+20;
+  
+  // Obliczamy dostępną przestrzeń dla wrapa (kontenera canvasu)
+  const availW=window.innerWidth-20;
+  const availH=window.innerHeight-uiH-padH-20;
+  
+  // Ustalamy idealny kwadrat pasujący do ekranu
+  const size=Math.min(availW,availH);
+  
+  const wrap=document.getElementById('wrap');
+  wrap.style.width=size+'px'; 
+  wrap.style.height=size+'px';
+
   if(isMobile){document.getElementById('gamepad').classList.add('visible');}
   else{document.getElementById('gamepad').classList.remove('visible');}
 }
 window.addEventListener('resize',resizeCV);
 window.addEventListener('orientationchange',()=>setTimeout(resizeCV,200));
 
+// ── DODANE: TOUCH EVENTY DLA GAMEPADA ───────────────────
+function bindTouch(id, keyName) {
+  const btn = document.getElementById(id);
+  if(!btn) return;
+  btn.addEventListener('touchstart', (e) => { e.preventDefault(); keys[keyName] = true; });
+  btn.addEventListener('touchend', (e) => { e.preventDefault(); keys[keyName] = false; });
+}
+bindTouch('gUp', 'ArrowUp');
+bindTouch('gDown', 'ArrowDown');
+bindTouch('gLeft', 'ArrowLeft');
+bindTouch('gRight', 'ArrowRight');
+bindTouch('gFire', ' ');
+bindTouch('gFire2', ' ');
+document.getElementById('gPause').addEventListener('touchstart', (e) => {
+  e.preventDefault();
+  if(running) paused = !paused;
+});
+
 const T={EMPTY:0,BRICK:1,STEEL:2,BASE:3,BUSH:4,WATER:5};
 const TANK_COLORS=['#44bb44','#ddcc22','#cccccc','#dd3333'];
 const PICKUP_TYPES=['ponton','shield','fuel','star','rockbuster','detonator'];
 
 let map,player,enemies,bullets,pickups,mines,score,lives,level,running,frameId,keys,spawnQ,spawnTimer,paused;
-
-// ── TOUCH ─────────────────────────────────────────────────
-function tp(k){keys[k]=true;}
-function tr(k){keys[k]=false;}
 
 // ── RANKING ───────────────────────────────────────────────
 function getScores(){ try{return JSON.parse(localStorage.getItem('tanki_scores')||'[]');}catch{return[];} }
@@ -194,7 +271,6 @@ function updateMines(){
   mines.forEach(mine=>{
     if(!mine.alive) return;
     mine.blink++;
-    // sprawdź czy czołg na minie
     const checkTank=(tank)=>{
       if(!tank.alive) return;
       if(Math.abs(tank.x-mine.x)<CELL-4&&Math.abs(tank.y-mine.y)<CELL-4){
@@ -230,7 +306,6 @@ function applyPickup(tank,p){
   if(p.type==='fuel') tank.hasFuel=true;
   if(p.type==='rockbuster') tank.rockAmmo+=10;
   if(p.type==='detonator'&&tank.isPlayer){
-    // wysadź losowego wroga
     const alive=enemies.filter(e=>e.alive);
     if(alive.length){const t=alive[Math.floor(Math.random()*alive.length)];t.alive=false;score+=100*(t.armour+1);uScore.textContent=score;}
   }
@@ -255,7 +330,6 @@ function init(){
   keys={}; paused=false;
   spawnQ=4+level*2; spawnTimer=100;
   uEnemies.textContent=spawnQ;
-  // miny na planszy: 1-3 w zależności od poziomu
   spawnMines(Math.min(1+Math.floor(level/2), 5));
   running=true;
   if(frameId) cancelAnimationFrame(frameId);
@@ -326,7 +400,6 @@ function updateEnemies(){
 
 // ── BULLETS ───────────────────────────────────────────────
 function updateBullets(){
-  // zderzenia pocisków
   for(let i=0;i<bullets.length;i++){
     if(!bullets[i].alive) continue;
     for(let j=i+1;j<bullets.length;j++){
@@ -419,7 +492,6 @@ function endGame(win){
   div.appendChild(btn);
   overlay.appendChild(div);
   overlay.style.display='flex';
-  // render ranking in new div
   const arr2=getScores();
   let rows=arr2.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td><td>${e.date}</td></tr>`).join('');
   rankDiv.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th><th>Data</th></tr>${rows}</table>`;
@@ -449,7 +521,6 @@ function draw(){
   ctx.strokeStyle='rgba(0,212,255,0.03)'; ctx.lineWidth=0.5;
   for(let c=0;c<=COLS;c++){ctx.beginPath();ctx.moveTo(c*CELL,0);ctx.lineTo(c*CELL,CV.height);ctx.stroke();}
   for(let r=0;r<=ROWS;r++){ctx.beginPath();ctx.moveTo(0,r*CELL);ctx.lineTo(CV.width,r*CELL);ctx.stroke();}
-  // tiles
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
     const t=map[r][c],x=c*CELL,y=r*CELL;
     if(t===T.BRICK){ctx.fillStyle='#7a3010';ctx.fillRect(x+1,y+1,CELL-2,CELL-2);ctx.fillStyle='#9a4018';ctx.fillRect(x+2,y+2,CELL/2-2,CELL/2-2);ctx.fillRect(x+CELL/2+1,y+CELL/2+1,CELL/2-2,CELL/2-2);}
@@ -458,7 +529,6 @@ function draw(){
     else if(t===T.BUSH){ctx.fillStyle='#1a3a12';ctx.fillRect(x,y,CELL,CELL);ctx.font=`${CELL-2}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('🌿',x+CELL/2,y+CELL/2);}
     else if(t===T.BASE){ctx.fillStyle='#c8a84b';ctx.shadowColor='#c8a84b';ctx.shadowBlur=12;ctx.font=`${CELL-4}px serif`;ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('★',x+CELL/2,y+CELL/2);ctx.shadowBlur=0;}
   }
-  // miny
   mines.forEach(mine=>{
     if(!mine.alive) return;
     const blink=Math.floor(mine.blink/20)%2;
@@ -467,7 +537,6 @@ function draw(){
     ctx.fillText('💥',mine.x+CELL/2,mine.y+CELL/2);
     ctx.globalAlpha=1;
   });
-  // pickups
   pickups.forEach(p=>{
     if(!p.alive||Math.floor(p.timer/15)%2===0) return;
     const icons={ponton:'⛵',shield:'🛡',fuel:'⚡',star:'⭐',rockbuster:'💣',detonator:'🎯'};
@@ -480,7 +549,6 @@ function draw(){
     ctx.fillStyle=b.isRock?'#ff6600':b.fromPlayer?'#ffffff':'#ffaa00';
     ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=6;ctx.fillRect(b.x,b.y,6,6);ctx.shadowBlur=0;
   });
-  // bush overlay
   for(let r=0;r<ROWS;r++) for(let c=0;c<COLS;c++){
     if(map[r][c]!==T.BUSH) continue;
     const x=c*CELL,y=r*CELL;
