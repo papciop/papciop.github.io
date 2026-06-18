@@ -91,20 +91,24 @@
       document.getElementById('sideNav').classList.toggle('expanded');
     }
 
+    // Dopasowane klucze (storageKey) dokładnie do tych używanych w skryptach gier
     const GAMES = [
-      { key: 'snake',  name: '🐍 Wąż',          unit: 'pkt' },
-      { key: 'tanki',  name: '🪖 Tanki',          unit: 'pkt' },
-      { key: 'wilk',   name: '🐺 Wilk i Zając',   unit: 'pkt' },
+      { storageKey: 'snake_scores_v2',  name: '🐍 Wąż',          unit: 'pkt' },
+      { storageKey: 'tanki_scores',     name: '⚙️ Tanki',         unit: 'pkt' },
+      { storageKey: 'wilk_scores',      name: '🐺 Wilk i Zając',  unit: 'pkt' }
     ];
 
-    function getScores(key) {
-      try { return JSON.parse(localStorage.getItem('ranking_' + key) || '[]'); }
+    function getScores(storageKey) {
+      try { 
+        // Próba pobrania danych według dokładnego klucza gry
+        return JSON.parse(localStorage.getItem(storageKey) || '[]'); 
+      }
       catch { return []; }
     }
 
-    function clearScores(key) {
+    function clearScores(storageKey) {
       if(confirm('Wyczyścić ranking dla tej gry?')) {
-        localStorage.removeItem('ranking_' + key);
+        localStorage.removeItem(storageKey);
         render();
       }
     }
@@ -113,12 +117,12 @@
       const wrap = document.getElementById('rankingWrap');
       wrap.innerHTML = '';
       GAMES.forEach(g => {
-        const scores = getScores(g.key).sort((a,b) => b.score - a.score).slice(0,10);
+        const scores = getScores(g.storageKey).sort((a,b) => b.score - a.score).slice(0,10);
         const sec = document.createElement('div');
         sec.className = 'game-section';
         const posClass = ['gold','silver','bronze'];
         const rows = scores.length === 0
-          ? '<tr><td colspan="3" class="empty-msg">Brak wyników — zagraj i wpisz swój nick!</td></tr>'
+          ? '<tr><td colspan="4" class="empty-msg">Brak wyników — zagraj i wpisz swój nick!</td></tr>'
           : scores.map((s, i) => `
             <tr>
               <td class="rank-pos ${posClass[i]||''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1)+'.'}
@@ -128,12 +132,14 @@
               <td class="rank-date">${s.date || ''}</td>
             </tr>`).join('');
         sec.innerHTML = `
-          <h2>${g.name} <button class="clear-btn" onclick="clearScores('${g.key}')">✕ Wyczyść</button></h2>
+          <h2>${g.name} <button class="clear-btn" onclick="clearScores('${g.storageKey}')">✕ Wyczyść</button></h2>
           <table class="rank-table">${rows}</table>`;
         wrap.appendChild(sec);
       });
     }
 
+    // Ważne: Jeśli w grze Wąż używasz jeszcze starego klucza 'snake_scores' (bez _v2), 
+    // zmień powyżej 'snake_scores_v2' na 'snake_scores'.
     render();
   </script>
 </body>
