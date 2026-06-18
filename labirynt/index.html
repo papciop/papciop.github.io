@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <title>Labirynt Pro - Taktyczna Walka</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box;}
+    html,body{width:100%;height:100%;overflow:hidden;background:#050a14;font-family:'Courier New',monospace;touch-action:none;}
+    body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding: 10px;}
+
+    #control-panel{display:flex;gap:10px;margin-bottom:8px;z-index:20;}
+    .ctrl-btn{padding:6px 14px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:inherit;font-size:12px;cursor:pointer;border-radius:4px;font-weight:bold;}
+    .ctrl-btn:active{background:rgba(0,212,255,0.3);}
+    .ctrl-btn.exit{border-color:#ff4444;color:#ff4444;background:rgba(255,68,68,0.05);}
+    .ctrl-btn.exit:active{background:rgba(255,68,68,0.2);}
+
+    #ui{display:flex;gap:20px;padding:4px 0;color:#00d4ff;font-size:14px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;width: 100%;margin-bottom: 5px;}
+    #ui span b{color:#c8a84b;}
+    #timerbar{display:flex;gap:6px;align-items:center;padding:2px 0;color:#8899aa;font-size:11px;flex-wrap:wrap;justify-content:center;margin-bottom: 10px;}
+
+    #wrap{position:relative;width: 75vh; height: 75vh; max-width: 100%; max-height: 100%;}
+    canvas{display:block;background:#02050a;border:3px solid rgba(0,212,255,0.4);border-radius:6px;box-shadow:0 0 30px rgba(0,212,255,0.2);width: 100%; height: 100%;}
+
+    #overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#00d4ff;text-align:center;background:rgba(5,10,20,0.95);border-radius:4px;overflow-y:auto;padding:15px;z-index:30;}
+    #overlay h2{font-size:28px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:13px;color:#8899aa;line-height:1.6;}
+    
+    .diff-box{display:flex;gap:10px;margin: 10px 0;}
+    .diff-btn{padding:8px 14px; background:rgba(255,255,255,0.05); border:1px solid rgba(0,212,255,0.3); color:#8899aa; cursor:pointer; border-radius:4px; font-family:inherit; font-size:12px;}
+    .diff-btn.active{background:rgba(0,212,255,0.2); border-color:#00d4ff; color:#00d4ff; font-weight:bold;}
+
+    .spd-btn{padding:10px 24px;background:rgba(200,168,75,0.1);border:1px solid #c8a84b;color:#c8a84b;font-family:'Courier New',monospace;font-size:14px;cursor:pointer;border-radius:4px;transition:all 0.2s;font-weight:bold;letter-spacing:0.1em;}
+    .spd-btn:hover{background:rgba(200,168,75,0.25);}
+    
+    #ranking{width:100%;max-width:340px;margin-top:4px;}
+    #ranking table{width:100%;border-collapse:collapse;font-size:11px;color:#8899aa;}
+    #ranking th{color:#c8a84b;padding:4px 6px;border-bottom:1px solid rgba(0,212,255,0.2);}
+    #ranking td{padding:4px 6px;}
+    #ranking tr.me td{color:#00d4ff;}
+    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:14px;padding:6px 10px;border-radius:4px;width:160px;text-align:center;}
+
+    #mobile-left-panel, #mobile-right-panel { display: none; }
+    .gp-row{display:flex;gap:6px;justify-content:center;}
+    .gpbtn{width:58px;height:48px;background:rgba(0,212,255,0.12);border:2px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:22px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+    .gpbtn:active{background:rgba(0,212,255,0.35);}
+    .gpbtn.wide{width:100px; font-size: 11px; color: #8899aa;}
+
+    @media(max-width: 767px) and (orientation: portrait) {
+      body { justify-content: flex-start; padding-top: 10px; }
+      #wrap { width: 92vw; height: 92vw; margin-bottom: 20px; }
+      #mobile-left-panel { display: flex; flex-direction: column; position: fixed; bottom: 25px; left: 20px; }
+      #mobile-right-panel { display: flex; flex-direction: column; position: fixed; bottom: 25px; right: 20px; }
+    }
+
+    @media(max-width: 950px) and (orientation: landscape) {
+      body { position: relative; flex-direction: row; justify-content: center; align-items: center; padding: 5px; height: 100vh; width: 100vw; }
+      #ui { position: absolute; top: 40px; left: 50%; transform: translateX(-50%); width: auto; font-size: 13px; z-index: 5; margin: 0; }
+      #control-panel { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); }
+      #timerbar { display: none; }
+      #wrap { width: 68vh; height: 68vh; margin: 20px auto 0 auto; }
+      #mobile-left-panel { display: flex; flex-direction: column; gap: 12px; position: fixed; left: 25px; top: 50%; transform: translateY(-50%); z-index: 10; }
+      #mobile-right-panel { display: flex; flex-direction: column; gap: 6px; position: fixed; right: 25px; top: 50%; transform: translateY(-50%); z-index: 10; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="control-panel">
+  <button class="ctrl-btn" id="btnPause">⏸ PAUZA</button>
+  <button class="ctrl-btn exit" id="btnExit">❌ WYJDŹ</button>
+</div>
+
+<div id="ui">
+  <span>WYNIK: <b id="score">0</b></span>
+  <span>REKORD: <b id="best">0</b></span>
+  <span>CZAS: <b id="timeleft">60s</b></span>
+</div>
+
+<div id="timerbar">TRYB: <span id="currentDiffDisplay" style="color:#00d4ff;font-weight:bold;">ŁATWY</span></div>
+
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="overlay">
+    <h2>🧩 LABIRYNT GIGANT</h2>
+    <p>Na TRUDNYM wrogowie współpracują!<br>Jeden goni, drugi odcina drogę, trzeci pilnuje wyjścia.</p>
+    
+    <div class="diff-box">
+      <button class="diff-btn active" onclick="setDifficulty('easy', this)">ŁATWY (0 Wrogów)</button>
+      <button class="diff-btn" onclick="setDifficulty('medium', this)">ŚREDNI (1 Snajper)👹</button>
+      <button class="diff-btn" onclick="setDifficulty('hard', this)">TRUDNY (ZESPÓŁ AI)💀</button>
+    </div>
+
+    <input id="nickInput" type="text" maxlength="12" placeholder="Twój nick" autocomplete="off">
+    <button class="spd-btn" id="startBtn">▶ URUCHOM</button>
+    <div id="ranking"></div>
+  </div>
+</div>
+
+<div id="mobile-left-panel">
+  <div class="gp-row"><button class="gpbtn wide">NAWIGACJA</button></div>
+  <div class="gp-row"><button class="gpbtn wide" style="font-size:16px;">👉 🕹️</button></div>
+</div>
+
+<div id="mobile-right-panel">
+  <div class="gp-row"><button class="gpbtn" id="mUp">▲</button></div>
+  <div class="gp-row"><button class="gpbtn" id="mLeft">◀</button><button class="gpbtn" id="mRight">▶</button></div>
+  <div class="gp-row"><button class="gpbtn" id="mDown">▼</button></div>
+</div>
+
+<script>
+const SIZE = 35; 
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+let cellSize = canvas.width / SIZE;
+
+let difficulty = 'easy'; 
+let enemies = [];
+let lastPlayerDir = {dx: 0, dy: 0};
+
+function setDifficulty(type, btn) {
+  difficulty = type;
+  document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  
+  if(type === 'easy') { document.getElementById('currentDiffDisplay').textContent = "ŁATWY (BEZ WROGÓW)"; }
+  if(type === 'medium') { document.getElementById('currentDiffDisplay').textContent = "ŚREDNI (1 WRÓG)"; }
+  if(type === 'hard') { document.getElementById('currentDiffDisplay').textContent = "TRUDNY (ASYMETRYCZNE AI)"; }
+}
+
+function resizeCanvas() {
+  const size = Math.min(window.innerWidth, window.innerHeight * 0.68, 540);
+  canvas.width = Math.floor(size / SIZE) * SIZE;
+  canvas.height = canvas.width;
+  cellSize = canvas.width / SIZE;
+  if (running) draw();
+}
+window.addEventListener('resize', resizeCanvas);
+
+const overlay = document.getElementById('overlay');
+const scoreEl = document.getElementById('score'), bestEl = document.getElementById('best'), timeEl = document.getElementById('timeleft');
+
+const menuHTML = overlay.innerHTML;
+
+// ── RANKING ──────────────────────────────────────────
+function getScores(){try{return JSON.parse(localStorage.getItem('labirynt_scores')||'[]');}catch{return[];}}
+function saveScore(nick,pts){
+  let a=getScores(); a.push({nick:nick||'???',score:pts,date:new Date().toLocaleDateString('pl')});
+  a.sort((x,y)=>y.score-x.score); a=a.slice(0,10);
+  localStorage.setItem('labirynt_scores',JSON.stringify(a)); return a;
+}
+function renderRanking(hi=-1, customEl=null){
+  const a=getScores(), el=customEl || document.getElementById('ranking');
+  if(!el) return;
+  if(!a.length){el.innerHTML='<p style="color:#8899aa;font-size:11px;padding:5px;">Brak wyników</p>';return;}
+  el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th></tr>${a.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td></tr>`).join('')}</table>`;
+}
+
+// ── LOGIKA GENEROWANIA PLANSZY Z PRZEJŚCIAMI ─────────
+let grid = [];
+function generateMaze() {
+  grid = Array(SIZE).fill().map(() => Array(SIZE).fill(1)); 
+  
+  function walk(cx, cy) {
+    grid[cy][cx] = 0;
+    const dirs = [[0, -2], [2, 0], [0, 2], [-2, 0]].sort(() => Math.random() - 0.5);
+    
+    for (let [dx, dy] of dirs) {
+      const nx = cx + dx, ny = cy + dy;
+      if (nx > 0 && nx < SIZE - 1 && ny > 0 && ny < SIZE - 1 && grid[ny][nx] === 1) {
+        grid[cy + dy/2][cx + dx/2] = 0;
+        walk(nx, ny);
+      }
+    }
+  }
+  walk(1, 1);
+  grid[SIZE-2][SIZE-2] = 0; 
+
+  // Wyburzanie ścian pod pętle ucieczkowe
+  for (let y = 1; y < SIZE - 1; y++) {
+    for (let x = 1; x < SIZE - 1; x++) {
+      if (grid[y][x] === 1 && Math.random() < 0.35) {
+        if ((grid[y][x-1] === 0 && grid[y][x+1] === 0) || (grid[y-1][x] === 0 && grid[y+1][x] === 0)) {
+          grid[y][x] = 0;
+        }
+      }
+    }
+  }
+}
+
+// ── SZUKANIE PATHFINDINGU (BFS) ──────────────────────
+function findPath(startX, startY, targetX, targetY) {
+  // Korekta celu, gdyby znajdował się w ścianie
+  if (targetX < 1) targetX = 1; if (targetX > SIZE-2) targetX = SIZE-2;
+  if (targetY < 1) targetY = 1; if (targetY > SIZE-2) targetY = SIZE-2;
+  if (grid[targetY][targetX] === 1) {
+    const neighbors = [[0,1],[1,0],[0,-1],[-1,0]];
+    for(let [dx, dy] of neighbors) {
+      if(grid[targetY+dy] && grid[targetY+dy][targetX+dx] === 0) {
+        targetX += dx; targetY += dy; break;
+      }
+    }
+  }
+
+  let queue = [[startX, startY, []]];
+  let visited = Array(SIZE).fill().map(() => Array(SIZE).fill(false));
+  visited[startY][startX] = true;
+
+  while(queue.length > 0) {
+    let [cx, cy, path] = queue.shift();
+    if(cx === targetX && cy === targetY) return path;
+
+    const dirs = [[0,-1],[0,1],[-1,0],[1,0]];
+    for(let [dx, dy] of dirs) {
+      let nx = cx + dx, ny = cy + dy;
+      if(nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE && grid[ny][nx] === 0 && !visited[ny][nx]) {
+        visited[ny][nx] = true;
+        queue.push([nx, ny, [...path, {x: nx, y: ny}]]);
+      }
+    }
+  }
+  return [];
+}
+
+// ── ASYMETRYCZNE ZACHOWANIA BOTÓW ────────────────────
+function getNextTacticalMove(enemy) {
+  // Jeśli bot jest ogłuszony przez mechanikę zmylenia kierunku – stoi w miejscu
+  if (enemy.stunned > 0) {
+    enemy.stunned--;
+    return {x: enemy.x, y: enemy.y};
+  }
+
+  let distanceToPlayer = Math.abs(enemy.x - player.x) + Math.abs(enemy.y - player.y);
+
+  // REAKCJA NA ZMYLENIE: Jeśli gracz gwałtownie zawrócił przed nosem bota, ogłusz go
+  if (distanceToPlayer <= 3 && enemy.lastPlayerDist <= 3 && enemy.hadSight) {
+    if (lastPlayerDir.dx !== 0 || lastPlayerDir.dy !== 0) {
+      enemy.stunned = 2; // Ogłuszenie na 2 tury ruchu bota
+      enemy.hadSight = false;
+      return {x: enemy.x, y: enemy.y};
+    }
+  }
+  enemy.lastPlayerDist = distanceToPlayer;
+
+  // ── REŻIM TRUDNY: PRZYPISANIE RÓL BOTOM ──
+  if (difficulty === 'hard') {
+    // BOT 0: ŚCIGACZ (Klasyczny agresor o dalekim wzroku)
+    if (enemy.role === 0) {
+      if (distanceToPlayer <= 14) {
+        enemy.hadSight = true;
+        let path = findPath(enemy.x, enemy.y, player.x, player.y);
+        if (path.length > 0) return path[0];
+      }
+    }
+    // BOT 1: FLANKIER (Próbuje wyprzedzić ruch gracza i odciąć drogę)
+    else if (enemy.role === 1) {
+      if (distanceToPlayer <= 12) {
+        enemy.hadSight = true;
+        // Celuje 3 kroki przed gracza w kierunku, w którym idzie gracz
+        let targetX = player.x + (lastPlayerDir.dx * 3);
+        let targetY = player.y + (lastPlayerDir.dy * 3);
+        let path = findPath(enemy.x, enemy.y, targetX, targetY);
+        if (path.length > 0) return path[0];
+      }
+    }
+    // BOT 2: STRAŻNIK PORTALU (Kręci się w pobliżu wyjścia, odpycha gracza na finiszu)
+    else if (enemy.role === 2) {
+      let distToExit = Math.abs(enemy.x - exit.x) + Math.abs(enemy.y - exit.y);
+      if (distanceToPlayer <= 7) {
+        enemy.hadSight = true;
+        let path = findPath(enemy.x, enemy.y, player.x, player.y);
+        if (path.length > 0) return path[0];
+      } else if (distToExit > 5) {
+        // Wraca na posterunek wokół portalu
+        let path = findPath(enemy.x, enemy.y, exit.x - 2, exit.y - 2);
+        if (path.length > 0) return path[0];
+      }
+    }
+  } else {
+    // TRYB ŚREDNI: 1 Zwykły bot z polem widzenia 8
+    if (distanceToPlayer <= 8) {
+      let path = findPath(enemy.x, enemy.y, player.x, player.y);
+      if (path.length > 0) return path[0];
+    }
+  }
+
+  // TRYB PATROLOWY (Gdy gracz jest niewidoczny lub zgubiony)
+  enemy.hadSight = false;
+  const dirs = [[0,-1],[0,1],[-1,0],[1,0]].sort(() => Math.random() - 0.5);
+  let validMoves = [];
+  for(let [dx, dy] of dirs) {
+    let nx = enemy.x + dx, ny = enemy.y + dy;
+    if(nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE && grid[ny][nx] === 0) {
+      if(enemy.lastX && nx === enemy.lastX && ny === enemy.lastY) continue;
+      validMoves.push({x: nx, y: ny});
+    }
+  }
+  return validMoves.length > 0 ? validMoves[0] : {x: enemy.lastX || enemy.x, y: enemy.lastY || enemy.y};
+}
+
+// ── STAN GRY ─────────────────────────────────────────
+let player, exit, score, best=0, timeLeft, timerId, enemyIntervalId, running=false, paused=false;
+
+function init() {
+  generateMaze();
+  player = { x: 1, y: 1 };
+  exit = { x: SIZE - 2, y: SIZE - 2 };
+  score = 0; scoreEl.textContent = 0;
+  timeLeft = 60; timeEl.textContent = timeLeft + "s";
+  initEnemies();
+}
+
+function initEnemies() {
+  enemies = [];
+  let count = 0;
+  if(difficulty === 'medium') count = 1;
+  if(difficulty === 'hard') count = 3;
+
+  const spawns = [
+    {x: SIZE - 2, y: SIZE - 2}, // Spawny rozrzucone strategicznie
+    {x: SIZE - 2, y: 2},        
+    {x: 2, y: SIZE - 2}         
+  ];
+
+  for(let i=0; i<count; i++) {
+    let sx = spawns[i].x;
+    let sy = spawns[i].y;
+    if(grid[sy][sx] === 1) sy--;
+    enemies.push({ x: sx, y: sy, lastX: null, lastY: null, role: i, stunned: 0, lastPlayerDist: 99, hadSight: false });
+  }
+}
+
+function startTimers() {
+  clearInterval(timerId);
+  clearInterval(enemyIntervalId);
+
+  timerId = setInterval(() => {
+    if (paused || !running) return;
+    timeLeft--;
+    timeEl.textContent = timeLeft + "s";
+    if (timeLeft <= 0) gameOver("KONIEC CZASU");
+  }, 1000);
+
+  let enemySpeed = Math.max(250, 440 - score * 10);
+  enemyIntervalId = setInterval(() => {
+    if (paused || !running || difficulty === 'easy') return;
+
+    for(let enemy of enemies) {
+      let nextMove = getNextTacticalMove(enemy);
+      enemy.lastX = enemy.x;
+      enemy.lastY = enemy.y;
+      enemy.x = nextMove.x;
+      enemy.y = nextMove.y;
+
+      if(enemy.x === player.x && enemy.y === player.y) {
+        gameOver("ZŁAPANY PRZEZ ZŁOCZYŃCĘ!");
+        return;
+      }
+    }
+    draw();
+  }, enemySpeed);
+}
+
+function movePlayer(dx, dy) {
+  if (!running || paused) return;
+  const newX = player.x + dx;
+  const newY = player.y + dy;
+  
+  if (newX >= 0 && newX < SIZE && newY >= 0 && newY < SIZE && grid[newY][newX] === 0) {
+    // Rejestracja wektora ruchu gracza pod kalkulację odcinania dróg przez Flankiera
+    lastPlayerDir = {dx: dx, dy: dy};
+    player.x = newX;
+    player.y = newY;
+    
+    for(let enemy of enemies) {
+      if(enemy.x === player.x && enemy.y === player.y) {
+        gameOver("ZŁAPANY PRZEZ ZŁOCZYŃCĘ!");
+        return;
+      }
+    }
+    
+    if (player.x === exit.x && player.y === exit.y) {
+      let mult = difficulty === 'easy' ? 1 : (difficulty === 'medium' ? 2 : 5);
+      score += mult; 
+      scoreEl.textContent = score;
+      if (score > best) { best = score; bestEl.textContent = best; }
+      
+      generateMaze();
+      player = { x: 1, y: 1 };
+      initEnemies();
+      timeLeft = Math.max(25, 60 - Math.floor(score / 2));
+      timeEl.textContent = timeLeft + "s";
+      
+      startTimers();
+    }
+    draw();
+  }
+}
+
+function draw() {
+  ctx.fillStyle = '#02050a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  for (let y = 0; y < SIZE; y++) {
+    for (let x = 0; x < SIZE; x++) {
+      if (grid[y][x] === 1) {
+        ctx.fillStyle = 'rgba(0, 212, 255, 0.15)';
+        ctx.strokeStyle = 'rgba(0, 212, 255, 0.23)';
+        ctx.lineWidth = 1;
+        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+      }
+    }
+  }
+  
+  ctx.fillStyle = '#c8a84b'; ctx.shadowColor = '#c8a84b'; ctx.shadowBlur = 8;
+  ctx.fillRect(exit.x * cellSize + 1, exit.y * cellSize + 1, cellSize - 2, cellSize - 2);
+  
+  if(difficulty !== 'easy') {
+    for(let enemy of enemies) {
+      if (enemy.stunned > 0) {
+        ctx.fillStyle = '#ffffff'; // Biały kolor oznaczający oszołomienie / zgubienie tropu
+        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 10;
+      } else {
+        ctx.fillStyle = enemy.hadSight ? '#ff1111' : '#b32424';
+        ctx.shadowColor = '#ff1111'; ctx.shadowBlur = enemy.hadSight ? 12 : 0;
+      }
+      ctx.fillRect(enemy.x * cellSize + 1, enemy.y * cellSize + 1, cellSize - 2, cellSize - 2);
+    }
+  }
+
+  ctx.fillStyle = '#00d4ff'; ctx.shadowColor = '#00d4ff'; ctx.shadowBlur = 10;
+  ctx.fillRect(player.x * cellSize + 1, player.y * cellSize + 1, cellSize - 2, cellSize - 2);
+  ctx.shadowBlur = 0;
+}
+
+function gameOver(reason = "KONIEC GRY"){
+  clearInterval(timerId); clearInterval(enemyIntervalId); running = false;
+  const nickInputCurrent = document.getElementById('nickInput');
+  const nick = (nickInputCurrent ? nickInputCurrent.value.trim() : '') || '???';
+  
+  const arr = score > 0 ? saveScore(nick, score) : getScores();
+  const hi = arr.findIndex(e => e.nick === nick && e.score === score);
+  
+  overlay.innerHTML = '';
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;width:100%;';
+  div.innerHTML = `
+    <h2 style="color:#ff4444;letter-spacing:0.1em;font-size:24px;">${reason}</h2>
+    <p style="color:#8899aa;font-size:14px;">Wynik końcowy: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
+    <input id="nickInput" type="text" maxlength="12" placeholder="Nick" value="${nick}">
+  `;
+  
+  const rankDiv = document.createElement('div');
+  rankDiv.id = 'ranking';
+  div.appendChild(rankDiv);
+  
+  const btnRestart = document.createElement('button');
+  btnRestart.className = 'spd-btn';
+  btnRestart.style.marginTop = '5px';
+  btnRestart.textContent = '▶ ZAGRAJ PONOWNIE';
+  btnRestart.onclick = () => {
+    overlay.innerHTML = menuHTML;
+    bindStartButton(); 
+    difficulty = 'easy';
+    document.getElementById('currentDiffDisplay').textContent = "ŁATWY (BEZ WROGÓW)";
+    resizeCanvas();
+    renderRanking(-1);
+  };
+  
+  div.appendChild(btnRestart);
+  overlay.appendChild(div);
+  overlay.style.display = 'flex';
+  
+  renderRanking(hi, rankDiv);
+}
+
+function startGame(){
+  init(); 
+  overlay.style.display = 'none'; 
+  running = true; 
+  paused = false;
+  document.getElementById('btnPause').textContent = "⏸ PAUZA";
+  resizeCanvas(); 
+  draw(); 
+  startTimers();
+}
+
+function bindStartButton() {
+  const btn = document.getElementById('startBtn');
+  if (btn) btn.onclick = startGame;
+}
+
+function togglePause() {
+  if (!running) return;
+  paused = !paused;
+  document.getElementById('btnPause').textContent = paused ? "▶ WZNAWIAJ" : "⏸ PAUZA";
+  if(!paused) draw();
+}
+
+function manualExit() {
+  if (!running) return;
+  if(confirm("Czy chcesz natychmiast wyjść i zapisać aktualny wynik?")) {
+    gameOver("GRA PRZERWANA");
+  }
+}
+
+document.getElementById('btnPause').onclick = togglePause;
+document.getElementById('btnExit').onclick = manualExit;
+
+const DMAP = { ArrowUp: [0, -1], ArrowDown: [0, 1], ArrowLeft: [-1, 0], ArrowRight: [1, 0] };
+document.addEventListener('keydown', e => {
+  if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
+  if (e.key.toLowerCase() === 'p' || e.key === 'Escape') {
+    togglePause();
+    return;
+  }
+  const d = DMAP[e.key];
+  if (d) movePlayer(d[0], d[1]);
+});
+
+function addGP(id, dx, dy) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.addEventListener('touchstart', e => { e.preventDefault(); movePlayer(dx, dy); }, { passive: false });
+  el.addEventListener('mousedown', () => movePlayer(dx, dy));
+}
+addGP('mUp', 0, -1); addGP('mDown', 0, 1); addGP('mLeft', -1, 0); addGP('mRight', 1, 0);
+
+let tx = 0, ty = 0;
+canvas.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
+canvas.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx, dy = e.changedTouches[0].clientY - ty;
+  if (Math.abs(dx) < 15 && Math.abs(dy) < 15) return;
+  if (Math.abs(dx) > Math.abs(dy)) movePlayer(dx > 0 ? 1 : -1, 0);
+  else movePlayer(0, dy > 0 ? 1 : -1);
+}, { passive: true });
+
+resizeCanvas();
+bindStartButton();
+renderRanking();
+</script>
+</body>
+</html>
