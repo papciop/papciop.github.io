@@ -46,10 +46,9 @@
       z-index: 10;
     }
 
-    /* KONTENER SKALOWALNY */
     #wrap {
       position: relative;
-      width: 85vh;  /* Idealne dopasowanie pod wysokość monitora na PC */
+      width: 85vh;
       height: 85vh;
       max-width: 100%;
     }
@@ -126,38 +125,60 @@
       body { justify-content: flex-start; padding-top: 40px; }
       #wrap {
         width: 96vw;
-        height: 96vw; /* Maksymalny kwadrat mieszczący się na szerokość */
+        height: 96vw;
       }
       #gamepad { display: flex; }
     }
 
-    /* TELEFONY (POZIOMO - LANDSCAPE) */
+    /* TELEFONY (POZIOMO - LANDSCAPE) - KLUCZOWE ZMIANY DLA ERGONOMII */
     @media(max-width: 950px) and (orientation: landscape) {
       body {
+        position: relative;
         flex-direction: row;
-        flex-wrap: wrap;
         justify-content: center;
         align-items: center;
-        padding: 5px 40px;
+        padding: 5px;
         height: 100vh;
+        width: 100vw;
       }
-      #ui { width: 100%; margin-bottom: 5px; font-size: 14px; }
+      #ui { 
+        position: absolute;
+        top: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: auto; 
+        font-size: 14px; 
+        z-index: 5;
+      }
       #wrap {
-        width: 76vh;   /* Maksymalizuje rozmiar planszy do wysokości ekranu */
-        height: 76vh;
-        margin: 0;
+        width: 75vh;
+        height: 75vh;
+        margin: 0 auto;
       }
       #gamepad {
         display: flex;
-        flex: 1;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
         max-width: none;
-        width: auto;
         margin-top: 0;
+        padding: 0 15px; /* Margines od fizycznych krawędzi ekranu bocznego */
+        pointer-events: none; /* Żeby tło padu nie blokowało klikania */
         justify-content: space-between;
-        padding: 0 20px;
+        align-items: center;
       }
-      .gpbtn { width: 55px; height: 48px; font-size: 22px; }
-      .gpbtn.fire { width: 80px; height: 48px; }
+      /* Przywrócenie klikalności dla samych przycisków */
+      .gp-left, .gp-right { 
+        pointer-events: auto; 
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      /* Przycisk strzału bezpośrednio pod kciukiem po lewej */
+      .gpbtn { width: 60px; height: 52px; font-size: 22px; }
+      .gpbtn.fire { width: 95px; height: 52px; }
     }
   </style>
 </head>
