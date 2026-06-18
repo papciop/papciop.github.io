@@ -21,7 +21,6 @@
       border-radius: 4px;
       overflow: hidden;
       transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-      cursor: pointer;
       text-decoration: none;
       display: block;
     }
@@ -212,6 +211,107 @@
             </a>
           </li>
           <li>
+            <a href="ranking.html" class="nav-link"><span class="nav-icon">🏆</span><span>Ranking</span><span class="nav-spark"></span></a>
+          </li>
+          <li>
+            <a href="gry.html" class="nav-link active-link">
+              <span class="nav-icon">🎮</span>
+              <span>Gry</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="side-nav" id="sideNav">
+    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+      <span class="toggle-icon">⚙</span>
+      <span class="toggle-label">MENU</span>
+      <span class="arrow" id="navArrow">▶</span>
+    </div>
+    <div class="nav-panel" id="navPanel">
+      <div class="nav-panel-inner">
+        <ul class="nav-list">
+          <li>
+            <a href="index.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Strona główna</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="dom.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Dom</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="ogrod.html" class="nav-link">
+              <span class="nav-icon">🌿</span>
+              <span>Ogród</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="praca.html" class="nav-link">
+              <span class="nav-icon">⚙</span>
+              <span>Praca</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="ranking.html" class="nav-link"><span class="nav-icon">🏆</span><span>Ranking</span><span class="nav-spark"></span></a></li><li><a href="gry.html" class="nav-link active-link">
+              <span class="nav-icon">🎮</span>
+              <span>Gry</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <nav class="side-nav" id="sideNav">
+    <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
+      <span class="toggle-icon">⚙</span>
+      <span class="toggle-label">MENU</span>
+      <span class="arrow" id="navArrow">▶</span>
+    </div>
+    <div class="nav-panel" id="navPanel">
+      <div class="nav-panel-inner">
+        <ul class="nav-list">
+          <li>
+            <a href="index.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Strona główna</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="dom.html" class="nav-link">
+              <span class="nav-icon">🏠</span>
+              <span>Dom</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="ogrod.html" class="nav-link">
+              <span class="nav-icon">🌿</span>
+              <span>Ogród</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
+            <a href="praca.html" class="nav-link">
+              <span class="nav-icon">⚙</span>
+              <span>Praca</span>
+              <span class="nav-spark"></span>
+            </a>
+          </li>
+          <li>
             <a href="ranking.html" class="nav-link"><span class="nav-icon">🏆</span><span>Ranking</span><span class="nav-spark"></span></a></li><li><a href="gry.html" class="nav-link active-link">
               <span class="nav-icon">🎮</span>
               <span>Gry</span>
@@ -270,6 +370,21 @@
             <p class="game-desc">Klasyczna bitwa czołgów — zniszcz wszystkich wrogów i chroń swoją bazę. Inspirowane Battle City z NES.</p>
             <span class="game-tag">Akcja</span>
             <span class="game-tag">Battle City</span>
+            <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
+          </div>
+        </div>
+
+        <div class="game-card" onclick="openGame('labirynt/index.html')">
+          <div class="corner-deco tl"></div>
+          <div class="corner-deco tr"></div>
+          <div class="corner-deco bl"></div>
+          <div class="corner-deco br"></div>
+          <div class="game-preview" style="padding:0;font-size:0"><img src="labirynt.png" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0"></div>
+          <div class="game-info">
+            <div class="game-title">Labirynt Pro</div>
+            <p class="game-desc">Zmierz się z taktycznym zespołem botów śledzących. Wykorzystuj ślepe zaułki, pętle i manewr uniku, aby uciec.</p>
+            <span class="game-tag">Taktyczna</span>
+            <span class="game-tag">Labirynt</span>
             <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
           </div>
         </div>
