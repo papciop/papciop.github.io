@@ -7,51 +7,63 @@
   <title>Tanki</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{height:100%;overflow-x:hidden;overflow-y:auto;} 
+    html,body{height:100%;background:#050a14;font-family:'Courier New',monospace;overflow:hidden;touch-action:none;}
+    
     body{
-      background:#050a14;
       display:flex;
       flex-direction:column;
       align-items:center;
-      justify-content:flex-start;
-      font-family:'Courier New',monospace;
-      touch-action:none;
-      padding: 20px 10px;
-      gap: 15px;
+      justify-content:center;
+      padding: 10px;
     }
+    
     #ui{
       display:flex;
-      gap:20px;
+      gap:15px;
       color:#00d4ff;
-      font-size:18px; /* Duża czcionka UI dla PC */
+      font-size:16px;
       letter-spacing:0.1em;
-      flex-wrap:wrap;
       justify-content:center;
+      align-items:center;
       width: 100%;
-      max-width: 900px;
-      flex-shrink: 0;
+      margin-bottom: 10px;
     }
     #ui span b{color:#c8a84b;}
     
-    #wrap{
-      position:relative;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width: 100%;
-      max-width: 900px; /* WYMUSZONY DUŻY ROZMIAR DLA KOMPUTERA */
-      height: 900px;    /* WYMUSZONY DUŻY ROZMIAR DLA KOMPUTERA */
+    .gp-pause{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 6px 12px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(0,212,255,0.3);
+      color:#00d4ff;
+      font-size:14px;
+      border-radius:4px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-user-select:none;
+      z-index: 10;
     }
+
+    /* KONTENER SKALOWALNY */
+    #wrap {
+      position: relative;
+      width: 85vh;  /* Idealne dopasowanie pod wysokość monitora na PC */
+      height: 85vh;
+      max-width: 100%;
+    }
+    
     canvas{
       border:3px solid rgba(0,212,255,0.4);
       border-radius:6px;
-      box-shadow:0 0 40px rgba(0,212,255,0.2);
+      box-shadow:0 0 30px rgba(0,212,255,0.2);
       background:#050a14;
       display:block;
       width: 100%;
       height: 100%;
-      object-fit: contain;
     }
+    
     #overlay{
       position:absolute;
       top:0;left:0;right:0;bottom:0;
@@ -59,55 +71,100 @@
       flex-direction:column;
       align-items:center;
       justify-content:center;
-      gap:15px;
+      gap:12px;
       text-align:center;
       background:rgba(5,10,20,0.95);
       border-radius:4px;
       overflow-y:auto;
-      padding: 20px;
+      padding: 15px;
     }
-    #overlay h2{font-size:36px;letter-spacing:0.2em;color:#c8a84b;}
-    #overlay p{font-size:16px;letter-spacing:0.06em;color:#8899aa;line-height:1.6;}
-    .legend{display:flex;flex-wrap:wrap;gap:6px 15px;justify-content:center;margin:4px 0;}
-    .leg{font-size:13px;color:#8899aa;}
-    button{padding:12px 30px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:14px;letter-spacing:0.1em;cursor:pointer;border-radius:4px;transition:all 0.2s;}
-    button:hover{background:rgba(0,212,255,0.2);}
+    #overlay h2{font-size:32px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:14px;color:#8899aa;}
+    .legend{display:flex;flex-wrap:wrap;gap:4px 12px;justify-content:center;font-size:11px;}
+    .leg{color:#8899aa;}
+    button{padding:10px 25px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;cursor:pointer;border-radius:4px;}
     
-    /* Panel sterowania mobilnego */
+    /* PANEL MOBILNY */
     #gamepad{
       display:none;
-      width:100%;
+      width: 100%;
       max-width: 600px;
-      flex-shrink:0;
-      padding-top:15px;
-    }
-    #gamepad.visible{
-      display:flex;
       justify-content:space-between;
       align-items:center;
+      margin-top: 15px;
     }
-    .gp-left,.gp-right{display:flex;flex-direction:column;gap:6px;}
-    .gp-row{display:flex;gap:6px;justify-content:center;}
-    .gpbtn{width:60px;height:50px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
-    .gpbtn:active{background:rgba(0,212,255,0.3);}
-    .gpbtn.fire{width:80px;height:50px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff4444;font-size:13px;}
-    .gpbtn.fire:active{background:rgba(255,50,50,0.35);}
-    .gp-mid{display:flex;flex-direction:column;gap:6px;align-items:center;}
-    .gp-pause{width:50px;height:40px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#556;font-size:13px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
     
-    /* Ranking */
-    #ranking{margin-top:12px;width:100%;max-width:500px;}
-    #ranking table{width:100%;border-collapse:collapse;font-size:13px;color:#8899aa;}
-    #ranking th{color:#c8a84b;letter-spacing:0.1em;padding:5px 8px;border-bottom:1px solid rgba(0,212,255,0.2);}
-    #ranking td{padding:5px 8px;}
+    .gp-left, .gp-right{display:flex;flex-direction:column;gap:8px;}
+    .gp-row{display:flex;gap:8px;justify-content:center;}
+    .gpbtn{
+      width:65px;
+      height:55px;
+      background:rgba(0,212,255,0.12);
+      border:2px solid rgba(0,212,255,0.35);
+      color:#00d4ff;
+      font-size:26px;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      user-select:none;
+      -webkit-user-select:none;
+    }
+    .gpbtn:active{background:rgba(0,212,255,0.35);}
+    .gpbtn.fire{width:90px;height:55px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff5555;font-size:13px;font-weight:bold;}
+    .gpbtn.fire:active{background:rgba(255,50,50,0.4);}
+    
+    #ranking{width:100%;max-width:400px;font-size:11px;}
+    #ranking table{width:100%;border-collapse:collapse;color:#8899aa;}
+    #ranking th{color:#c8a84b;padding:4px;border-bottom:1px solid rgba(0,212,255,0.2);}
+    #ranking td{padding:4px;}
     #ranking tr.me td{color:#00d4ff;}
-    
-    /* Nick input */
-    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:15px;padding:8px 16px;border-radius:4px;width:200px;text-align:center;}
-    #nickInput::placeholder{color:#445566;}
+    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;padding:6px;border-radius:4px;text-align:center;}
+
+    /* TELEFONY (PIONOWO) */
+    @media(max-width: 767px) and (orientation: portrait) {
+      body { justify-content: flex-start; padding-top: 40px; }
+      #wrap {
+        width: 96vw;
+        height: 96vw; /* Maksymalny kwadrat mieszczący się na szerokość */
+      }
+      #gamepad { display: flex; }
+    }
+
+    /* TELEFONY (POZIOMO - LANDSCAPE) */
+    @media(max-width: 950px) and (orientation: landscape) {
+      body {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        padding: 5px 40px;
+        height: 100vh;
+      }
+      #ui { width: 100%; margin-bottom: 5px; font-size: 14px; }
+      #wrap {
+        width: 76vh;   /* Maksymalizuje rozmiar planszy do wysokości ekranu */
+        height: 76vh;
+        margin: 0;
+      }
+      #gamepad {
+        display: flex;
+        flex: 1;
+        max-width: none;
+        width: auto;
+        margin-top: 0;
+        justify-content: space-between;
+        padding: 0 20px;
+      }
+      .gpbtn { width: 55px; height: 48px; font-size: 22px; }
+      .gpbtn.fire { width: 80px; height: 48px; }
+    }
   </style>
 </head>
 <body>
+
+<div id="gPause" class="gp-pause">⏸</div>
+
 <div id="ui">
   <span>ŻYCIA: <b id="ulives">3</b></span>
   <span>WYNIK: <b id="uscore">0</b></span>
@@ -115,13 +172,14 @@
   <span>WROGÓW: <b id="uenemies">0</b></span>
   <span id="ubonus"></span>
 </div>
+
 <div id="wrap">
   <canvas id="c"></canvas>
   <div id="overlay">
     <h2>⚙ TANKI</h2>
     <p>Strzałki = ruch &nbsp;|&nbsp; Spacja = strzał &nbsp;|&nbsp; Esc = pauza</p>
     <div class="legend">
-      <span class="leg">🟩 Zielony 1♥</span><span class="leg">🟨 Żółty 2♥</span><span class="leg">⬜ Biały 3♥</span><span class="leg">🟥 Czerwony 4♥</span>
+      <span class="leg">🟩 ZIELONY 1♥</span><span class="leg">🟨 ŻÓŁTY 2♥</span><span class="leg">⬜ BIAŁY 3♥</span><span class="leg">🟥 CZERWONY 4♥</span>
     </div>
     <div class="legend">
       <span class="leg">🌿 Krzaki</span><span class="leg">💧 Woda</span><span class="leg">💥 Mina</span>
@@ -141,10 +199,6 @@
     <div class="gp-row"><button class="gpbtn fire" id="gFire2">🔫</button></div>
   </div>
   
-  <div class="gp-mid">
-    <div class="gp-pause" id="gPause">⏸</div>
-  </div>
-  
   <div class="gp-right">
     <div class="gp-row"><button class="gpbtn" id="gUp">▲</button></div>
     <div class="gp-row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
@@ -161,29 +215,6 @@ const nickInput=document.getElementById('nickInput');
 const CELL=32, COLS=15, ROWS=15;
 CV.width=COLS*CELL; CV.height=ROWS*CELL;
 
-function resizeCV(){
-  const isMobile=window.innerWidth<=768;
-  const wrap=document.getElementById('wrap');
-  
-  if(isMobile){
-    const padH=160;
-    const uiH=document.getElementById('ui').offsetHeight+20;
-    const availW=window.innerWidth-20;
-    const availH=window.innerHeight-uiH-padH-20;
-    const size=Math.min(availW,availH);
-    wrap.style.width=size+'px'; 
-    wrap.style.height=size+'px';
-    document.getElementById('gamepad').classList.add('visible');
-  } else {
-    // Na komputerach sztywne, wielkie 900px
-    wrap.style.width='900px';
-    wrap.style.height='900px';
-    document.getElementById('gamepad').classList.remove('visible');
-  }
-}
-window.addEventListener('resize',resizeCV);
-window.addEventListener('orientationchange',()=>setTimeout(resizeCV,200));
-
 const keys={};
 function bindTouch(id, keyName) {
   const btn = document.getElementById(id);
@@ -197,10 +228,12 @@ bindTouch('gLeft', 'ArrowLeft');
 bindTouch('gRight', 'ArrowRight');
 bindTouch('gFire', ' ');
 bindTouch('gFire2', ' ');
-document.getElementById('gPause').addEventListener('touchstart', (e) => {
-  e.preventDefault();
+
+function togglePause() {
   if(running) paused = !paused;
-});
+}
+document.getElementById('gPause').addEventListener('touchstart', (e) => { e.preventDefault(); togglePause(); });
+document.getElementById('gPause').addEventListener('click', togglePause);
 
 const T={EMPTY:0,BRICK:1,STEEL:2,BASE:3,BUSH:4,WATER:5};
 const TANK_COLORS=['#44bb44','#ddcc22','#cccccc','#dd3333'];
@@ -583,7 +616,6 @@ document.getElementById('startBtn').addEventListener('click',()=>{
 
 renderRanking(-1);
 ctx.fillStyle='#050a14';ctx.fillRect(0,0,CV.width,CV.height);
-resizeCV();
 </script>
 </body>
 </html>
