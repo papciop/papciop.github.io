@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Labirynt Pro - Taktyczna Walka</title>
+  <title>Labirynt Pro - Osaczenie AI</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     html,body{width:100%;height:100%;overflow:hidden;background:#050a14;font-family:'Courier New',monospace;touch-action:none;}
@@ -75,7 +75,7 @@
 <div id="ui">
   <span>WYNIK: <b id="score">0</b></span>
   <span>REKORD: <b id="best">0</b></span>
-  <span>CZAS: <b id="timeleft">60s</b></span>
+  <span>CZAS ETAPU: <b id="timeleft">0.0s</b></span>
 </div>
 
 <div id="timerbar">TRYB: <span id="currentDiffDisplay" style="color:#00d4ff;font-weight:bold;">ŁATWY</span></div>
@@ -83,13 +83,15 @@
 <div id="wrap">
   <canvas id="c"></canvas>
   <div id="overlay">
-    <h2>🧩 LABIRYNT GIGANT</h2>
-    <p>Na TRUDNYM wrogowie współpracują!<br>Jeden goni, drugi odcina drogę, trzeci pilnuje wyjścia.</p>
+    <h2>🧩 LABIRYNT: OSACZENIE</h2>
+    <p>Boty nie strzegą już wyjścia — ich jedynym celem jest <b>upolowanie Ciebie</b>!<br><br>
+    <span style="color:#ffcc00;font-weight:bold;">⚠️ MECHANIKA PARALIŻU:</span> Kontakt z botem paraliżuje Cię na <b>5 sekund</b>.<br>
+    <span style="color:#ff1111;font-weight:bold;">💀 OSACZENIE:</span> Jeśli boty zablokują Cię całkowicie w ślepym zaułku i nie będziesz miał możliwości ruchu — następuje <b>Koniec Gry</b>!</p>
     
     <div class="diff-box">
-      <button class="diff-btn active" onclick="setDifficulty('easy', this)">ŁATWY (0 Wrogów)</button>
-      <button class="diff-btn" onclick="setDifficulty('medium', this)">ŚREDNI (1 Snajper)👹</button>
-      <button class="diff-btn" onclick="setDifficulty('hard', this)">TRUDNY (ZESPÓŁ AI)💀</button>
+      <button class="diff-btn active" onclick="setDifficulty('easy', this)">ŁATWY (0 Botów)</button>
+      <button class="diff-btn" onclick="setDifficulty('medium', this)">ŚREDNI (1 Łowca)👹</button>
+      <button class="diff-btn" onclick="setDifficulty('hard', this)">TRUDNY (3 Łowców)💀</button>
     </div>
 
     <input id="nickInput" type="text" maxlength="12" placeholder="Twój nick" autocomplete="off">
@@ -117,7 +119,7 @@ let cellSize = canvas.width / SIZE;
 
 let difficulty = 'easy'; 
 let enemies = [];
-let lastPlayerDir = {dx: 0, dy: 0};
+let playerSlowdownTimer = 0; // Licznik paraliżu gracza (w sekundach)
 
 function setDifficulty(type, btn) {
   difficulty = type;
@@ -125,8 +127,8 @@ function setDifficulty(type, btn) {
   btn.classList.add('active');
   
   if(type === 'easy') { document.getElementById('currentDiffDisplay').textContent = "ŁATWY (BEZ WROGÓW)"; }
-  if(type === 'medium') { document.getElementById('currentDiffDisplay').textContent = "ŚREDNI (1 WRÓG)"; }
-  if(type === 'hard') { document.getElementById('currentDiffDisplay').textContent = "TRUDNY (ASYMETRYCZNE AI)"; }
+  if(type === 'medium') { document.getElementById('currentDiffDisplay').textContent = "ŚREDNI (1 ŁOWCA)"; }
+  if(type === 'hard') { document.getElementById('currentDiffDisplay').textContent = "TRUDNY (3 AGRESYWNYCH ŁOWCÓW)"; }
 }
 
 function resizeCanvas() {
@@ -157,7 +159,7 @@ function renderRanking(hi=-1, customEl=null){
   el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th></tr>${a.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td></tr>`).join('')}</table>`;
 }
 
-// ── LOGIKA GENEROWANIA PLANSZY Z PRZEJŚCIAMI ─────────
+// ── GENEROWANIE PLANSZY Z PĘTLAMI ─────────────────────
 let grid = [];
 function generateMaze() {
   grid = Array(SIZE).fill().map(() => Array(SIZE).fill(1)); 
@@ -177,7 +179,6 @@ function generateMaze() {
   walk(1, 1);
   grid[SIZE-2][SIZE-2] = 0; 
 
-  // Wyburzanie ścian pod pętle ucieczkowe
   for (let y = 1; y < SIZE - 1; y++) {
     for (let x = 1; x < SIZE - 1; x++) {
       if (grid[y][x] === 1 && Math.random() < 0.35) {
@@ -189,20 +190,11 @@ function generateMaze() {
   }
 }
 
-// ── SZUKANIE PATHFINDINGU (BFS) ──────────────────────
+// ── PATHFINDING (BFS) ───────────────────────────────
 function findPath(startX, startY, targetX, targetY) {
-  // Korekta celu, gdyby znajdował się w ścianie
   if (targetX < 1) targetX = 1; if (targetX > SIZE-2) targetX = SIZE-2;
   if (targetY < 1) targetY = 1; if (targetY > SIZE-2) targetY = SIZE-2;
-  if (grid[targetY][targetX] === 1) {
-    const neighbors = [[0,1],[1,0],[0,-1],[-1,0]];
-    for(let [dx, dy] of neighbors) {
-      if(grid[targetY+dy] && grid[targetY+dy][targetX+dx] === 0) {
-        targetX += dx; targetY += dy; break;
-      }
-    }
-  }
-
+  
   let queue = [[startX, startY, []]];
   let visited = Array(SIZE).fill().map(() => Array(SIZE).fill(false));
   visited[startY][startX] = true;
@@ -223,91 +215,46 @@ function findPath(startX, startY, targetX, targetY) {
   return [];
 }
 
-// ── ASYMETRYCZNE ZACHOWANIA BOTÓW ────────────────────
-function getNextTacticalMove(enemy) {
-  // Jeśli bot jest ogłuszony przez mechanikę zmylenia kierunku – stoi w miejscu
-  if (enemy.stunned > 0) {
-    enemy.stunned--;
-    return {x: enemy.x, y: enemy.y};
+// ── LOGIKA AGRESYWNYCH BOTÓW (Wszyscy gonią Gracza) ──
+function getNextHunterMove(enemy) {
+  // Każdy bot bezwzględnie szuka najkrótszej drogi do współrzędnych gracza
+  let path = findPath(enemy.x, enemy.y, player.x, player.y);
+  if (path.length > 0) {
+    return path[0];
   }
+  return {x: enemy.x, y: enemy.y};
+}
 
-  let distanceToPlayer = Math.abs(enemy.x - player.x) + Math.abs(enemy.y - player.y);
-
-  // REAKCJA NA ZMYLENIE: Jeśli gracz gwałtownie zawrócił przed nosem bota, ogłusz go
-  if (distanceToPlayer <= 3 && enemy.lastPlayerDist <= 3 && enemy.hadSight) {
-    if (lastPlayerDir.dx !== 0 || lastPlayerDir.dy !== 0) {
-      enemy.stunned = 2; // Ogłuszenie na 2 tury ruchu bota
-      enemy.hadSight = false;
-      return {x: enemy.x, y: enemy.y};
-    }
-  }
-  enemy.lastPlayerDist = distanceToPlayer;
-
-  // ── REŻIM TRUDNY: PRZYPISANIE RÓL BOTOM ──
-  if (difficulty === 'hard') {
-    // BOT 0: ŚCIGACZ (Klasyczny agresor o dalekim wzroku)
-    if (enemy.role === 0) {
-      if (distanceToPlayer <= 14) {
-        enemy.hadSight = true;
-        let path = findPath(enemy.x, enemy.y, player.x, player.y);
-        if (path.length > 0) return path[0];
-      }
-    }
-    // BOT 1: FLANKIER (Próbuje wyprzedzić ruch gracza i odciąć drogę)
-    else if (enemy.role === 1) {
-      if (distanceToPlayer <= 12) {
-        enemy.hadSight = true;
-        // Celuje 3 kroki przed gracza w kierunku, w którym idzie gracz
-        let targetX = player.x + (lastPlayerDir.dx * 3);
-        let targetY = player.y + (lastPlayerDir.dy * 3);
-        let path = findPath(enemy.x, enemy.y, targetX, targetY);
-        if (path.length > 0) return path[0];
-      }
-    }
-    // BOT 2: STRAŻNIK PORTALU (Kręci się w pobliżu wyjścia, odpycha gracza na finiszu)
-    else if (enemy.role === 2) {
-      let distToExit = Math.abs(enemy.x - exit.x) + Math.abs(enemy.y - exit.y);
-      if (distanceToPlayer <= 7) {
-        enemy.hadSight = true;
-        let path = findPath(enemy.x, enemy.y, player.x, player.y);
-        if (path.length > 0) return path[0];
-      } else if (distToExit > 5) {
-        // Wraca na posterunek wokół portalu
-        let path = findPath(enemy.x, enemy.y, exit.x - 2, exit.y - 2);
-        if (path.length > 0) return path[0];
-      }
-    }
-  } else {
-    // TRYB ŚREDNI: 1 Zwykły bot z polem widzenia 8
-    if (distanceToPlayer <= 8) {
-      let path = findPath(enemy.x, enemy.y, player.x, player.y);
-      if (path.length > 0) return path[0];
-    }
-  }
-
-  // TRYB PATROLOWY (Gdy gracz jest niewidoczny lub zgubiony)
-  enemy.hadSight = false;
-  const dirs = [[0,-1],[0,1],[-1,0],[1,0]].sort(() => Math.random() - 0.5);
-  let validMoves = [];
+// ── SPRAWDZENIE CZY GRACZ MA MOŻLIWOŚĆ RUCHU ──────────
+function isPlayerCompletelyTrapped() {
+  const dirs = [[0,-1],[0,1],[-1,0],[1,0]];
+  
+  // Przejdź po wszystkich 4 sąsiadujących kierunkach wokół gracza
   for(let [dx, dy] of dirs) {
-    let nx = enemy.x + dx, ny = enemy.y + dy;
+    let nx = player.x + dx;
+    let ny = player.y + dy;
+    
+    // Jeśli choć jedno pole wokół jest puste (podłoga) I nie stoi na nim żaden bot, gracz NIE jest osaczony
     if(nx >= 0 && nx < SIZE && ny >= 0 && ny < SIZE && grid[ny][nx] === 0) {
-      if(enemy.lastX && nx === enemy.lastX && ny === enemy.lastY) continue;
-      validMoves.push({x: nx, y: ny});
+      let isBotThere = enemies.some(e => e.x === nx && e.y === ny);
+      if(!isBotThere) {
+        return false; // Znalazło się wolne pole ucieczki!
+      }
     }
   }
-  return validMoves.length > 0 ? validMoves[0] : {x: enemy.lastX || enemy.x, y: enemy.lastY || enemy.y};
+  return true; // Wszystkie wolne pola są zablokowane przez ściany lub boty
 }
 
 // ── STAN GRY ─────────────────────────────────────────
-let player, exit, score, best=0, timeLeft, timerId, enemyIntervalId, running=false, paused=false;
+let player, exit, score, best=0, timeElapsed, timerId, enemyIntervalId, running=false, paused=false;
 
 function init() {
   generateMaze();
   player = { x: 1, y: 1 };
   exit = { x: SIZE - 2, y: SIZE - 2 };
   score = 0; scoreEl.textContent = 0;
-  timeLeft = 60; timeEl.textContent = timeLeft + "s";
+  timeElapsed = 0; timeEl.textContent = "0.0s";
+  playerSlowdownTimer = 0;
   initEnemies();
 }
 
@@ -317,8 +264,9 @@ function initEnemies() {
   if(difficulty === 'medium') count = 1;
   if(difficulty === 'hard') count = 3;
 
+  // Rozmieszczenie botów z dala od startu gracza
   const spawns = [
-    {x: SIZE - 2, y: SIZE - 2}, // Spawny rozrzucone strategicznie
+    {x: SIZE - 2, y: SIZE - 2}, 
     {x: SIZE - 2, y: 2},        
     {x: 2, y: SIZE - 2}         
   ];
@@ -327,7 +275,7 @@ function initEnemies() {
     let sx = spawns[i].x;
     let sy = spawns[i].y;
     if(grid[sy][sx] === 1) sy--;
-    enemies.push({ x: sx, y: sy, lastX: null, lastY: null, role: i, stunned: 0, lastPlayerDist: 99, hadSight: false });
+    enemies.push({ x: sx, y: sy });
   }
 }
 
@@ -335,62 +283,85 @@ function startTimers() {
   clearInterval(timerId);
   clearInterval(enemyIntervalId);
 
+  // Stoper gry oraz redukcja czasu paraliżu
   timerId = setInterval(() => {
     if (paused || !running) return;
-    timeLeft--;
-    timeEl.textContent = timeLeft + "s";
-    if (timeLeft <= 0) gameOver("KONIEC CZASU");
-  }, 1000);
+    timeElapsed += 0.1;
+    timeEl.textContent = timeElapsed.toFixed(1) + "s";
+    
+    // Zmniejszaj licznik paraliżu co sekundę (jeśli aktywny)
+    if (playerSlowdownTimer > 0) {
+      playerSlowdownTimer -= 0.1;
+      if (playerSlowdownTimer <= 0) {
+        playerSlowdownTimer = 0;
+      }
+    }
+  }, 100);
 
-  let enemySpeed = Math.max(250, 440 - score * 10);
+  // Pętla ruchu botów
+  let enemySpeed = Math.max(220, 400 - score * 10);
   enemyIntervalId = setInterval(() => {
     if (paused || !running || difficulty === 'easy') return;
 
     for(let enemy of enemies) {
-      let nextMove = getNextTacticalMove(enemy);
-      enemy.lastX = enemy.x;
-      enemy.lastY = enemy.y;
+      let nextMove = getNextHunterMove(enemy);
       enemy.x = nextMove.x;
       enemy.y = nextMove.y;
 
+      // Aktywacja spowolnienia/paraliżu w przypadku najechania bota na gracza
       if(enemy.x === player.x && enemy.y === player.y) {
-        gameOver("ZŁAPANY PRZEZ ZŁOCZYŃCĘ!");
-        return;
+        playerSlowdownTimer = 5.0; // Paraliż na 5 sekund
       }
     }
+
+    // SPRAWDZENIE WARUNKU PRZEGRANEJ: Czy boty całkowicie odcięły drogę (Osaczenie)?
+    if (difficulty !== 'easy' && isPlayerCompletelyTrapped()) {
+      let touchingBots = enemies.filter(e => Math.abs(e.x - player.x) + Math.abs(e.y - player.y) <= 1);
+      if (touchingBots.length >= 1) {
+         gameOver("ZOSTAŁEŚ OSACZONY BEZ WYJŚCIA!");
+         return;
+      }
+    }
+
     draw();
   }, enemySpeed);
 }
 
 function movePlayer(dx, dy) {
   if (!running || paused) return;
+  
+  // Jeśli gracz jest sparaliżowany przez bota, ignoruj próby ruchu
+  if (playerSlowdownTimer > 0) return;
+
   const newX = player.x + dx;
   const newY = player.y + dy;
   
   if (newX >= 0 && newX < SIZE && newY >= 0 && newY < SIZE && grid[newY][newX] === 0) {
-    // Rejestracja wektora ruchu gracza pod kalkulację odcinania dróg przez Flankiera
-    lastPlayerDir = {dx: dx, dy: dy};
     player.x = newX;
     player.y = newY;
     
+    // Jeśli gracz sam wejdzie na bota, zostaje sparaliżowany na 5s
     for(let enemy of enemies) {
       if(enemy.x === player.x && enemy.y === player.y) {
-        gameOver("ZŁAPANY PRZEZ ZŁOCZYŃCĘ!");
-        return;
+        playerSlowdownTimer = 5.0;
       }
     }
     
+    // Wygrana etapu (wejście do portalu)
     if (player.x === exit.x && player.y === exit.y) {
-      let mult = difficulty === 'easy' ? 1 : (difficulty === 'medium' ? 2 : 5);
-      score += mult; 
+      let basePoints = difficulty === 'easy' ? 50 : (difficulty === 'medium' ? 150 : 400);
+      let timeBonus = Math.max(10, Math.floor(1000 / (timeElapsed + 1)));
+      
+      score += (basePoints + timeBonus); 
       scoreEl.textContent = score;
       if (score > best) { best = score; bestEl.textContent = best; }
       
       generateMaze();
       player = { x: 1, y: 1 };
       initEnemies();
-      timeLeft = Math.max(25, 60 - Math.floor(score / 2));
-      timeEl.textContent = timeLeft + "s";
+      timeElapsed = 0;
+      timeEl.textContent = "0.0s";
+      playerSlowdownTimer = 0;
       
       startTimers();
     }
@@ -401,6 +372,7 @@ function movePlayer(dx, dy) {
 function draw() {
   ctx.fillStyle = '#02050a'; ctx.fillRect(0, 0, canvas.width, canvas.height);
   
+  // Rysowanie ścian labiryntu
   for (let y = 0; y < SIZE; y++) {
     for (let x = 0; x < SIZE; x++) {
       if (grid[y][x] === 1) {
@@ -413,25 +385,35 @@ function draw() {
     }
   }
   
+  // Portal wyjściowy
   ctx.fillStyle = '#c8a84b'; ctx.shadowColor = '#c8a84b'; ctx.shadowBlur = 8;
   ctx.fillRect(exit.x * cellSize + 1, exit.y * cellSize + 1, cellSize - 2, cellSize - 2);
   
+  // Rysowanie agresywnych botów
   if(difficulty !== 'easy') {
     for(let enemy of enemies) {
-      if (enemy.stunned > 0) {
-        ctx.fillStyle = '#ffffff'; // Biały kolor oznaczający oszołomienie / zgubienie tropu
-        ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 10;
-      } else {
-        ctx.fillStyle = enemy.hadSight ? '#ff1111' : '#b32424';
-        ctx.shadowColor = '#ff1111'; ctx.shadowBlur = enemy.hadSight ? 12 : 0;
-      }
+      ctx.fillStyle = '#ff1111';
+      ctx.shadowColor = '#ff1111'; ctx.shadowBlur = 8;
       ctx.fillRect(enemy.x * cellSize + 1, enemy.y * cellSize + 1, cellSize - 2, cellSize - 2);
     }
   }
 
-  ctx.fillStyle = '#00d4ff'; ctx.shadowColor = '#00d4ff'; ctx.shadowBlur = 10;
+  // Rysowanie gracza (zmienia kolor na jasny żółty/biały, gdy jest sparaliżowany)
+  if (playerSlowdownTimer > 0) {
+    ctx.fillStyle = '#ffffff'; ctx.shadowColor = '#ffffff'; ctx.shadowBlur = 15;
+  } else {
+    ctx.fillStyle = '#00d4ff'; ctx.shadowColor = '#00d4ff'; ctx.shadowBlur = 10;
+  }
   ctx.fillRect(player.x * cellSize + 1, player.y * cellSize + 1, cellSize - 2, cellSize - 2);
   ctx.shadowBlur = 0;
+
+  // Tekst informacyjny o paraliżu wyświetlany bezpośrednio na mapie
+  if (playerSlowdownTimer > 0) {
+    ctx.fillStyle = '#ffcc00';
+    ctx.font = 'bold 13px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(`PARALIŻ: ${playerSlowdownTimer.toFixed(1)}s`, canvas.width / 2, 25);
+  }
 }
 
 function gameOver(reason = "KONIEC GRY"){
@@ -446,8 +428,8 @@ function gameOver(reason = "KONIEC GRY"){
   const div = document.createElement('div');
   div.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;width:100%;';
   div.innerHTML = `
-    <h2 style="color:#ff4444;letter-spacing:0.1em;font-size:24px;">${reason}</h2>
-    <p style="color:#8899aa;font-size:14px;">Wynik końcowy: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
+    <h2 style="color:#ff4444;letter-spacing:0.1em;font-size:22px;">${reason}</h2>
+    <p style="color:#8899aa;font-size:14px;">Twój Wynik Finiszowy: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
     <input id="nickInput" type="text" maxlength="12" placeholder="Nick" value="${nick}">
   `;
   
