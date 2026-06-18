@@ -2,59 +2,122 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Wąż</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-family:'Courier New',monospace;touch-action:none;}
-    body{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    html,body{width:100%;height:100%;overflow:hidden;background:#050a14;font-family:'Courier New',monospace;touch-action:none;}
+    body{display:flex;flex-direction:column;align-items:center;justify-content:center;padding: 10px;}
 
-    #ui{display:flex;gap:20px;padding:4px 0;color:#00d4ff;font-size:13px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;}
+    #ui{display:flex;gap:20px;padding:4px 0;color:#00d4ff;font-size:14px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;width: 100%;margin-bottom: 5px;}
     #ui span b{color:#c8a84b;}
-    #speedbar{display:flex;gap:6px;align-items:center;padding:2px 0;color:#8899aa;font-size:11px;flex-wrap:wrap;justify-content:center;}
+    #speedbar{display:flex;gap:6px;align-items:center;padding:2px 0;color:#8899aa;font-size:11px;flex-wrap:wrap;justify-content:center;margin-bottom: 10px;}
 
-    #wrap{position:relative;flex-shrink:0;}
-    canvas{display:block;background:#050a14;border:2px solid rgba(0,212,255,0.4);border-radius:4px;}
+    #wrap{position:relative;width: 75vh; height: 75vh; max-width: 100%; max-height: 100%;}
+    canvas{display:block;background:#050a14;border:3px solid rgba(0,212,255,0.4);border-radius:6px;box-shadow:0 0 30px rgba(0,212,255,0.2);width: 100%; height: 100%;}
 
-    #overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#00d4ff;text-align:center;background:rgba(5,10,20,0.92);border-radius:4px;overflow-y:auto;padding:12px;}
-    #overlay h2{font-size:22px;letter-spacing:0.2em;color:#c8a84b;}
-    #overlay p{font-size:11px;color:#8899aa;line-height:1.8;}
+    #overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;color:#00d4ff;text-align:center;background:rgba(5,10,20,0.95);border-radius:4px;overflow-y:auto;padding:15px;}
+    #overlay h2{font-size:28px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:13px;color:#8899aa;line-height:1.6;}
     .speed-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
-    .spd-btn{padding:6px 14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;cursor:pointer;border-radius:2px;transition:all 0.2s;}
+    .spd-btn{padding:8px 18px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;cursor:pointer;border-radius:4px;transition:all 0.2s;}
     .spd-btn.active{background:rgba(0,212,255,0.2);border-color:#00d4ff;color:#fff;}
 
     /* Ranking */
     #ranking{width:100%;max-width:340px;margin-top:4px;}
-    #ranking table{width:100%;border-collapse:collapse;font-size:10px;color:#8899aa;}
-    #ranking th{color:#c8a84b;padding:2px 5px;border-bottom:1px solid rgba(0,212,255,0.2);}
-    #ranking td{padding:2px 5px;}
+    #ranking table{width:100%;border-collapse:collapse;font-size:11px;color:#8899aa;}
+    #ranking th{color:#c8a84b;padding:4px 6px;border-bottom:1px solid rgba(0,212,255,0.2);}
+    #ranking td{padding:4px 6px;}
     #ranking tr.me td{color:#00d4ff;}
-    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;padding:5px 10px;border-radius:2px;width:150px;text-align:center;}
+    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:14px;padding:6px 10px;border-radius:4px;width:160px;text-align:center;}
 
-    /* Gamepad — dwa kciuki */
-    #gamepad{display:none;width:100%;flex-shrink:0;padding:6px 8px;box-sizing:border-box;}
-    #gamepad.visible{display:flex;justify-content:space-between;align-items:center;}
-    .side{display:flex;flex-direction:column;gap:4px;}
-    .side.left .row,.side.right .row{display:flex;gap:4px;}
-    .gpbtn{width:52px;height:44px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
-    .gpbtn:active{background:rgba(0,212,255,0.3);}
-    .gpbtn.wide{width:110px;}
-    .mid-pause{width:50px;height:36px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#556;font-size:11px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+    /* Nowy układ paneli sterowania (Ukryty na komputerach) */
+    #mobile-left-panel, #mobile-right-panel, #gPause {
+      display: none;
+    }
+
+    .gp-row{display:flex;gap:6px;justify-content:center;}
+    .gpbtn{width:58px;height:48px;background:rgba(0,212,255,0.12);border:2px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:22px;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+    .gpbtn:active{background:rgba(0,212,255,0.35);}
+    .gpbtn.wide{width:100px; font-size: 11px; color: #8899aa;}
+    
+    .mid-pause{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 6px 12px;
+      background:rgba(255,255,255,0.05);
+      border:1px solid rgba(0,212,255,0.3);
+      color:#00d4ff;
+      font-size:14px;
+      border-radius:4px;
+      cursor:pointer;
+      user-select:none;
+      -webkit-user-select:none;
+      z-index: 10;
+    }
+
+    /* WERSJA PIONOWA (PORTRAIT) */
+    @media(max-width: 767px) and (orientation: portrait) {
+      body { justify-content: flex-start; padding-top: 20px; }
+      #wrap { width: 92vw; height: 92vw; margin-bottom: 20px; }
+      #gPause { display: block; }
+      #mobile-left-panel { display: flex; flex-direction: column; position: fixed; bottom: 25px; left: 20px; }
+      #mobile-right-panel { display: flex; flex-direction: column; position: fixed; bottom: 25px; right: 20px; }
+    }
+
+    /* WERSJA POZIOMA (LANDSCAPE - SZTYWNY UKŁAD DLA KCIUKÓW) */
+    @media(max-width: 950px) and (orientation: landscape) {
+      body { position: relative; flex-direction: row; justify-content: center; align-items: center; padding: 5px; height: 100vh; width: 100vw; }
+      #ui { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: auto; font-size: 13px; z-index: 5; margin: 0; }
+      #speedbar { display: none; } /* ukrywamy zbędny pasek prędkości w poziomie dla miejsca */
+      #wrap { width: 72vh; height: 72vh; margin: 0 auto; }
+      #gPause { display: block; }
+
+      /* Lewy panel info/funkcyjny */
+      #mobile-left-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        position: fixed;
+        left: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+      }
+      
+      /* Prawy panel - D-pad do ruchu */
+      #mobile-right-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        position: fixed;
+        right: 25px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+      }
+    }
   </style>
 </head>
 <body>
+
+<div id="gPause" class="mid-pause">⏸</div>
+
 <div id="ui">
   <span>WYNIK: <b id="score">0</b></span>
   <span>REKORD: <b id="best">0</b></span>
   <span>PRĘDKOŚĆ: <b id="curspeed">1</b></span>
 </div>
+
 <div id="speedbar">
   POZIOM: &nbsp;
   <button class="spd-btn active" id="s1" onclick="setStartSpeed(1)">1 WOLNO</button>
   <button class="spd-btn" id="s2" onclick="setStartSpeed(2)">2 ŚREDNIO</button>
   <button class="spd-btn" id="s3" onclick="setStartSpeed(3)">3 SZYBKO</button>
 </div>
+
 <div id="wrap">
   <canvas id="c"></canvas>
   <div id="overlay">
@@ -70,17 +133,16 @@
     <div id="ranking"></div>
   </div>
 </div>
-<!-- GAMEPAD dwa kciuki -->
-<div id="gamepad">
-  <div class="side left">
-    <div class="row" style="justify-content:center"><button class="gpbtn" id="gUp">▲</button></div>
-    <div class="row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
-    <div class="row" style="justify-content:center"><button class="gpbtn" id="gDown">▼</button></div>
-  </div>
-  <div class="mid-pause" id="gPause">⏸</div>
-  <div class="side right">
-    <div class="row" style="justify-content:center"><button class="gpbtn wide" style="background:rgba(0,212,255,0.08);color:#8899aa;font-size:10px">TAP = kierunek</button></div>
-  </div>
+
+<div id="mobile-left-panel">
+  <div class="gp-row"><button class="gpbtn wide">KIERUNEK</button></div>
+  <div class="gp-row"><button class="gpbtn wide" style="font-size:16px;">👉 🕹️</button></div>
+</div>
+
+<div id="mobile-right-panel">
+  <div class="gp-row"><button class="gpbtn" id="gUp">▲</button></div>
+  <div class="gp-row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
+  <div class="gp-row"><button class="gpbtn" id="gDown">▼</button></div>
 </div>
 
 <script>
@@ -91,22 +153,8 @@ canvas.width=COLS*CELL; canvas.height=ROWS*CELL;
 
 const overlay=document.getElementById('overlay');
 const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),curSpeedEl=document.getElementById('curspeed');
-const gamepad=document.getElementById('gamepad');
 
-// ── SKALOWANIE ────────────────────────────────────────
-function resize(){
-  const isMobile=window.innerWidth<=768;
-  const padH=isMobile?130:0;
-  const uiH=document.getElementById('ui').offsetHeight+document.getElementById('speedbar').offsetHeight+16;
-  const availW=window.innerWidth-16;
-  const availH=window.innerHeight-uiH-padH-16;
-  const size=Math.floor(Math.min(availW,availH)/CELL)*CELL;
-  canvas.style.width=size+'px'; canvas.style.height=size+'px';
-  if(isMobile){gamepad.classList.add('visible');}
-  else{gamepad.classList.remove('visible');}
-}
-window.addEventListener('resize',resize);
-window.addEventListener('orientationchange',()=>setTimeout(resize,200));
+let menuHTML = overlay.innerHTML; // Zapamiętujemy szablon początkowy menu
 
 // ── RANKING ──────────────────────────────────────────
 function getScores(){try{return JSON.parse(localStorage.getItem('snake_scores')||'[]');}catch{return[];}}
@@ -115,9 +163,9 @@ function saveScore(nick,pts){
   a.sort((x,y)=>y.score-x.score); a=a.slice(0,10);
   localStorage.setItem('snake_scores',JSON.stringify(a)); return a;
 }
-function renderRanking(hi=-1){
-  const a=getScores(),el=document.getElementById('ranking');
-  if(!a.length){el.innerHTML='';return;}
+function renderRanking(hi=-1, customEl=null){
+  const a=getScores(),el=customEl || document.getElementById('ranking');
+  if(!el || !a.length){if(el)el.innerHTML='';return;}
   el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th></tr>${a.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td></tr>`).join('')}</table>`;
 }
 
@@ -133,6 +181,7 @@ function setStartSpeed(n){
     document.getElementById('o'+i)?.classList.toggle('active',i===n);
   });
 }
+
 function getInterval(sc){return Math.max(SPEED_MIN[startSpeed],SPEED_BASE[startSpeed]-Math.floor(sc/5)*SPEED_STEP[startSpeed]);}
 
 // ── GAME STATE ───────────────────────────────────────
@@ -183,25 +232,55 @@ function draw(){
   });ctx.shadowBlur=0;
 }
 
+function setupMainMenuBindings() {
+  const btn = document.getElementById('startBtn');
+  if(btn) {
+    btn.addEventListener('click', startGame);
+  }
+}
+
 function gameOver(){
   clearInterval(loopId);running=false;
-  const nick=(document.getElementById('nickInput')?.value||'???').trim()||'???';
+  const nickInputCurrent = document.getElementById('nickInput');
+  const nick = (nickInputCurrent ? nickInputCurrent.value.trim() : '') || '???';
+  
   const arr=score>0?saveScore(nick,score):getScores();
   const hi=arr.findIndex(e=>e.nick===nick&&e.score===score);
-  overlay.innerHTML=`
-    <h2>KONIEC</h2>
-    <p>Wynik: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
+  
+  overlay.innerHTML='';
+  const div=document.createElement('div');
+  div.style.cssText='display:flex;flex-direction:column;align-items:center;gap:12px;padding:16px;width:100%;';
+  div.innerHTML=`
+    <h2 style="color:#c8a84b;letter-spacing:0.2em;font-size:26px;">KONIEC GRA</h2>
+    <p style="color:#8899aa;font-size:14px;">Wynik: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
     <div class="speed-btns">
       <button class="spd-btn ${startSpeed===1?'active':''}" onclick="setStartSpeed(1)">1</button>
       <button class="spd-btn ${startSpeed===2?'active':''}" onclick="setStartSpeed(2)">2</button>
       <button class="spd-btn ${startSpeed===3?'active':''}" onclick="setStartSpeed(3)">3</button>
     </div>
-    <input id="nickInput" type="text" maxlength="12" placeholder="Nick" value="${nick}" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;padding:5px 10px;border-radius:2px;width:150px;text-align:center">
-    <button class="spd-btn" onclick="startGame()">▶ ZAGRAJ PONOWNIE</button>
-    <div id="ranking"></div>
+    <input id="nickInput" type="text" maxlength="12" placeholder="Nick" value="${nick}">
   `;
+  
+  const rankDiv=document.createElement('div');
+  rankDiv.id='ranking';
+  div.appendChild(rankDiv);
+  
+  const btnRestart=document.createElement('button');
+  btnRestart.className = 'spd-btn';
+  btnRestart.style.marginTop = '5px';
+  btnRestart.textContent='▶ ZAGRAJ PONOWNIE';
+  btnRestart.onclick=()=>{
+    overlay.innerHTML = menuHTML;
+    setupMainMenuBindings();
+    setStartSpeed(startSpeed);
+    renderRanking(-1);
+  };
+  
+  div.appendChild(btnRestart);
+  overlay.appendChild(div);
   overlay.style.display='flex';
-  renderRanking(hi);
+  
+  renderRanking(hi, rankDiv);
 }
 
 function startGame(){
@@ -223,13 +302,17 @@ document.addEventListener('keydown',e=>{
 function gpDir(d){if(!running||paused)return;if(d&&!(d.x===-dir.x&&d.y===-dir.y))nextDir=d;}
 function addGP(id,d){
   const el=document.getElementById(id);
+  if(!el) return;
   el.addEventListener('touchstart',e=>{e.preventDefault();gpDir(d);},{passive:false});
   el.addEventListener('mousedown',()=>gpDir(d));
 }
 addGP('gUp',{x:0,y:-1});addGP('gDown',{x:0,y:1});addGP('gLeft',{x:-1,y:0});addGP('gRight',{x:1,y:0});
-document.getElementById('gPause').addEventListener('click',()=>{
+
+function togglePause() {
   if(!running)return;paused=!paused;if(paused)clearInterval(loopId);else restartLoop();
-});
+}
+document.getElementById('gPause').addEventListener('touchstart', (e)=>{e.preventDefault(); togglePause();});
+document.getElementById('gPause').addEventListener('click', togglePause);
 
 // ── SWIPE ─────────────────────────────────────────────
 let tx=0,ty=0;
@@ -241,10 +324,9 @@ canvas.addEventListener('touchend',e=>{
   else gpDir({x:0,y:dy>0?1:-1});
 },{passive:true});
 
-document.getElementById('startBtn').addEventListener('click',startGame);
+setupMainMenuBindings();
 renderRanking();
 init();draw();
-resize();
 </script>
 </body>
 </html>
