@@ -120,6 +120,8 @@ let cellSize = canvas.width / SIZE;
 let difficulty = 'easy'; 
 let enemies = [];
 let playerSlowdownTimer = 0; 
+let running = false;
+let paused = false;
 
 function setDifficulty(type, btn) {
   difficulty = type;
@@ -145,7 +147,6 @@ const scoreEl = document.getElementById('score'), bestEl = document.getElementBy
 
 const menuHTML = overlay.innerHTML;
 
-// ── RANKING ──────────────────────────────────────────
 function getScores(){try{return JSON.parse(localStorage.getItem('labirynt_scores')||'[]');}catch{return[];}}
 function saveScore(nick,pts){
   let a=getScores(); a.push({nick:nick||'???',score:pts,date:new Date().toLocaleDateString('pl')});
@@ -159,7 +160,6 @@ function renderRanking(hi=-1, customEl=null){
   el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th></tr>${a.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td></tr>`).join('')}</table>`;
 }
 
-// ── GENEROWANIE PLANSZY Z PĘTLAMI ─────────────────────
 let grid = [];
 function generateMaze() {
   grid = Array(SIZE).fill().map(() => Array(SIZE).fill(1)); 
@@ -190,7 +190,6 @@ function generateMaze() {
   }
 }
 
-// ── PATHFINDING (BFS) ───────────────────────────────
 function findPath(startX, startY, targetX, targetY) {
   if (targetX < 1) targetX = 1; if (targetX > SIZE-2) targetX = SIZE-2;
   if (targetY < 1) targetY = 1; if (targetY > SIZE-2) targetY = SIZE-2;
@@ -223,14 +222,11 @@ function getNextHunterMove(enemy) {
   return {x: enemy.x, y: enemy.y};
 }
 
-// ── SPRAWDZANIE WARUNKÓW OSACZENIA I PARALIŻU ──────────
 function checkCollisionsAndTraps() {
-  if (difficulty === 'easy') return;
+  if (difficulty === 'easy') return false;
 
-  // 1. Liczymy ile botów stoi dokładnie na tym samym polu co gracz
   let botsOnPlayerTile = enemies.filter(e => e.x === player.x && e.y === player.y).length;
 
-  // 2. Liczymy wolne kierunki ucieczki (pola sąsiadujące bez ścian i bez botów)
   const dirs = [[0,-1], [0,1], [-1,0], [1,0]];
   let freeEscapeRoutes = 0;
 
@@ -245,27 +241,21 @@ function checkCollisionsAndTraps() {
     }
   }
 
-  // Obliczamy całkowitą liczbę botów biorących udział w osaczaniu gracza
-  // (te na naszym kafelku + te blokujące bezpośrednie wyjścia)
   let activeBlockingBots = botsOnPlayerTile + enemies.filter(e => Math.abs(e.x - player.x) + Math.abs(e.y - player.y) === 1).length;
 
-  // ── WARUNEK PRZEGRANEJ (3 BOTY NA RAZ) ──
-  // Koniec gry, gdy gracz ma na swoim polu 3 boty, LUB gdy łącznie 3 boty go dotykają/blokują i nie ma ruchu.
   if (difficulty === 'hard' && (botsOnPlayerTile >= 3 || (freeEscapeRoutes === 0 && activeBlockingBots >= 3))) {
-    gameOver("TRZY BOTY CIĘ DOPADŁY - OSACZENIE!");
+    gameOver("TRZY BOTY CIĘ OSACZYŁY - KONIEC GRY!");
     return true;
   }
 
-  // ── WARUNEK PARALIŻU (1 LUB 2 BOTY) ──
   if (botsOnPlayerTile > 0 && playerSlowdownTimer <= 0) {
-    playerSlowdownTimer = 5.0; // Paraliż na 5 sekund
+    playerSlowdownTimer = 5.0; 
   }
   
   return false;
 }
 
-// ── STAN GRY ─────────────────────────────────────────
-let player, exit, score, best=0, timeElapsed, timerId, enemyIntervalId, running=false, paused=false;
+let player, exit, score, best=0, timeElapsed, timerId, enemyIntervalId;
 
 function init() {
   generateMaze();
@@ -322,7 +312,6 @@ function startTimers() {
       enemy.y = nextMove.y;
     }
 
-    // Sprawdzamy stan osaczenia po każdym kroku botów
     if (checkCollisionsAndTraps()) return;
 
     draw();
