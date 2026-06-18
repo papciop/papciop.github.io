@@ -27,7 +27,7 @@
       flex-wrap:wrap;
       justify-content:center;
       width: 100%;
-      max-width: 600px;
+      max-width: 1200px; /* Zwiększone dopasowanie do góry */
       flex-shrink: 0;
     }
     #ui span b{color:#c8a84b;}
@@ -39,8 +39,8 @@
       justify-content:center;
       flex-grow: 1;
       width: 100%;
-      max-width: 600px; /* Maksymalny rozmiar na komputerze */
-      min-height: 0; /* Ważne dla flexboxa */
+      max-width: 1200px; /* DWA RAZY WIĘKSZY ROZMIAR NA KOMPUTERZE (było 600px) */
+      min-height: 0;
     }
     canvas{
       border:2px solid rgba(0,212,255,0.4);
@@ -50,7 +50,7 @@
       display:block;
       width: 100%;
       height: 100%;
-      object-fit: contain; /* Utrzymuje proporcje 1:1 bez rozciągania grafik */
+      object-fit: contain;
     }
     #overlay{
       position:absolute;
@@ -66,16 +66,27 @@
       overflow-y:auto;
       padding: 10px;
     }
-    #overlay h2{font-size:20px;letter-spacing:0.2em;color:#c8a84b;}
-    #overlay p{font-size:11px;letter-spacing:0.06em;color:#8899aa;line-height:1.6;}
+    #overlay h2{font-size:24px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:13px;letter-spacing:0.06em;color:#8899aa;line-height:1.6;}
     .legend{display:flex;flex-wrap:wrap;gap:4px 10px;justify-content:center;margin:2px 0;}
-    .leg{font-size:10px;color:#8899aa;}
+    .leg{font-size:11px;color:#8899aa;}
     button{padding:8px 20px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:0.1em;cursor:pointer;border-radius:2px;transition:all 0.2s;}
     button:hover{background:rgba(0,212,255,0.2);}
     
-    /* Gamepad dwa kciuki */
-    #gamepad{display:none;width:100%;max-width:600px;flex-shrink:0;padding-top:10px;}
-    #gamepad.visible{display:flex;justify-content:space-between;align-items:center;}
+    /* Gamepad z odwróconymi stronami */
+    #gamepad{
+      display:none;
+      width:100%;
+      max-width: 1200px; /* Dopasowane do nowego wymiaru gry */
+      flex-shrink:0;
+      padding-top:10px;
+    }
+    #gamepad.visible{
+      display:flex;
+      flex-direction: row-reverse; /* ZAMIANA STRON: prawo staje się lewą, lewo prawą */
+      justify-content:space-between;
+      align-items:center;
+    }
     .gp-left,.gp-right{display:flex;flex-direction:column;gap:4px;}
     .gp-row{display:flex;gap:4px;justify-content:center;}
     .gpbtn{width:54px;height:44px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
@@ -145,19 +156,17 @@ const uLives=document.getElementById('ulives'),uScore=document.getElementById('u
 const nickInput=document.getElementById('nickInput');
 
 const CELL=32, COLS=15, ROWS=15;
-CV.width=COLS*CELL; CV.height=ROWS*CELL; // Stała rozdzielczość renderowania (480x480)
+CV.width=COLS*CELL; CV.height=ROWS*CELL;
 
-// ── NOWE SKALOWANIE DO OKNA VIA CSS ────────────────────
+// ── DOPASOWANIE DO WIĘKSZYCH EKRANÓW ───────────────────
 function resizeCV(){
   const isMobile=window.innerWidth<=768;
   const padH=isMobile?150:0;
   const uiH=document.getElementById('ui').offsetHeight+20;
   
-  // Obliczamy dostępną przestrzeń dla wrapa (kontenera canvasu)
   const availW=window.innerWidth-20;
   const availH=window.innerHeight-uiH-padH-20;
   
-  // Ustalamy idealny kwadrat pasujący do ekranu
   const size=Math.min(availW,availH);
   
   const wrap=document.getElementById('wrap');
@@ -165,12 +174,12 @@ function resizeCV(){
   wrap.style.height=size+'px';
 
   if(isMobile){document.getElementById('gamepad').classList.add('visible');}
-  else{document.getElementById('gamepad').classList.remove('visible');}
+  else{document.getElementById('gamepad').classList.remove('remove');
+       document.getElementById('gamepad').classList.remove('visible');}
 }
 window.addEventListener('resize',resizeCV);
 window.addEventListener('orientationchange',()=>setTimeout(resizeCV,200));
 
-// ── DODANE: TOUCH EVENTY DLA GAMEPADA ───────────────────
 function bindTouch(id, keyName) {
   const btn = document.getElementById(id);
   if(!btn) return;
@@ -194,7 +203,6 @@ const PICKUP_TYPES=['ponton','shield','fuel','star','rockbuster','detonator'];
 
 let map,player,enemies,bullets,pickups,mines,score,lives,level,running,frameId,keys,spawnQ,spawnTimer,paused;
 
-// ── RANKING ───────────────────────────────────────────────
 function getScores(){ try{return JSON.parse(localStorage.getItem('tanki_scores')||'[]');}catch{return[];} }
 function saveScore(nick,sc){
   let arr=getScores();
@@ -212,7 +220,6 @@ function renderRanking(highlight){
   el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th><th>Data</th></tr>${rows}</table>`;
 }
 
-// ── MAP ───────────────────────────────────────────────────
 function makeMap(lvl){
   let m,att=0;
   do{m=tryMakeMap(lvl);att++;}while(!isPlayable(m)&&att<20);
@@ -246,19 +253,16 @@ function isPlayable(m){
   return cnt>=ROWS*COLS*0.3;
 }
 
-// ── TANK ──────────────────────────────────────────────────
 function makeTank(col,row,isPlayer){
   const armour=isPlayer?0:pickArmour(level);
   return{x:col*CELL,y:row*CELL,dir:'up',speed:isPlayer?1.75:1.05,hp:armour+1,armour,isPlayer,hasPonton:false,hasFuel:false,hasShield:false,shieldHits:0,rockAmmo:0,alive:true,shootCd:0,aiTimer:0,aiDir:'down'};
 }
 function pickArmour(lvl){const r=Math.random();if(lvl<=1)return r<0.7?0:1;if(lvl<=3)return r<0.5?0:r<0.8?1:2;return r<0.3?0:r<0.6?1:r<0.85?2:3;}
 
-// ── SOLID ─────────────────────────────────────────────────
 function tileAt(px,py){const c=Math.floor(px/CELL),r=Math.floor(py/CELL);if(c<0||c>=COLS||r<0||r>=ROWS)return T.STEEL;return map[r][c];}
 function isSolid(px,py,hasPonton){const t=tileAt(px,py);if(t===T.BRICK||t===T.STEEL||t===T.BASE)return true;if(t===T.WATER&&!hasPonton)return true;return false;}
 function canMove(tank,dx,dy){const s=CELL-8,nx=tank.x+dx,ny=tank.y+dy;return[[nx,ny],[nx+s,ny],[nx,ny+s],[nx+s,ny+s]].every(([px,py])=>!isSolid(px,py,tank.hasPonton));}
 
-// ── MINES ─────────────────────────────────────────────────
 function spawnMines(count){
   for(let i=0;i<count;i++){
     let r,c,tries=0;
@@ -291,7 +295,6 @@ function updateMines(){
   mines=mines.filter(m=>m.alive);
 }
 
-// ── PICKUP ────────────────────────────────────────────────
 function spawnPickup(){
   let r,c,tries=0;
   do{r=Math.floor(Math.random()*ROWS);c=Math.floor(Math.random()*COLS);tries++;}
@@ -319,7 +322,6 @@ function showBonus(type){
   uBonus._t=setTimeout(()=>uBonus.textContent='',2500);
 }
 
-// ── INIT ──────────────────────────────────────────────────
 function init(){
   score=parseInt(uScore.textContent)||0;
   lives=parseInt(uLives.textContent)||3;
@@ -336,7 +338,6 @@ function init(){
   loop();
 }
 
-// ── SPAWN ENEMY ───────────────────────────────────────────
 function spawnEnemy(){
   if(spawnQ<=0||enemies.length>=5) return;
   const cols=[0,Math.floor(COLS/2),COLS-1];
@@ -346,7 +347,6 @@ function spawnEnemy(){
   uEnemies.textContent=spawnQ+enemies.length;
 }
 
-// ── PLAYER ────────────────────────────────────────────────
 function updatePlayer(){
   if(!player.alive) return;
   const spd=player.hasFuel?player.speed*1.6:player.speed;
@@ -360,7 +360,6 @@ function updatePlayer(){
   if(keys[' ']&&player.shootCd===0) shoot(player);
 }
 
-// ── SHOOT ─────────────────────────────────────────────────
 const DV={up:{dx:0,dy:-1},down:{dx:0,dy:1},left:{dx:-1,dy:0},right:{dx:1,dy:0}};
 function shoot(tank){
   const d=DV[tank.dir];
@@ -371,7 +370,6 @@ function shoot(tank){
   tank.shootCd=tank.isPlayer?20:50;
 }
 
-// ── ENEMIES ───────────────────────────────────────────────
 function updateEnemies(){
   enemies.forEach(e=>{
     if(!e.alive) return;
@@ -398,7 +396,6 @@ function updateEnemies(){
   });
 }
 
-// ── BULLETS ───────────────────────────────────────────────
 function updateBullets(){
   for(let i=0;i<bullets.length;i++){
     if(!bullets[i].alive) continue;
@@ -448,7 +445,6 @@ function updateBullets(){
   if(enemies.length===0&&spawnQ===0) setTimeout(()=>nextLevel(),700);
 }
 
-// ── PICKUPS ───────────────────────────────────────────────
 function updatePickups(){
   pickups.forEach(p=>{
     if(!p.alive) return;
@@ -459,7 +455,6 @@ function updatePickups(){
   pickups=pickups.filter(p=>p.alive);
 }
 
-// ── NEXT LEVEL ────────────────────────────────────────────
 function nextLevel(){
   level++; uLevel.textContent=level;
   map=makeMap(level);
@@ -472,7 +467,6 @@ function nextLevel(){
   spawnMines(Math.min(1+Math.floor(level/2),6));
 }
 
-// ── END ───────────────────────────────────────────────────
 function endGame(win){
   running=false; cancelAnimationFrame(frameId);
   const nick=nickInput.value.trim()||'???';
@@ -498,7 +492,6 @@ function endGame(win){
 }
 let origOverlay;
 
-// ── DRAW ──────────────────────────────────────────────────
 function drawTank(tank){
   if(!tank.alive) return;
   const x=tank.x,y=tank.y,s=CELL-6;
@@ -558,7 +551,6 @@ function draw(){
   }
 }
 
-// ── LOOP ──────────────────────────────────────────────────
 function loop(){
   if(!running) return;
   if(!paused){
