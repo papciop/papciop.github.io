@@ -71,11 +71,10 @@
     @media(max-width: 950px) and (orientation: landscape) {
       body { position: relative; flex-direction: row; justify-content: center; align-items: center; padding: 5px; height: 100vh; width: 100vw; }
       #ui { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: auto; font-size: 13px; z-index: 5; margin: 0; }
-      #speedbar { display: none; } /* ukrywamy zbędny pasek prędkości w poziomie dla miejsca */
+      #speedbar { display: none; }
       #wrap { width: 72vh; height: 72vh; margin: 0 auto; }
       #gPause { display: block; }
 
-      /* Lewy panel info/funkcyjny */
       #mobile-left-panel {
         display: flex;
         flex-direction: column;
@@ -87,7 +86,6 @@
         z-index: 10;
       }
       
-      /* Prawy panel - D-pad do ruchu */
       #mobile-right-panel {
         display: flex;
         flex-direction: column;
@@ -154,18 +152,19 @@ canvas.width=COLS*CELL; canvas.height=ROWS*CELL;
 const overlay=document.getElementById('overlay');
 const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),curSpeedEl=document.getElementById('curspeed');
 
-let menuHTML = overlay.innerHTML; // Zapamiętujemy szablon początkowy menu
+let menuHTML = overlay.innerHTML; 
 
-// ── RANKING ──────────────────────────────────────────
-function getScores(){try{return JSON.parse(localStorage.getItem('snake_scores')||'[]');}catch{return[];}}
+// ── RANKING (ZMIENIONO KLUCZ NA snake_scores_v2) ──────────────────────────
+function getScores(){try{return JSON.parse(localStorage.getItem('snake_scores_v2')||'[]');}catch{return[];}}
 function saveScore(nick,pts){
   let a=getScores(); a.push({nick:nick||'???',score:pts,date:new Date().toLocaleDateString('pl')});
   a.sort((x,y)=>y.score-x.score); a=a.slice(0,10);
-  localStorage.setItem('snake_scores',JSON.stringify(a)); return a;
+  localStorage.setItem('snake_scores_v2',JSON.stringify(a)); return a;
 }
 function renderRanking(hi=-1, customEl=null){
   const a=getScores(),el=customEl || document.getElementById('ranking');
-  if(!el || !a.length){if(el)el.innerHTML='';return;}
+  if(!el) return;
+  if(!a.length){el.innerHTML='<p style="color:#8899aa;font-size:11px;padding:5px;">Brak wyników</p>';return;}
   el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th></tr>${a.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td></tr>`).join('')}</table>`;
 }
 
