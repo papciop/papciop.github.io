@@ -2,10 +2,12 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Tanki</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:'Courier New',monospace;touch-action:none;overflow:hidden;}
+    body{background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;font-family:'Courier New',monospace;touch-action:none;}
     #ui{display:flex;gap:16px;margin-bottom:6px;color:#00d4ff;font-size:13px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;}
     #ui span b{color:#c8a84b;}
     canvas{border:2px solid rgba(0,212,255,0.4);border-radius:4px;box-shadow:0 0 30px rgba(0,212,255,0.15);background:#050a14;display:block;max-width:100%;}
@@ -17,15 +19,18 @@
     button{padding:7px 18px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:0.1em;cursor:pointer;border-radius:2px;transition:all 0.2s;}
     button:hover{background:rgba(0,212,255,0.2);}
     #wrap{position:relative;display:inline-block;max-width:100%;width:100%;}
-    /* D-pad */
-    #dpad{display:none;margin-top:8px;position:relative;width:130px;height:130px;flex-shrink:0;}
-    #dpad button{position:absolute;width:40px;height:40px;background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-size:18px;border-radius:4px;padding:0;}
-    #dpad .d-up{top:0;left:45px;}
-    #dpad .d-down{bottom:0;left:45px;}
-    #dpad .d-left{left:0;top:45px;}
-    #dpad .d-right{right:0;top:45px;}
-    #dpad .d-fire{left:45px;top:45px;background:rgba(255,50,50,0.2);border-color:rgba(255,50,50,0.5);color:#ff4444;font-size:14px;}
-    @media(max-width:700px){#dpad{display:block;}}
+    /* Gamepad dwa kciuki */
+    html,body{height:100%;overflow:hidden;}
+    #gamepad{display:none;width:100%;flex-shrink:0;padding:6px 8px;}
+    #gamepad.visible{display:flex;justify-content:space-between;align-items:center;}
+    .gp-left,.gp-right{display:flex;flex-direction:column;gap:4px;}
+    .gp-row{display:flex;gap:4px;justify-content:center;}
+    .gpbtn{width:54px;height:46px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+    .gpbtn:active{background:rgba(0,212,255,0.3);}
+    .gpbtn.fire{width:54px;height:46px;background:rgba(255,50,50,0.15);border-color:rgba(255,80,80,0.5);color:#ff4444;font-size:13px;}
+    .gpbtn.fire:active{background:rgba(255,50,50,0.35);}
+    .gp-mid{display:flex;flex-direction:column;gap:6px;align-items:center;}
+    .gp-pause{width:44px;height:36px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);color:#556;font-size:11px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
     /* Ranking */
     #ranking{margin-top:8px;width:100%;max-width:400px;}
     #ranking table{width:100%;border-collapse:collapse;font-size:11px;color:#8899aa;}
@@ -64,13 +69,18 @@
     <div id="ranking"></div>
   </div>
 </div>
-<div style="display:flex;gap:16px;align-items:center;margin-top:6px;">
-  <div id="dpad">
-    <button class="d-up" ontouchstart="tp('ArrowUp')" ontouchend="tr('ArrowUp')">▲</button>
-    <button class="d-down" ontouchstart="tp('ArrowDown')" ontouchend="tr('ArrowDown')">▼</button>
-    <button class="d-left" ontouchstart="tp('ArrowLeft')" ontouchend="tr('ArrowLeft')">◀</button>
-    <button class="d-right" ontouchstart="tp('ArrowRight')" ontouchend="tr('ArrowRight')">▶</button>
-    <button class="d-fire" ontouchstart="tp(' ')" ontouchend="tr(' ')">STRZAŁ</button>
+<div id="gamepad">
+  <div class="gp-left">
+    <div class="gp-row"><button class="gpbtn" id="gUp">▲</button></div>
+    <div class="gp-row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
+    <div class="gp-row"><button class="gpbtn" id="gDown">▼</button></div>
+  </div>
+  <div class="gp-mid">
+    <div class="gp-pause" id="gPause">⏸</div>
+  </div>
+  <div class="gp-right">
+    <div class="gp-row"><button class="gpbtn fire" id="gFire">STRZAŁ</button></div>
+    <div class="gp-row"><button class="gpbtn fire" id="gFire2">🔫</button></div>
   </div>
 </div>
 <script>
@@ -84,14 +94,18 @@ CV.width=COLS*CELL; CV.height=ROWS*CELL;
 
 // ── SKALOWANIE DO OKNA ────────────────────────────────
 function resizeCV(){
-  const maxW=Math.min(window.innerWidth-16, COLS*CELL);
-  const maxH=Math.min(window.innerHeight-160, ROWS*CELL);
-  const size=Math.min(maxW,maxH);
-  CV.style.width=size+"px";
-  CV.style.height=size+"px";
+  const isMobile=window.innerWidth<=768;
+  const padH=isMobile?160:0;
+  const uiH=document.getElementById('ui').offsetHeight+16;
+  const availW=window.innerWidth-16;
+  const availH=window.innerHeight-uiH-padH-16;
+  const size=Math.floor(Math.min(availW,availH)/CELL)*CELL;
+  CV.style.width=size+'px'; CV.style.height=size+'px';
+  if(isMobile){document.getElementById('gamepad').classList.add('visible');}
+  else{document.getElementById('gamepad').classList.remove('visible');}
 }
-window.addEventListener("resize",resizeCV);
-resizeCV();
+window.addEventListener('resize',resizeCV);
+window.addEventListener('orientationchange',()=>setTimeout(resizeCV,200));
 
 const T={EMPTY:0,BRICK:1,STEEL:2,BASE:3,BUSH:4,WATER:5};
 const TANK_COLORS=['#44bb44','#ddcc22','#cccccc','#dd3333'];
@@ -504,6 +518,7 @@ document.getElementById('startBtn').addEventListener('click',()=>{
 
 renderRanking(-1);
 ctx.fillStyle='#050a14';ctx.fillRect(0,0,CV.width,CV.height);
+resizeCV();
 </script>
 </body>
 </html>

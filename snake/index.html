@@ -2,111 +2,130 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
   <title>Wąż</title>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
-    body{background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;font-family:'Courier New',monospace;touch-action:none;overflow:hidden;}
-    #ui{display:flex;gap:24px;margin-bottom:8px;color:#00d4ff;font-size:14px;letter-spacing:0.13em;flex-wrap:wrap;justify-content:center;}
-    #speedbar{display:flex;gap:8px;align-items:center;margin-bottom:8px;color:#8899aa;font-size:12px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;}
-    canvas{border:2px solid rgba(0,212,255,0.4);border-radius:4px;box-shadow:0 0 30px rgba(0,212,255,0.15);background:#050a14;display:block;max-width:100%;max-height:60vw;}
-    #overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#00d4ff;text-align:center;background:rgba(5,10,20,0.88);border-radius:4px;}
-    #overlay h2{font-size:24px;letter-spacing:0.2em;color:#c8a84b;}
-    #overlay p{font-size:12px;letter-spacing:0.08em;color:#8899aa;line-height:1.8;}
-    .speed-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;}
-    .spd-btn{padding:7px 16px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;letter-spacing:0.1em;cursor:pointer;border-radius:2px;transition:all 0.2s;}
-    .spd-btn:hover,.spd-btn.active{background:rgba(0,212,255,0.2);box-shadow:0 0 10px rgba(0,212,255,0.3);border-color:#00d4ff;}
-    .spd-btn.active{color:#fff;}
-    #wrap{position:relative;display:inline-block;max-width:100%;}
-    /* Dpad mobile */
-    #dpad{display:none;margin-top:10px;position:relative;width:120px;height:120px;}
-    #dpad button{position:absolute;width:38px;height:38px;background:rgba(0,212,255,0.15);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-size:18px;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-    #dpad .d-up{top:0;left:41px;}
-    #dpad .d-down{bottom:0;left:41px;}
-    #dpad .d-left{left:0;top:41px;}
-    #dpad .d-right{right:0;top:41px;}
-    @media(max-width:600px){#dpad{display:block;}}
+    html,body{width:100%;height:100%;overflow:hidden;background:transparent;font-family:'Courier New',monospace;touch-action:none;}
+    body{display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+    #ui{display:flex;gap:20px;padding:4px 0;color:#00d4ff;font-size:13px;letter-spacing:0.1em;flex-wrap:wrap;justify-content:center;}
+    #ui span b{color:#c8a84b;}
+    #speedbar{display:flex;gap:6px;align-items:center;padding:2px 0;color:#8899aa;font-size:11px;flex-wrap:wrap;justify-content:center;}
+
+    #wrap{position:relative;flex-shrink:0;}
+    canvas{display:block;background:#050a14;border:2px solid rgba(0,212,255,0.4);border-radius:4px;}
+
+    #overlay{position:absolute;top:0;left:0;right:0;bottom:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#00d4ff;text-align:center;background:rgba(5,10,20,0.92);border-radius:4px;overflow-y:auto;padding:12px;}
+    #overlay h2{font-size:22px;letter-spacing:0.2em;color:#c8a84b;}
+    #overlay p{font-size:11px;color:#8899aa;line-height:1.8;}
+    .speed-btns{display:flex;gap:6px;flex-wrap:wrap;justify-content:center;}
+    .spd-btn{padding:6px 14px;background:rgba(0,212,255,0.07);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-family:'Courier New',monospace;font-size:12px;cursor:pointer;border-radius:2px;transition:all 0.2s;}
+    .spd-btn.active{background:rgba(0,212,255,0.2);border-color:#00d4ff;color:#fff;}
+
     /* Ranking */
-    #ranking{margin-top:10px;width:100%;max-width:380px;}
-    #ranking table{width:100%;border-collapse:collapse;font-size:11px;color:#8899aa;}
-    #ranking th{color:#c8a84b;letter-spacing:0.1em;padding:3px 6px;border-bottom:1px solid rgba(0,212,255,0.2);}
-    #ranking td{padding:3px 6px;}
-    #ranking tr:first-child td{color:#00d4ff;}
+    #ranking{width:100%;max-width:340px;margin-top:4px;}
+    #ranking table{width:100%;border-collapse:collapse;font-size:10px;color:#8899aa;}
+    #ranking th{color:#c8a84b;padding:2px 5px;border-bottom:1px solid rgba(0,212,255,0.2);}
+    #ranking td{padding:2px 5px;}
+    #ranking tr.me td{color:#00d4ff;}
+    #nickInput{background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;padding:5px 10px;border-radius:2px;width:150px;text-align:center;}
+
+    /* Gamepad — dwa kciuki */
+    #gamepad{display:none;width:100%;flex-shrink:0;padding:6px 8px;box-sizing:border-box;}
+    #gamepad.visible{display:flex;justify-content:space-between;align-items:center;}
+    .side{display:flex;flex-direction:column;gap:4px;}
+    .side.left .row,.side.right .row{display:flex;gap:4px;}
+    .gpbtn{width:52px;height:44px;background:rgba(0,212,255,0.12);border:1px solid rgba(0,212,255,0.35);color:#00d4ff;font-size:18px;border-radius:6px;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;}
+    .gpbtn:active{background:rgba(0,212,255,0.3);}
+    .gpbtn.wide{width:110px;}
+    .mid-pause{width:50px;height:36px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#556;font-size:11px;border-radius:4px;display:flex;align-items:center;justify-content:center;cursor:pointer;}
   </style>
 </head>
 <body>
-  <div id="ui">
-    <span>WYNIK: <b id="score">0</b></span>
-    <span>REKORD: <b id="best">0</b></span>
-    <span>PRĘDKOŚĆ: <b id="curspeed">1</b></span>
-  </div>
-  <div id="speedbar">
-    POZIOM:
-    <button class="spd-btn active" id="s1" onclick="setStartSpeed(1)">1 — WOLNO</button>
-    <button class="spd-btn" id="s2" onclick="setStartSpeed(2)">2 — ŚREDNIO</button>
-    <button class="spd-btn" id="s3" onclick="setStartSpeed(3)">3 — SZYBKO</button>
-  </div>
-  <div id="wrap">
-    <canvas id="c" width="400" height="400"></canvas>
-    <div id="overlay">
-      <h2>WĄŻ</h2>
-      <p>Strzałki / Dpad = ruch &nbsp;|&nbsp; Esc = pauza</p>
-      <div class="speed-btns">
-        <button class="spd-btn active" id="o1" onclick="setStartSpeed(1)">1 — WOLNO</button>
-        <button class="spd-btn" id="o2" onclick="setStartSpeed(2)">2 — ŚREDNIO</button>
-        <button class="spd-btn" id="o3" onclick="setStartSpeed(3)">3 — SZYBKO</button>
-      </div>
-      <button class="spd-btn" style="margin-top:4px" id="startBtn">▶ ZAGRAJ</button>
-      <div id="ranking"></div>
+<div id="ui">
+  <span>WYNIK: <b id="score">0</b></span>
+  <span>REKORD: <b id="best">0</b></span>
+  <span>PRĘDKOŚĆ: <b id="curspeed">1</b></span>
+</div>
+<div id="speedbar">
+  POZIOM: &nbsp;
+  <button class="spd-btn active" id="s1" onclick="setStartSpeed(1)">1 WOLNO</button>
+  <button class="spd-btn" id="s2" onclick="setStartSpeed(2)">2 ŚREDNIO</button>
+  <button class="spd-btn" id="s3" onclick="setStartSpeed(3)">3 SZYBKO</button>
+</div>
+<div id="wrap">
+  <canvas id="c"></canvas>
+  <div id="overlay">
+    <h2>🐍 WĄŻ</h2>
+    <p>Strzałki / D-pad = ruch &nbsp;|&nbsp; Esc = pauza<br>Prędkość rośnie co 5 punktów</p>
+    <div class="speed-btns">
+      <button class="spd-btn active" id="o1" onclick="setStartSpeed(1)">1 WOLNO</button>
+      <button class="spd-btn" id="o2" onclick="setStartSpeed(2)">2 ŚREDNIO</button>
+      <button class="spd-btn" id="o3" onclick="setStartSpeed(3)">3 SZYBKO</button>
     </div>
+    <input id="nickInput" type="text" maxlength="12" placeholder="Twój nick" autocomplete="off">
+    <button class="spd-btn" id="startBtn">▶ ZAGRAJ</button>
+    <div id="ranking"></div>
   </div>
-  <div id="dpad">
-    <button class="d-up" ontouchstart="dpadPress('ArrowUp')" ontouchend="dpadRelease()">▲</button>
-    <button class="d-down" ontouchstart="dpadPress('ArrowDown')" ontouchend="dpadRelease()">▼</button>
-    <button class="d-left" ontouchstart="dpadPress('ArrowLeft')" ontouchend="dpadRelease()">◀</button>
-    <button class="d-right" ontouchstart="dpadPress('ArrowRight')" ontouchend="dpadRelease()">▶</button>
+</div>
+<!-- GAMEPAD dwa kciuki -->
+<div id="gamepad">
+  <div class="side left">
+    <div class="row" style="justify-content:center"><button class="gpbtn" id="gUp">▲</button></div>
+    <div class="row"><button class="gpbtn" id="gLeft">◀</button><button class="gpbtn" id="gRight">▶</button></div>
+    <div class="row" style="justify-content:center"><button class="gpbtn" id="gDown">▼</button></div>
   </div>
+  <div class="mid-pause" id="gPause">⏸</div>
+  <div class="side right">
+    <div class="row" style="justify-content:center"><button class="gpbtn wide" style="background:rgba(0,212,255,0.08);color:#8899aa;font-size:10px">TAP = kierunek</button></div>
+  </div>
+</div>
 
 <script>
 const COLS=20,ROWS=20,CELL=20;
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+canvas.width=COLS*CELL; canvas.height=ROWS*CELL;
 
-// ── SKALOWANIE DO OKNA ────────────────────────────────
-let scale=1;
-function resizeCanvas(){
-  const maxW=Math.min(window.innerWidth-16, 500);
-  const maxH=Math.min(window.innerHeight-180, 500);
-  const size=Math.min(maxW,maxH);
-  scale=size/(COLS*CELL);
-  canvas.style.width=size+"px";
-  canvas.style.height=size+"px";
-}
-window.addEventListener("resize",resizeCanvas);
-resizeCanvas();
-const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');
 const overlay=document.getElementById('overlay');
 const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),curSpeedEl=document.getElementById('curspeed');
+const gamepad=document.getElementById('gamepad');
 
-const SPEED_BASE=[null, 291, 200, 127];
-const SPEED_STEP=[null,20,14,9];
-const SPEED_MIN=[null, 109, 82, 55];
+// ── SKALOWANIE ────────────────────────────────────────
+function resize(){
+  const isMobile=window.innerWidth<=768;
+  const padH=isMobile?130:0;
+  const uiH=document.getElementById('ui').offsetHeight+document.getElementById('speedbar').offsetHeight+16;
+  const availW=window.innerWidth-16;
+  const availH=window.innerHeight-uiH-padH-16;
+  const size=Math.floor(Math.min(availW,availH)/CELL)*CELL;
+  canvas.style.width=size+'px'; canvas.style.height=size+'px';
+  if(isMobile){gamepad.classList.add('visible');}
+  else{gamepad.classList.remove('visible');}
+}
+window.addEventListener('resize',resize);
+window.addEventListener('orientationchange',()=>setTimeout(resize,200));
 
-let snake,dir,nextDir,food,score,best=0,loop,running=false,paused=false;
-let startSpeed=1;
-
-// ── RANKING ──────────────────────────────────────────────
+// ── RANKING ──────────────────────────────────────────
 function getScores(){try{return JSON.parse(localStorage.getItem('snake_scores')||'[]');}catch{return[];}}
 function saveScore(nick,pts){
-  const s=getScores();
-  s.push({nick,pts,date:new Date().toLocaleDateString('pl')});
-  s.sort((a,b)=>b.pts-a.pts);
-  localStorage.setItem('snake_scores',JSON.stringify(s.slice(0,10)));
+  let a=getScores(); a.push({nick:nick||'???',score:pts,date:new Date().toLocaleDateString('pl')});
+  a.sort((x,y)=>y.score-x.score); a=a.slice(0,10);
+  localStorage.setItem('snake_scores',JSON.stringify(a)); return a;
 }
-function renderRanking(){
-  const s=getScores();
-  if(!s.length){document.getElementById('ranking').innerHTML='';return;}
-  document.getElementById('ranking').innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th><th>Data</th></tr>${s.slice(0,10).map((r,i)=>`<tr><td>${i+1}</td><td>${r.nick}</td><td>${r.pts}</td><td>${r.date}</td></tr>`).join('')}</table>`;
+function renderRanking(hi=-1){
+  const a=getScores(),el=document.getElementById('ranking');
+  if(!a.length){el.innerHTML='';return;}
+  el.innerHTML=`<table><tr><th>#</th><th>Nick</th><th>Wynik</th></tr>${a.map((e,i)=>`<tr class="${i===hi?'me':''}"><td>${i+1}</td><td>${e.nick}</td><td>${e.score}</td></tr>`).join('')}</table>`;
 }
 
+// ── SPEED ─────────────────────────────────────────────
+const SPEED_BASE=[null,291,200,127];
+const SPEED_STEP=[null,20,14,9];
+const SPEED_MIN=[null,109,82,55];
+let startSpeed=1;
 function setStartSpeed(n){
   startSpeed=n;
   [1,2,3].forEach(i=>{
@@ -114,28 +133,25 @@ function setStartSpeed(n){
     document.getElementById('o'+i)?.classList.toggle('active',i===n);
   });
 }
+function getInterval(sc){return Math.max(SPEED_MIN[startSpeed],SPEED_BASE[startSpeed]-Math.floor(sc/5)*SPEED_STEP[startSpeed]);}
 
-function getInterval(sc){
-  const reduced=Math.floor(sc/5)*SPEED_STEP[startSpeed];
-  return Math.max(SPEED_MIN[startSpeed],SPEED_BASE[startSpeed]-reduced);
-}
+// ── GAME STATE ───────────────────────────────────────
+let snake,dir,nextDir,food,score,best=0,loopId,running=false,paused=false;
 
 function init(){
   snake=[{x:10,y:10},{x:9,y:10},{x:8,y:10}];
-  dir={x:1,y:0};nextDir={x:1,y:0};
-  score=0;scoreEl.textContent=0;
+  dir={x:1,y:0}; nextDir={x:1,y:0};
+  score=0; scoreEl.textContent=0;
   curSpeedEl.textContent=startSpeed;
   placeFood();
 }
-
 function placeFood(){
-  let pos;
-  do{pos={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)};}
-  while(snake.some(s=>s.x===pos.x&&s.y===pos.y));
-  food=pos;
+  let p;
+  do{p={x:Math.floor(Math.random()*COLS),y:Math.floor(Math.random()*ROWS)};}
+  while(snake.some(s=>s.x===p.x&&s.y===p.y));
+  food=p;
 }
-
-function restartLoop(){clearInterval(loop);loop=setInterval(step,getInterval(score));}
+function restartLoop(){clearInterval(loopId);loopId=setInterval(step,getInterval(score));}
 
 function step(){
   dir=nextDir;
@@ -143,9 +159,10 @@ function step(){
   if(head.x<0||head.x>=COLS||head.y<0||head.y>=ROWS||snake.some(s=>s.x===head.x&&s.y===head.y)){gameOver();return;}
   snake.unshift(head);
   if(head.x===food.x&&head.y===food.y){
-    score++;scoreEl.textContent=score;
+    score++; scoreEl.textContent=score;
     if(score>best){best=score;bestEl.textContent=best;}
-    if(score%5===0){curSpeedEl.textContent=startSpeed+Math.floor(score/5);restartLoop();return;}
+    curSpeedEl.textContent=startSpeed+Math.floor(score/5);
+    if(score%5===0){placeFood();restartLoop();return;}
     placeFood();
   } else {snake.pop();}
   draw();
@@ -159,80 +176,75 @@ function draw(){
   ctx.fillStyle='#c8a84b';ctx.shadowColor='#c8a84b';ctx.shadowBlur=10;
   ctx.fillRect(food.x*CELL+2,food.y*CELL+2,CELL-4,CELL-4);ctx.shadowBlur=0;
   snake.forEach((s,i)=>{
-    const ratio=1-i/snake.length;
-    ctx.fillStyle=i===0?'#00d4ff':`rgba(0,${Math.floor(150*ratio+50)},${Math.floor(200*ratio+55)},${0.4+ratio*0.6})`;
+    const r=1-i/snake.length;
+    ctx.fillStyle=i===0?'#00d4ff':`rgba(0,${Math.floor(150*r+50)},${Math.floor(200*r+55)},${0.4+r*0.6})`;
     ctx.shadowColor=i===0?'#00d4ff':'transparent';ctx.shadowBlur=i===0?8:0;
     ctx.fillRect(s.x*CELL+1,s.y*CELL+1,CELL-2,CELL-2);
-  });
-  ctx.shadowBlur=0;
+  });ctx.shadowBlur=0;
 }
 
 function gameOver(){
-  clearInterval(loop);running=false;
-  // zapytaj o nick i zapisz wynik
-  const nickInput=`<input id="nickInput" placeholder="Twój nick" maxlength="12" style="margin-top:6px;padding:5px 10px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.4);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;letter-spacing:0.1em;border-radius:2px;width:140px;text-align:center">`;
+  clearInterval(loopId);running=false;
+  const nick=(document.getElementById('nickInput')?.value||'???').trim()||'???';
+  const arr=score>0?saveScore(nick,score):getScores();
+  const hi=arr.findIndex(e=>e.nick===nick&&e.score===score);
   overlay.innerHTML=`
     <h2>KONIEC</h2>
     <p>Wynik: ${score} &nbsp;|&nbsp; Rekord: ${best}</p>
-    ${nickInput}
     <div class="speed-btns">
       <button class="spd-btn ${startSpeed===1?'active':''}" onclick="setStartSpeed(1)">1</button>
       <button class="spd-btn ${startSpeed===2?'active':''}" onclick="setStartSpeed(2)">2</button>
       <button class="spd-btn ${startSpeed===3?'active':''}" onclick="setStartSpeed(3)">3</button>
     </div>
-    <button class="spd-btn" onclick="submitScore()">💾 ZAPISZ I ZAGRAJ PONOWNIE</button>
+    <input id="nickInput" type="text" maxlength="12" placeholder="Nick" value="${nick}" style="background:rgba(0,212,255,0.08);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Courier New',monospace;font-size:13px;padding:5px 10px;border-radius:2px;width:150px;text-align:center">
+    <button class="spd-btn" onclick="startGame()">▶ ZAGRAJ PONOWNIE</button>
     <div id="ranking"></div>
   `;
   overlay.style.display='flex';
-  renderRanking();
-}
-
-function submitScore(){
-  const nick=(document.getElementById('nickInput')?.value||'???').trim()||'???';
-  if(score>0) saveScore(nick,score);
-  startGame();
+  renderRanking(hi);
 }
 
 function startGame(){
-  init();overlay.style.display='none';
-  running=true;paused=false;
+  init();overlay.style.display='none';running=true;paused=false;
   placeFood();draw();restartLoop();
 }
 
-// Swipe na mobile
-let touchStartX=0,touchStartY=0;
-canvas.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;touchStartY=e.touches[0].clientY;},{passive:true});
-canvas.addEventListener('touchend',e=>{
-  const dx=e.changedTouches[0].clientX-touchStartX;
-  const dy=e.changedTouches[0].clientY-touchStartY;
-  if(Math.abs(dx)>Math.abs(dy)){
-    if(dx>20&&dir.x===0) nextDir={x:1,y:0};
-    else if(dx<-20&&dir.x===0) nextDir={x:-1,y:0};
-  } else {
-    if(dy>20&&dir.y===0) nextDir={x:0,y:1};
-    else if(dy<-20&&dir.y===0) nextDir={x:0,y:-1};
-  }
-},{passive:true});
-
-function dpadPress(key){
-  const map={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
-  const d=map[key];
-  if(d&&!(d.x===-dir.x&&d.y===-dir.y)) nextDir=d;
-}
-function dpadRelease(){}
-
+// ── KLAWIATURA ───────────────────────────────────────
+const DMAP={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
 document.addEventListener('keydown',e=>{
-  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) e.preventDefault();
-  if(e.key==='Escape'&&running){paused=!paused;if(paused)clearInterval(loop);else restartLoop();return;}
-  if(!running||paused) return;
-  const map={ArrowUp:{x:0,y:-1},ArrowDown:{x:0,y:1},ArrowLeft:{x:-1,y:0},ArrowRight:{x:1,y:0}};
-  const d=map[e.key];
-  if(d&&!(d.x===-dir.x&&d.y===-dir.y)) nextDir=d;
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key))e.preventDefault();
+  if(e.key==='Escape'&&running){paused=!paused;if(paused)clearInterval(loopId);else restartLoop();return;}
+  if(!running||paused)return;
+  const d=DMAP[e.key];
+  if(d&&!(d.x===-dir.x&&d.y===-dir.y))nextDir=d;
 });
+
+// ── GAMEPAD BUTTONS ───────────────────────────────────
+function gpDir(d){if(!running||paused)return;if(d&&!(d.x===-dir.x&&d.y===-dir.y))nextDir=d;}
+function addGP(id,d){
+  const el=document.getElementById(id);
+  el.addEventListener('touchstart',e=>{e.preventDefault();gpDir(d);},{passive:false});
+  el.addEventListener('mousedown',()=>gpDir(d));
+}
+addGP('gUp',{x:0,y:-1});addGP('gDown',{x:0,y:1});addGP('gLeft',{x:-1,y:0});addGP('gRight',{x:1,y:0});
+document.getElementById('gPause').addEventListener('click',()=>{
+  if(!running)return;paused=!paused;if(paused)clearInterval(loopId);else restartLoop();
+});
+
+// ── SWIPE ─────────────────────────────────────────────
+let tx=0,ty=0;
+canvas.addEventListener('touchstart',e=>{tx=e.touches[0].clientX;ty=e.touches[0].clientY;},{passive:true});
+canvas.addEventListener('touchend',e=>{
+  const dx=e.changedTouches[0].clientX-tx,dy=e.changedTouches[0].clientY-ty;
+  if(Math.abs(dx)<10&&Math.abs(dy)<10)return;
+  if(Math.abs(dx)>Math.abs(dy))gpDir({x:dx>0?1:-1,y:0});
+  else gpDir({x:0,y:dy>0?1:-1});
+},{passive:true});
 
 document.getElementById('startBtn').addEventListener('click',startGame);
 renderRanking();
 init();draw();
+resize();
 </script>
 </body>
 </html>
