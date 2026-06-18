@@ -91,16 +91,16 @@
       document.getElementById('sideNav').classList.toggle('expanded');
     }
 
-    // Dopasowane klucze (storageKey) dokładnie do tych używanych w skryptach gier
+    // Tablica gier z dodanym Labiryntem powiązanym kluczem 'labirynt_scores'
     const GAMES = [
       { storageKey: 'snake_scores_v2',  name: '🐍 Wąż',          unit: 'pkt' },
-      { storageKey: 'tanki_scores',     name: '⚙️ Tanki',         unit: 'pkt' },
-      { storageKey: 'wilk_scores',      name: '🐺 Wilk i Zając',  unit: 'pkt' }
+      { storageKey: 'tanki_scores',      name: '⚙️ Tanki',         unit: 'pkt' },
+      { storageKey: 'wilk_scores',      name: '🐺 Wilk i Zając',  unit: 'pkt' },
+      { storageKey: 'labirynt_scores',  name: '🧩 Labirynt Pro',  unit: 'pkt' }
     ];
 
     function getScores(storageKey) {
       try { 
-        // Próba pobrania danych według dokładnego klucza gry
         return JSON.parse(localStorage.getItem(storageKey) || '[]'); 
       }
       catch { return []; }
@@ -138,8 +138,6 @@
       });
     }
 
-    // Ważne: Jeśli w grze Wąż używasz jeszcze starego klucza 'snake_scores' (bez _v2), 
-    // zmień powyżej 'snake_scores_v2' na 'snake_scores'.
     render();
   </script>
 </body>
