@@ -28,6 +28,21 @@ const imagePaths = [
   "url('assets/wolf_RightDown.svg')",
 ];
 
+// ── SYSTEM FUNKCJI RANKINGOWYCH (NOWOŚĆ) ──────────────────────────
+function getScores() {
+  try { return JSON.parse(localStorage.getItem('wilk_scores') || '[]'); }
+  catch { return []; }
+}
+
+function saveScore(nick, pts) {
+  let a = getScores();
+  a.push({ nick: nick || '???', score: pts, date: new Date().toLocaleDateString('pl') });
+  a.sort((x, y) => y.score - x.score);
+  a = a.slice(0, 10);
+  localStorage.setItem('wilk_scores', JSON.stringify(a));
+  return a;
+}
+
 class Game {
   constructor() {
     this.score = 0;
@@ -36,7 +51,6 @@ class Game {
     this.eggSpeed = 1000;
     this.wolf = new Wolf();
     this.isEnded = false;
-    // this.intervalId = null;
     this.gameStarted = false;
     this.previousEggState = "";
     this.gameType = "A";
@@ -77,18 +91,15 @@ class Game {
         egg.fall();
         egg.timeOfExistence = 0;
       }
-      //slow down the game
       if (this.score % 100 == 0) {
         this.eggFrequency = 4000;
       }
-      //remove lifes when the score is at some point
       if (this.score == 200 || this.score == 500 || this.score == 1000) {
         this.lives = 0;
         document.querySelectorAll(".life").forEach((lifeElement) => {
           livesBoxElement.removeChild(lifeElement);
         });
       }
-      //speeding up the game
       if (
         this.score % 10 == 0 &&
         this.eggFrequency >= 1000 &&
@@ -110,11 +121,19 @@ class Game {
     }, this.eggFrequency);
   }
 
+  // Zaktualizowana funkcja końca gry (Obsługuje wywołanie zapisu)
   end() {
     document.removeEventListener("keydown", this.handleKeyDown);
     this.isEnded = true;
     let gameOverSound = new Audio("sounds/gameOver.mp3");
     gameOverSound.play();
+
+    // Opóźnienie wyskoczenia okienka, aby dźwięki i animacje zdążyły się odegrać
+    setTimeout(() => {
+      const nick = prompt("PRZEGRANA! Wpisz swój nick do rankingu:", "ANONIM") || "???";
+      saveScore(nick.trim(), this.score);
+      alert("Twój wynik został zapisany!");
+    }, 500);
   }
 
   handleKeyDown(event) {
@@ -259,7 +278,6 @@ class Egg {
   constructor() {
     let eggOptions = ["bottom-left", "bottom-right", "top-left", "top-right"];
     this.state = eggOptions[Math.floor(Math.random() * eggOptions.length)];
-    // prevent eggs to slide directly after each other
     while (this.state === game.previousEggState) {
       this.state = eggOptions[Math.floor(Math.random() * eggOptions.length)];
     }
@@ -282,9 +300,6 @@ class Egg {
         game.wolf.checkCollision(self);
         gameBoardElement.removeChild(eggElement);
       }
-
-      // let eggSound = new Audio('sounds/egg.mp3');
-      // eggSound.play();
     }, game.eggSpeed);
   }
 
@@ -333,10 +348,8 @@ startBtn2.addEventListener("click", () => {
 });
 
 // RESPONSIBILITY
-
 function responsibility() {
   const { innerWidth: windowWidth, innerHeight: windowHeight } = window;
-
   const regex = /\((.*?)px/;
 
   const containerHeightString = getComputedStyle(
@@ -373,7 +386,6 @@ function responsibility() {
     "--multiplier",
     `${newMultiplier}`
   );
-  console.log(newMultiplier);
 }
 
 window.addEventListener("resize", responsibility);
@@ -388,8 +400,6 @@ window.addEventListener("load", () => {
   responsibility();
   pleaseRotate();
 });
-
-//add class "shown" to modal when mobile screen orientation is not landscape
 
 function pleaseRotate() {
   if (window.screen.width <= 700) {
