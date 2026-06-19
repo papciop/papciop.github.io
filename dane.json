@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "19.06.2026 05:15",
+  "aktualizacja": "19.06.2026 05:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "52",
+    "lazienka": "51",
     "piwnica": "66",
     "powietrze": "52.0",
     "stacja": "unavailable"
