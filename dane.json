@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "28.06.2026 05:00",
+  "aktualizacja": "28.06.2026 05:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -17,10 +17,10 @@
   },
   "temperatury": {
     "cpu_ha": "51.6",
-    "czerpnia": "21.7",
+    "czerpnia": "21.8",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
-    "lazienka": "27.8",
+    "lazienka": "27.7",
     "nagrzewnica": "0.3",
     "nawiew": "26.2",
     "parownica": "unavailable",
@@ -28,7 +28,7 @@
     "pokoj_franka": "25.99",
     "pokoj_z_jaskolka": "25.35",
     "rekuperator": "26.2",
-    "salon": "24.57",
+    "salon": "24.59",
     "salon_klima": "25",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
