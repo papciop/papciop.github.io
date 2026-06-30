@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "30.06.2026 02:00",
+  "aktualizacja": "30.06.2026 02:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,24 +16,24 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "52.1",
-    "czerpnia": "22.8",
+    "cpu_ha": "50.6",
+    "czerpnia": "23.1",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "28.3",
     "nagrzewnica": "0.3",
-    "nawiew": "27.4",
+    "nawiew": "27.6",
     "parownica": "unavailable",
-    "piwnica": "19.8",
+    "piwnica": "19.7",
     "pokoj_franka": "26.86",
-    "pokoj_z_jaskolka": "26.23",
-    "rekuperator": "27.4",
+    "pokoj_z_jaskolka": "26.19",
+    "rekuperator": "27.6",
     "salon": "25.03",
     "salon_klima": "26",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "unavailable",
-    "sypialnia": "25.23",
+    "sypialnia": "25.31",
     "sypialnia_klima": "27",
     "wiatrolap": "unavailable",
     "wyciag": "28.0",
@@ -48,7 +48,7 @@
     "stacja": "unavailable"
   },
   "zmiekczacz": {
-    "dni_do_konca": "15",
+    "dni_do_konca": "14",
     "sol_procent": "40.0"
   }
 }
