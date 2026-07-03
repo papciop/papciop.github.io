@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "03.07.2026 10:45",
+  "aktualizacja": "03.07.2026 11:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,7 +16,7 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "52.1",
+    "cpu_ha": "51.1",
     "czerpnia": "20.2",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
