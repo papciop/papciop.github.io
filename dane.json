@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "05.07.2026 18:15",
+  "aktualizacja": "05.07.2026 18:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,19 +16,19 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "51.1",
+    "cpu_ha": "51.6",
     "czerpnia": "18.8",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
-    "lazienka": "24.8",
+    "lazienka": "25.0",
     "nagrzewnica": "0.3",
-    "nawiew": "23.4",
+    "nawiew": "23.9",
     "parownica": "unavailable",
     "piwnica": "20.0",
-    "pokoj_franka": "24.16",
+    "pokoj_franka": "23.88",
     "pokoj_z_jaskolka": "23.62",
-    "rekuperator": "23.4",
-    "salon": "24.25",
+    "rekuperator": "23.9",
+    "salon": "24.29",
     "salon_klima": "26",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
@@ -37,14 +37,14 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unavailable",
     "wyciag": "25.0",
-    "wyrzutnia": "22.7",
+    "wyrzutnia": "22.6",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
     "lazienka": "57",
     "piwnica": "68",
-    "powietrze": "52.0",
+    "powietrze": "53.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
