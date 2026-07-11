@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "11.07.2026 12:45",
+  "aktualizacja": "11.07.2026 13:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -33,18 +33,18 @@
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "unavailable",
-    "sypialnia": "23.1",
+    "sypialnia": "23.32",
     "sypialnia_klima": "25",
     "wiatrolap": "unavailable",
     "wyciag": "24.4",
-    "wyrzutnia": "23.9",
+    "wyrzutnia": "24.1",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
     "lazienka": "49",
     "piwnica": "67",
-    "powietrze": "46.0",
+    "powietrze": "47.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
