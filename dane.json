@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "14.07.2026 01:45",
+  "aktualizacja": "14.07.2026 02:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,7 +16,7 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "50.1",
+    "cpu_ha": "49.7",
     "czerpnia": "18.7",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "58",
+    "lazienka": "59",
     "piwnica": "69",
     "powietrze": "57.0",
     "stacja": "unavailable"
