@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "22.07.2026 10:45",
+  "aktualizacja": "22.07.2026 11:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -17,7 +17,7 @@
   },
   "temperatury": {
     "cpu_ha": "50.6",
-    "czerpnia": "22.0",
+    "czerpnia": "21.6",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "25.8",
@@ -28,7 +28,7 @@
     "pokoj_franka": "24.48",
     "pokoj_z_jaskolka": "24.22",
     "rekuperator": "24.9",
-    "salon": "24.33",
+    "salon": "24.38",
     "salon_klima": "26",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
