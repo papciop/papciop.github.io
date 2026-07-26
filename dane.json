@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "26.07.2026 12:15",
+  "aktualizacja": "26.07.2026 12:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -17,7 +17,7 @@
   },
   "temperatury": {
     "cpu_ha": "49.7",
-    "czerpnia": "27.8",
+    "czerpnia": "27.6",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "25.6",
@@ -37,7 +37,7 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unavailable",
     "wyciag": "25.1",
-    "wyrzutnia": "27.0",
+    "wyrzutnia": "26.9",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
