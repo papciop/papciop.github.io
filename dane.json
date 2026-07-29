@@ -1,11 +1,9 @@
 {
-  "aktualizacja": "29.07.2026 09:30",
+  "aktualizacja": "29.07.2026 09:45",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": [
-      "Wejście 1"
-    ]
+    "wejscia_naruszone": []
   },
   "rekuperator": {
     "bypass": "unavailable",
@@ -18,7 +16,7 @@
     "wyciag": "unavailable"
   },
   "temperatury": {
-    "cpu_ha": "50.1",
+    "cpu_ha": "49.7",
     "czerpnia": "unavailable",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
@@ -35,7 +33,7 @@
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "unavailable",
-    "sypialnia": "24.31",
+    "sypialnia": "24.33",
     "sypialnia_klima": "23",
     "wiatrolap": "unavailable",
     "wyciag": "unavailable",
