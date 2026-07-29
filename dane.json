@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "30.07.2026 00:45",
+  "aktualizacja": "30.07.2026 01:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,11 +16,11 @@
     "wyciag": "unavailable"
   },
   "temperatury": {
-    "cpu_ha": "49.7",
+    "cpu_ha": "50.6",
     "czerpnia": "unavailable",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
-    "lazienka": "26.5",
+    "lazienka": "26.4",
     "nagrzewnica": "unavailable",
     "nawiew": "unavailable",
     "parownica": "unavailable",
