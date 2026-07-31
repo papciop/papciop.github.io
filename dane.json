@@ -1,53 +1,52 @@
 {
-  "aktualizacja": "31.07.2026 16:15",
+  "aktualizacja": "31.07.2026 16:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
     "wejscia_naruszone": [
-      "Wejście 1",
-      "Wejście 7"
+      "Wejście 1"
     ]
   },
   "rekuperator": {
-    "bypass": "unavailable",
-    "co2": "unavailable",
-    "error_code": "unavailable",
-    "filtry_dni": "unavailable",
-    "nawiew": "unavailable",
-    "status": "unavailable",
-    "tryb": "unavailable",
-    "wyciag": "unavailable"
+    "bypass": "Zamknięty (auto)",
+    "co2": "500.0",
+    "error_code": "0.0",
+    "filtry_dni": "40.0",
+    "nawiew": "90.0",
+    "status": "on",
+    "tryb": "Tryb inteligentny",
+    "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "50.1",
-    "czerpnia": "unavailable",
+    "cpu_ha": "51.1",
+    "czerpnia": "33.0",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "28.0",
-    "nagrzewnica": "unavailable",
-    "nawiew": "unavailable",
+    "nagrzewnica": "0.3",
+    "nawiew": "27.9",
     "parownica": "unavailable",
-    "piwnica": "20.5",
+    "piwnica": "20.4",
     "pokoj_franka": "25.81",
     "pokoj_z_jaskolka": "25.2",
-    "rekuperator": "unavailable",
-    "salon": "22.65",
+    "rekuperator": "27.9",
+    "salon": "23.08",
     "salon_klima": "24",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "unavailable",
-    "sypialnia": "24.44",
+    "sypialnia": "24.57",
     "sypialnia_klima": "27",
     "wiatrolap": "unavailable",
-    "wyciag": "unavailable",
-    "wyrzutnia": "unavailable",
+    "wyciag": "27.2",
+    "wyrzutnia": "31.4",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "51",
+    "lazienka": "52",
     "piwnica": "70",
-    "powietrze": "unavailable",
+    "powietrze": "48.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
