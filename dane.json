@@ -1,54 +1,50 @@
 {
-  "aktualizacja": "28.08.2026 17:00",
+  "aktualizacja": "28.08.2026 17:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": [
-      "Wejście 1",
-      "Wejście 2",
-      "Wejście 7"
-    ]
+    "wejscia_naruszone": []
   },
   "rekuperator": {
-    "bypass": "unavailable",
-    "co2": "unavailable",
-    "error_code": "unavailable",
-    "filtry_dni": "unavailable",
-    "nawiew": "unavailable",
-    "status": "unavailable",
-    "tryb": "unavailable",
-    "wyciag": "unavailable"
+    "bypass": "Zamknięty (auto)",
+    "co2": "500.0",
+    "error_code": "0.0",
+    "filtry_dni": "12.0",
+    "nawiew": "90.0",
+    "status": "on",
+    "tryb": "Tryb inteligentny",
+    "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "50.6",
-    "czerpnia": "unavailable",
+    "cpu_ha": "50.1",
+    "czerpnia": "27.0",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
-    "lazienka": "25.5",
-    "nagrzewnica": "unavailable",
-    "nawiew": "unavailable",
+    "lazienka": "25.6",
+    "nagrzewnica": "0.3",
+    "nawiew": "26.1",
     "parownica": "unavailable",
-    "piwnica": "21.1",
-    "pokoj_franka": "24.53",
-    "pokoj_z_jaskolka": "24.33",
-    "rekuperator": "unavailable",
+    "piwnica": "21.0",
+    "pokoj_franka": "24.57",
+    "pokoj_z_jaskolka": "24.35",
+    "rekuperator": "26.1",
     "salon": "24.74",
     "salon_klima": "26",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "unavailable",
-    "sypialnia": "24.85",
+    "sypialnia": "24.92",
     "sypialnia_klima": "27",
     "wiatrolap": "unavailable",
-    "wyciag": "unavailable",
-    "wyrzutnia": "unavailable",
+    "wyciag": "25.8",
+    "wyrzutnia": "26.9",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "51",
+    "lazienka": "50",
     "piwnica": "66",
-    "powietrze": "unavailable",
+    "powietrze": "46.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
