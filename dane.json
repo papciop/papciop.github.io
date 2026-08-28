@@ -1,9 +1,13 @@
 {
-  "aktualizacja": "28.08.2026 16:45",
+  "aktualizacja": "28.08.2026 17:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": []
+    "wejscia_naruszone": [
+      "Wejście 1",
+      "Wejście 2",
+      "Wejście 7"
+    ]
   },
   "rekuperator": {
     "bypass": "unavailable",
@@ -16,7 +20,7 @@
     "wyciag": "unavailable"
   },
   "temperatury": {
-    "cpu_ha": "51.1",
+    "cpu_ha": "50.6",
     "czerpnia": "unavailable",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
@@ -28,7 +32,7 @@
     "pokoj_franka": "24.53",
     "pokoj_z_jaskolka": "24.33",
     "rekuperator": "unavailable",
-    "salon": "24.72",
+    "salon": "24.74",
     "salon_klima": "26",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
