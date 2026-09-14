@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "14.09.2026 10:00",
+  "aktualizacja": "14.09.2026 10:15",
   "alarm": {
     "strefa_1": "unavailable",
     "strefa_2": "unavailable",
@@ -16,7 +16,7 @@
     "wyciag": "unavailable"
   },
   "temperatury": {
-    "cpu_ha": "44.8",
+    "cpu_ha": "45.8",
     "czerpnia": "unavailable",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
@@ -25,7 +25,7 @@
     "nawiew": "unavailable",
     "parownica": "unavailable",
     "piwnica": "unavailable",
-    "pokoj_franka": "23.14",
+    "pokoj_franka": "23.12",
     "pokoj_z_jaskolka": "22.89",
     "rekuperator": "unavailable",
     "salon": "23.32",
