@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "15.09.2026 10:15",
+  "aktualizacja": "15.09.2026 10:30",
   "alarm": {
     "strefa_1": "unavailable",
     "strefa_2": "unavailable",
@@ -16,7 +16,7 @@
     "wyciag": "unavailable"
   },
   "temperatury": {
-    "cpu_ha": "49.2",
+    "cpu_ha": "48.7",
     "czerpnia": "unavailable",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
