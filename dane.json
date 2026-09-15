@@ -1,54 +1,54 @@
 {
-  "aktualizacja": "16.09.2026 01:00",
+  "aktualizacja": "16.09.2026 01:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
     "wejscia_naruszone": []
   },
   "rekuperator": {
-    "bypass": "Zamknięty (auto)",
-    "co2": "500.0",
-    "error_code": "0.0",
-    "filtry_dni": "0.0",
-    "nawiew": "90.0",
-    "status": "on",
-    "tryb": "Tryb inteligentny",
-    "wyciag": "90.0"
+    "bypass": "unavailable",
+    "co2": "unavailable",
+    "error_code": "unavailable",
+    "filtry_dni": "unavailable",
+    "nawiew": "unavailable",
+    "status": "unavailable",
+    "tryb": "unavailable",
+    "wyciag": "unavailable"
   },
   "temperatury": {
-    "cpu_ha": "52.1",
-    "czerpnia": "12.8",
-    "garaz": "19.3",
+    "cpu_ha": "53.6",
+    "czerpnia": "unavailable",
+    "garaz": "19.2",
     "kotlownia": "unavailable",
     "lazienka": "24.7",
-    "nagrzewnica": "0.3",
-    "nawiew": "22.8",
+    "nagrzewnica": "unavailable",
+    "nawiew": "unavailable",
     "parownica": "unavailable",
     "piwnica": "20.9",
     "pokoj_franka": "23.42",
     "pokoj_z_jaskolka": "23.34",
-    "rekuperator": "22.8",
+    "rekuperator": "unavailable",
     "salon": "23.73",
     "salon_klima": "25",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
-    "strych": "22.7",
-    "sypialnia": "24.12",
+    "strych": "22.6",
+    "sypialnia": "24.08",
     "sypialnia_klima": "26",
-    "wiatrolap": "23.2",
-    "wyciag": "24.1",
-    "wyrzutnia": "15.9",
+    "wiatrolap": "23.3",
+    "wyciag": "unavailable",
+    "wyrzutnia": "unavailable",
     "zewnetrzna_polnoc": "59.0",
-    "zewnetrzna_wschod": "11.1"
+    "zewnetrzna_wschod": "10.9"
   },
   "wilgotnosc": {
-    "lazienka": "60",
+    "lazienka": "59",
     "piwnica": "68",
-    "powietrze": "54.0",
+    "powietrze": "unavailable",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
-    "dni_do_konca": "10",
-    "sol_procent": "20.0"
+    "dni_do_konca": "unavailable",
+    "sol_procent": "unavailable"
   }
 }
