@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "16.09.2026 20:00",
+  "aktualizacja": "16.09.2026 20:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,18 +16,18 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "53.6",
-    "czerpnia": "21.1",
+    "cpu_ha": "53.1",
+    "czerpnia": "20.8",
     "garaz": "19.5",
     "kotlownia": "unavailable",
-    "lazienka": "24.6",
+    "lazienka": "24.8",
     "nagrzewnica": "0.3",
-    "nawiew": "23.8",
+    "nawiew": "23.9",
     "parownica": "unavailable",
-    "piwnica": "20.8",
+    "piwnica": "20.9",
     "pokoj_franka": "23.73",
-    "pokoj_z_jaskolka": "23.4",
-    "rekuperator": "23.8",
+    "pokoj_z_jaskolka": "23.42",
+    "rekuperator": "23.9",
     "salon": "23.99",
     "salon_klima": "25",
     "stacja_1": "unavailable",
@@ -36,19 +36,19 @@
     "sypialnia": "24.2",
     "sypialnia_klima": "26",
     "wiatrolap": "23.6",
-    "wyciag": "24.4",
-    "wyrzutnia": "22.0",
+    "wyciag": "24.5",
+    "wyrzutnia": "21.8",
     "zewnetrzna_polnoc": "70.0",
-    "zewnetrzna_wschod": "20.2"
+    "zewnetrzna_wschod": "20.0"
   },
   "wilgotnosc": {
-    "lazienka": "54",
+    "lazienka": "64",
     "piwnica": "68",
-    "powietrze": "52.0",
+    "powietrze": "55.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
-    "dni_do_konca": "unavailable",
-    "sol_procent": "unavailable"
+    "dni_do_konca": "0",
+    "sol_procent": "0.0"
   }
 }
