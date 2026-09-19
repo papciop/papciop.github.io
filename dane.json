@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "20.09.2026 00:45",
+  "aktualizacja": "20.09.2026 01:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -33,13 +33,13 @@
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "22.6",
-    "sypialnia": "24.18",
+    "sypialnia": "24.16",
     "sypialnia_klima": "26",
     "wiatrolap": "23.8",
     "wyciag": "unavailable",
     "wyrzutnia": "unavailable",
     "zewnetrzna_polnoc": "59.0",
-    "zewnetrzna_wschod": "11.1"
+    "zewnetrzna_wschod": "10.8"
   },
   "wilgotnosc": {
     "lazienka": "62",
