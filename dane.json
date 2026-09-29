@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "29.09.2026 15:30",
+  "aktualizacja": "29.09.2026 15:45",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,7 +16,7 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "52.1",
+    "cpu_ha": "52.6",
     "czerpnia": "21.5",
     "garaz": "18.0",
     "kotlownia": "31.0",
@@ -36,13 +36,13 @@
     "sypialnia": "23.47",
     "sypialnia_klima": "26",
     "wiatrolap": "23.1",
-    "wyciag": "23.8",
-    "wyrzutnia": "22.1",
+    "wyciag": "23.9",
+    "wyrzutnia": "22.0",
     "zewnetrzna_polnoc": "71.0",
-    "zewnetrzna_wschod": "20.7"
+    "zewnetrzna_wschod": "20.6"
   },
   "wilgotnosc": {
-    "lazienka": "54",
+    "lazienka": "52",
     "piwnica": "68",
     "powietrze": "48.0",
     "stacja": "unavailable"
