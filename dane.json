@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "13.10.2026 08:15",
+  "aktualizacja": "13.10.2026 08:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -33,16 +33,16 @@
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "16.2",
-    "sypialnia": "22.89",
+    "sypialnia": "22.86",
     "sypialnia_klima": "25",
     "wiatrolap": "21.9",
     "wyciag": "23.7",
-    "wyrzutnia": "11.9",
+    "wyrzutnia": "11.8",
     "zewnetrzna_polnoc": "53.0",
-    "zewnetrzna_wschod": "6.8"
+    "zewnetrzna_wschod": "7.0"
   },
   "wilgotnosc": {
-    "lazienka": "50",
+    "lazienka": "49",
     "piwnica": "65",
     "powietrze": "45.0",
     "stacja": "unavailable"
