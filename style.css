@@ -1,5 +1,5 @@
 /* ============================================================
-   NEXUS — Steampunk Cyber Theme
+   HAOS.SID — Steampunk Cyber Theme
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;900&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap');
@@ -22,9 +22,8 @@
   box-sizing: border-box;
 }
 
-html, body {
-  width: 100%; height: 100%;
-  overflow-x: hidden;
+html {
+  min-height: 100%;
 }
 
 body {
@@ -32,6 +31,8 @@ body {
   color: var(--text-main);
   background: var(--dark);
   min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* ── BACKGROUND ─────────────────────────────────────── */
@@ -103,6 +104,11 @@ body {
   display: flex;
   flex-direction: row-reverse;
   align-items: flex-start;
+  width: 53px;
+}
+
+.side-nav.expanded {
+  width: calc(var(--nav-width) + 53px);
 }
 
 .nav-toggle {
@@ -124,13 +130,6 @@ body {
 
 .nav-toggle:hover {
   background: rgba(0, 50, 80, 0.9);
-}
-
-.toggle-icon {
-  font-size: 18px;
-  color: var(--gold);
-  animation: spin 8s linear infinite;
-  display: inline-block;
 }
 
 .toggle-label {
@@ -155,6 +154,8 @@ body {
 /* Nav Panel */
 .nav-panel {
   width: 0;
+  flex-shrink: 0;
+  max-height: calc(100vh - 56px);
   overflow: hidden;
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
   background: rgba(5, 10, 20, 0.92);
@@ -166,6 +167,7 @@ body {
 
 .nav-panel.open {
   width: var(--nav-width);
+  overflow-y: auto;
 }
 
 .nav-panel-inner {
@@ -186,6 +188,7 @@ body {
   color: var(--text-main);
   font-family: 'Cinzel', serif;
   font-size: 13px;
+  line-height: 1.2;
   letter-spacing: 0.1em;
   position: relative;
   transition: color 0.2s, background 0.2s;
@@ -222,17 +225,203 @@ body {
   background: var(--gold) !important;
 }
 
-.nav-icon {
-  font-size: 16px;
-  min-width: 20px;
+.nav-icon,
+.rank-game-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border: 2px solid var(--cyan);
+  background: var(--cyan);
+  color: var(--dark);
+  font: 900 16px/1 monospace;
   text-align: center;
+}
+
+.rank-game-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.nav-link:hover .nav-icon,
+.active-link .nav-icon {
+  border-color: var(--gold-light);
+  background: var(--gold-light);
+}
+
+.game-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.game-title .rank-game-icon {
+  margin: 0;
+}
+
+/* ── GARDEN CALENDAR ─────────────────────────────────── */
+.garden-calendar {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.garden-intro {
+  margin-bottom: 22px;
+}
+
+.garden-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px;
+  background: var(--panel-bg);
+  border: 2px solid var(--cyan);
+  box-shadow: 5px 5px 0 rgba(0, 212, 255, 0.2);
+}
+
+.garden-month-controls,
+.garden-filters {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.garden-month-title {
+  min-width: 190px;
+  color: var(--gold-light);
+  font: 900 20px/1.2 'Cinzel', serif;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+.garden-control,
+.garden-select,
+.garden-search {
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 2px solid var(--panel-border);
+  border-radius: 0;
+  background: #050a14;
+  color: var(--text-main);
+  font: 600 14px 'Crimson Pro', Georgia, serif;
+}
+
+.garden-control {
+  cursor: pointer;
+}
+
+.garden-control:hover,
+.garden-select:focus,
+.garden-search:focus {
+  border-color: var(--gold-light);
+  outline: 2px solid transparent;
+}
+
+.garden-task-count {
+  margin: 14px 0;
+  color: var(--text-dim);
+}
+
+.garden-task-list {
+  display: grid;
+  gap: 10px;
+}
+
+.garden-task {
+  display: grid;
+  grid-template-columns: 112px minmax(0, 1fr);
+  gap: 14px;
+  padding: 16px;
+  border: 2px solid rgba(0, 212, 255, 0.35);
+  background: rgba(5, 10, 20, 0.9);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.35);
+}
+
+.garden-task-period {
+  color: var(--gold-light);
+  font: 700 13px/1.4 'Cinzel', serif;
+  text-transform: uppercase;
+}
+
+.garden-task-kind {
+  display: inline-block;
+  margin-bottom: 6px;
+  padding: 3px 7px;
+  border: 2px solid var(--cyan);
+  color: var(--cyan);
+  font: 700 11px/1.2 monospace;
+  text-transform: uppercase;
+}
+
+.garden-task p {
+  margin: 0 0 5px;
+  color: var(--text-main);
+  line-height: 1.5;
+}
+
+.garden-task-plants {
+  color: var(--text-dim) !important;
+  font-size: 14px;
+}
+
+.garden-empty {
+  padding: 24px;
+  border: 2px dashed var(--panel-border);
+  color: var(--text-dim);
+  text-align: center;
+}
+
+.garden-section {
+  margin-top: 28px;
+}
+
+.garden-section h2 {
+  margin-bottom: 12px;
+  color: var(--cyan);
+  font: 900 17px 'Cinzel', serif;
+  letter-spacing: 0.08em;
+}
+
+.garden-plants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+}
+
+.garden-plants li {
+  padding: 6px 9px;
+  border: 1px solid var(--panel-border);
+  background: rgba(0, 212, 255, 0.06);
+  color: var(--text-main);
+  font-size: 14px;
+}
+
+.garden-guidance {
+  margin-top: 20px;
+  padding: 16px;
+  border-left: 4px solid var(--gold);
+  background: var(--panel-bg);
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+@media (max-width: 640px) {
+  .garden-month-title { min-width: 145px; font-size: 17px; }
+  .garden-toolbar { padding: 12px; }
+  .garden-task { grid-template-columns: 1fr; gap: 6px; padding: 12px; }
 }
 
 /* ── MAIN CONTENT ─────────────────────────────────────── */
 .main-content {
   position: relative;
   z-index: 10;
-  min-height: 100vh;
+  min-height: calc(100vh + 4rem);
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;

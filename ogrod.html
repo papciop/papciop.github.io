@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ogród — Nexus</title>
+  <title>HAOS.SID</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,17 +21,18 @@
 
   <nav class="side-nav" id="sideNav">
     <div class="nav-toggle" id="navToggle" onclick="toggleNav()">
-      <span class="toggle-icon">⚙</span>
       <span class="toggle-label">MENU</span>
       <span class="arrow" id="navArrow">▶</span>
     </div>
     <div class="nav-panel" id="navPanel">
       <div class="nav-panel-inner">
         <ul class="nav-list">
-          <li><a href="dom.html" class="nav-link"><span class="nav-icon">🏠</span><span>Dom</span></a></li>
-          <li><a href="ogrod.html" class="nav-link active-link"><span class="nav-icon">🌿</span><span>Ogród</span></a></li>
-          <li><a href="praca.html" class="nav-link"><span class="nav-icon">⚙</span><span>Praca</span></a></li>
-          <li><a href="gry.html" class="nav-link"><span class="nav-icon">🎮</span><span>Gry</span></a></li>
+          <li><a href="index.html" class="nav-link"><span class="nav-icon" aria-hidden="true">⌂</span><span>Strona główna</span></a></li>
+          <li><a href="dom.html" class="nav-link"><span class="nav-icon" aria-hidden="true">▦</span><span>Dom</span></a></li>
+          <li><a href="ogrod.html" class="nav-link active-link"><span class="nav-icon" aria-hidden="true">✳</span><span>Ogród</span></a></li>
+          <li><a href="praca.html" class="nav-link"><span class="nav-icon" aria-hidden="true">⚒</span><span>Praca</span></a></li>
+          <li><a href="ranking.html" class="nav-link"><span class="nav-icon" aria-hidden="true">★</span><span>Ranking</span></a></li>
+          <li><a href="gry.html" class="nav-link"><span class="nav-icon" aria-hidden="true">▶</span><span>Gry</span></a></li>
         </ul>
       </div>
     </div>
@@ -40,23 +42,76 @@
     <a class="back-btn" onclick="history.back()">← Powrót</a>
 
     <div class="page-header">
-      <p class="page-category">Kategoria</p>
+      <p class="page-category">Kraków i Małopolska</p>
       <h1 class="page-title">OGRÓD</h1>
       <div class="page-divider"></div>
     </div>
 
-    <div class="content-panel">
-      <h2>🌿 Mój ogród</h2>
-      <p>Notatki, plany i inspiracje ogrodnicze. Edytuj ten plik HTML, aby dodać własne treści, zdjęcia i listy zadań.</p>
-      <ul>
-        <li>Warzywa</li>
-        <li>Kwiaty</li>
-        <li>Drzewa owocowe</li>
-        <li>Trawnik</li>
-        <li>Kompost</li>
-        <li>Narzędzia</li>
-      </ul>
-    </div>
+    <section class="garden-calendar" aria-labelledby="calendarHeading">
+      <div class="garden-intro content-panel">
+        <h2 id="calendarHeading">Kalendarz ogrodniczy</h2>
+        <p>Roczny plan prac dla roślin w Twoim ogrodzie. Wybierz miesiąc, kategorię albo wyszukaj roślinę.</p>
+      </div>
+
+      <div class="garden-toolbar">
+        <div class="garden-month-controls" aria-label="Wybór miesiąca">
+          <button class="garden-control" id="previousMonth" type="button" aria-label="Poprzedni miesiąc">←</button>
+          <h2 class="garden-month-title" id="monthTitle" aria-live="polite"></h2>
+          <button class="garden-control" id="nextMonth" type="button" aria-label="Następny miesiąc">→</button>
+        </div>
+        <div class="garden-filters">
+          <label for="taskCategory">Kategoria</label>
+          <select class="garden-select" id="taskCategory">
+            <option value="all">Wszystkie prace</option>
+            <option value="Nawożenie">Nawożenie</option>
+            <option value="Pielęgnacja">Pielęgnacja</option>
+            <option value="Przycinanie">Przycinanie</option>
+            <option value="Opryski i monitoring">Opryski i monitoring</option>
+            <option value="Zbiory">Zbiory</option>
+            <option value="Odchwaszczanie">Odchwaszczanie</option>
+            <option value="Choroby i szkodniki">Choroby i szkodniki</option>
+          </select>
+          <label for="plantSearch">Roślina</label>
+          <input class="garden-search" id="plantSearch" type="search" placeholder="np. róże, jabłoń">
+        </div>
+      </div>
+
+      <p class="garden-task-count" id="taskCount" aria-live="polite"></p>
+      <div class="garden-task-list" id="taskList"></div>
+
+      <div class="garden-section">
+        <h2>Rośliny w ogrodzie</h2>
+        <ul class="garden-plants">
+          <li>Róże okrywowe</li><li>Róże pienne</li><li>Berberysy</li><li>Bez lilak</li>
+          <li>Irga płożąca</li><li>Pęcherznica kalinolistna</li><li>Trawy ozdobne — piórówki</li>
+          <li>Sosny na pniu</li><li>Kosodrzewina</li><li>Jałowce</li><li>Sosny karłowate</li>
+          <li>Wrzosy</li><li>Maliny</li><li>Truskawki</li><li>Jabłonie</li>
+          <li>Borówki kamczackie</li><li>Borówki amerykańskie</li><li>Szczypiorek</li>
+          <li>Pietruszka</li><li>Winogrona</li><li>Porzeczki czerwone i czarne na pniu</li>
+          <li>Agrest na pniu</li><li>Trawnik</li>
+        </ul>
+      </div>
+
+      <div class="garden-section">
+        <h2>Odchwaszczanie</h2>
+        <div class="content-panel">
+          <p>Najłatwiej ograniczyć chwasty regularnym, płytkim pieleniem po deszczu, zanim zakwitną i wydadzą nasiona. Usuwaj korzenie chwastów wieloletnich, uzupełniaj ściółkę i nie przysypuj nią szyjek korzeniowych roślin.</p>
+          <p>Przy trawniku wycinaj pojedyncze chwasty lub popraw pielęgnację darni. Nie stosuj herbicydu na rabatach ani w pobliżu roślin jadalnych bez sprawdzenia, czy etykieta dopuszcza takie użycie.</p>
+        </div>
+      </div>
+
+      <div class="garden-section">
+        <h2>Choroby i szkodniki</h2>
+        <div class="content-panel">
+          <p>Raz w tygodniu oglądaj młode liście i spód blaszek: u róż zwracaj uwagę na czarną plamistość, mączniaka i mszyce; u jabłoni na plamy parcha, uszkodzenia liści i owoców; u truskawek i krzewów na szarą pleśń oraz zamierające pędy.</p>
+          <p>Najpierw usuń porażone części, opadłe liście i mumie owoców, popraw przewiew korony i podlewaj glebę, nie liście. Oprysk rozważ dopiero po rozpoznaniu problemu, dobierz preparat z aktualnym zezwoleniem do konkretnej rośliny i przestrzegaj etykiety, okresu karencji oraz zasad ochrony zapylaczy.</p>
+        </div>
+      </div>
+
+      <aside class="garden-guidance">
+        <strong>Ważne:</strong> Podane terminy są orientacyjne dla Krakowa i Małopolski. Pogoda i faza rozwoju roślin są ważniejsze niż data w kalendarzu — prace przesuwaj zależnie od przymrozków, kwitnienia i tempa wegetacji. Opryski wykonuj tylko po rozpoznaniu zagrożenia i wyłącznie środkiem dopuszczonym do danej rośliny, zgodnie z etykietą. Nie opryskuj kwitnących roślin ani podczas oblotu pszczół; najpierw wybieraj metody niechemiczne.
+      </aside>
+    </section>
   </main>
 
   <script>
@@ -68,6 +123,155 @@
       arrow.classList.toggle('rotated');
       nav.classList.toggle('expanded');
     }
+
+    const monthlyTasks = [
+      [
+        { period: 'Przez cały miesiąc', category: 'Pielęgnacja', plants: 'Róże pienne, iglaki, trawy ozdobne', task: 'Po mokrym śniegu delikatnie strząśnij jego nadmiar z koron i sprawdź osłony róż piennych. Nie uderzaj w zamarznięte pędy.' },
+        { period: 'Przez cały miesiąc', category: 'Choroby i szkodniki', plants: 'Jabłonie, róże, porzeczki, agrest', task: 'Przeglądaj przechowywane owoce i widoczne na krzewach zaschnięte lub chore pędy. Usuwaj źródła infekcji, gdy warunki pozwalają pracować.' }
+      ],
+      [
+        { period: 'Koniec miesiąca', category: 'Przycinanie', plants: 'Jabłonie, porzeczki, agrest', task: 'W bezmroźny dzień rozpocznij cięcie sanitarne i prześwietlające, jeśli pąki są jeszcze w spoczynku. Nie tnij podczas silnego mrozu.' },
+        { period: 'Koniec miesiąca', category: 'Przycinanie', plants: 'Winogrona', task: 'Zakończ zimowe cięcie winorośli przed ruszeniem soków; późne cięcie może powodować silne „płakanie” łozy.' },
+        { period: 'Przez cały miesiąc', category: 'Odchwaszczanie', plants: 'Rabaty i obrzeża', task: 'W dni bez mrozu usuwaj zimujące chwasty i resztki roślinne, zanim wydadzą nasiona.' }
+      ],
+      [
+        { period: 'Początek miesiąca', category: 'Przycinanie', plants: 'Jabłonie, porzeczki, agrest', task: 'Dokończ cięcie drzew i krzewów w suchy, łagodny dzień. Usuń pędy martwe, chore, krzyżujące się i nadmiernie zagęszczające koronę.' },
+        { period: 'Przed ruszeniem pąków', category: 'Opryski i monitoring', plants: 'Jabłonie', task: 'To możliwe okno na zabieg zapobiegawczy przeciw parchowi tylko wtedy, gdy jest potrzebny, warunki są odpowiednie, a etykieta dopuszcza zastosowanie na jabłoni w tej fazie.' },
+        { period: 'Przed nowymi przyrostami', category: 'Przycinanie', plants: 'Trawy ozdobne — piórówki', task: 'Przytnij zeszłoroczne liście nisko, zanim pojawią się nowe źdźbła. Nie uszkadzaj młodych przyrostów.' },
+        { period: 'Gdy gleba rozmarznie', category: 'Pielęgnacja', plants: 'Szczypiorek, pietruszka', task: 'Oczyść kępę szczypiorku i wysiej pietruszkę w miejscu z żyzną, przepuszczalną glebą. Podlewaj delikatnie do wschodów.' },
+        { period: 'Gdy rusza wegetacja', category: 'Odchwaszczanie', plants: 'Rabaty, krzewy owocowe, trawnik', task: 'Wyrywaj chwasty po deszczu i uzupełnij ściółkę na rabatach, zostawiając wolną przestrzeń przy nasadach pędów.' }
+      ],
+      [
+        { period: 'Gdy pękają pąki', category: 'Przycinanie', plants: 'Róże okrywowe i pienne', task: 'Usuń pędy przemarznięte i chore; róże przytnij właściwie dla grupy i siły wzrostu. Róż piennych nie tnij poniżej miejsca szczepienia.' },
+        { period: 'Początek wzrostu', category: 'Nawożenie', plants: 'Jabłonie, maliny, porzeczki, agrest, winogrona', task: 'Rozłóż dojrzały kompost lub zastosuj nawóz przeznaczony dla danej grupy roślin, zgodnie z dawką na opakowaniu. Nie nawoź zamarzniętej ani podmokłej gleby.' },
+        { period: 'Początek wzrostu', category: 'Nawożenie', plants: 'Borówki amerykańskie i kamczackie, wrzosy', task: 'Zastosuj nawóz do roślin kwaśnolubnych według etykiety. Sprawdź wilgotność i odczyn podłoża zamiast dokładać nawóz „na zapas”.' },
+        { period: 'Po ruszeniu trawy', category: 'Pielęgnacja', plants: 'Trawnik', task: 'Zgrab liście i filc; wertykuluj lub napowietrz tylko wtedy, gdy murawa jest sucha i aktywnie rośnie. Pierwsze koszenie wykonaj wysoko.' },
+        { period: 'Od wiosny do jesieni', category: 'Pielęgnacja', plants: 'Szczypiorek, pietruszka', task: 'Zbieraj zewnętrzne liście szczypiorku i natkę pietruszki w miarę potrzeb. Nie ścinaj całej kępy naraz i podlewaj podczas suszy.' },
+        { period: 'Przed kwitnieniem', category: 'Choroby i szkodniki', plants: 'Jabłonie, róże, porzeczki i agrest', task: 'Oglądaj pąki i młode liście w poszukiwaniu objawów chorób, mszyc i innych szkodników. Usuwaj porażone części i notuj nasilenie.' }
+      ],
+      [
+        { period: 'Początek miesiąca', category: 'Nawożenie', plants: 'Róże okrywowe i pienne', task: 'Po cięciu i rozpoczęciu wzrostu zasil róże nawozem do róż, zgodnie z zaleceniem producenta. Nie przekraczaj dawki.' },
+        { period: 'Po kwitnieniu', category: 'Przycinanie', plants: 'Bez lilak', task: 'Usuń przekwitłe kwiatostany bez wycinania młodych pędów. Cięcie wykonaj zaraz po kwitnieniu, bo lilak zawiązuje pąki kwiatowe na kolejny rok.' },
+        { period: 'Po przyroście wiosennym', category: 'Przycinanie', plants: 'Sosny na pniu, kosodrzewina, sosny karłowate', task: 'Jeśli chcesz zagęścić sosny, skróć ręcznie część świec, zanim igły się rozwiną. Nie tnij starego, bezigielnego drewna.' },
+        { period: 'Przez cały miesiąc', category: 'Pielęgnacja', plants: 'Truskawki, borówki, maliny', task: 'Ściółkuj i podlewaj w czasie suszy; przy truskawkach podłóż czystą słomę pod zawiązki. Nie zalewaj korzeni borówki.' },
+        { period: 'Przed i w czasie kwitnienia', category: 'Opryski i monitoring', plants: 'Jabłonie, róże, krzewy owocowe', task: 'Monitoruj objawy parcha, mączniaka, mszyc i szkodników. W czasie kwitnienia zrezygnuj z oprysków niebezpiecznych dla zapylaczy; zabieg rozważaj wyłącznie po diagnozie i zgodnie z etykietą.' },
+        { period: 'Po deszczu', category: 'Odchwaszczanie', plants: 'Rabaty, warzywnik, trawnik', task: 'Płytko spulchniaj glebę i usuwaj chwasty przed kwitnieniem. Przy trawniku wycinaj pojedyncze chwasty ręcznie.' }
+      ],
+      [
+        { period: 'Po kwitnieniu', category: 'Przycinanie', plants: 'Berberysy, irga płożąca, pęcherznica', task: 'Wykonaj lekkie cięcie formujące lub sanitarne po kwitnieniu. Nie skracaj mocno wszystkich pędów, jeśli zależy Ci na kwiatach i owocach.' },
+        { period: 'Początek miesiąca', category: 'Nawożenie', plants: 'Trawnik', task: 'Jeśli murawa słabo rośnie, zastosuj nawóz letni zgodnie z etykietą i podlej po nawożeniu. Nie nawoź podczas upału ani suszy.' },
+        { period: 'W czasie dojrzewania', category: 'Zbiory', plants: 'Truskawki, borówki kamczackie i amerykańskie, agrest', task: 'Zbieraj dojrzałe owoce regularnie. Usuwaj owoce nadgniłe, by ograniczyć rozprzestrzenianie się szarej pleśni.' },
+        { period: 'Od wiosny do jesieni', category: 'Pielęgnacja', plants: 'Szczypiorek, pietruszka', task: 'Zbieraj zewnętrzne liście szczypiorku i natkę pietruszki w miarę potrzeb. Nie ścinaj całej kępy naraz i podlewaj podczas suszy.' },
+        { period: 'Przez cały miesiąc', category: 'Choroby i szkodniki', plants: 'Róże, jabłonie, truskawki, porzeczki', task: 'Sprawdzaj spód liści i młode przyrosty. Przy pierwszych objawach usuń porażone liście, popraw przewiew i podlewaj glebę, nie liście.' },
+        { period: 'Po deszczu', category: 'Odchwaszczanie', plants: 'Rabaty i obrzeża', task: 'Usuwaj chwasty przed wydaniem nasion; uzupełnij ściółkę w miejscach, gdzie odsłoniła się ziemia.' }
+      ],
+      [
+        { period: 'W miarę dojrzewania', category: 'Zbiory', plants: 'Maliny, porzeczki czerwone i czarne, agrest, wczesne jabłonie', task: 'Zbieraj owoce etapami i usuwaj z krzewów owoce chore lub uszkodzone.' },
+        { period: 'Od wiosny do jesieni', category: 'Pielęgnacja', plants: 'Szczypiorek, pietruszka', task: 'Zbieraj zewnętrzne liście szczypiorku i natkę pietruszki w miarę potrzeb. Nie ścinaj całej kępy naraz i podlewaj podczas suszy.' },
+        { period: 'Po zakończeniu owocowania', category: 'Przycinanie', plants: 'Porzeczki czarne i czerwone, agrest', task: 'Usuń przy ziemi najstarsze i najsłabsze pędy, zachowując młode, silne przyrosty. Przy formach piennych tnij ostrożnie, by utrzymać koronę i nie naruszyć miejsca szczepienia.' },
+        { period: 'Po zbiorze', category: 'Przycinanie', plants: 'Maliny letnie', task: 'Wytnij przy ziemi pędy, które owocowały. Młode, zdrowe pędy zostaw na przyszły sezon; malin jesiennych nie tnij w ten sam sposób.' },
+        { period: 'Po zbiorze', category: 'Pielęgnacja', plants: 'Truskawki', task: 'Usuń chore i zaschnięte liście oraz nadmiar rozłogów. Nie uszkadzaj koron; podlewaj podczas suszy.' },
+        { period: 'Przez cały miesiąc', category: 'Opryski i monitoring', plants: 'Jabłonie, maliny, porzeczki, agrest', task: 'Kontynuuj lustrację pod kątem chorób i szkodników. Przy zbiorach przestrzegaj okresu karencji wskazanego na etykiecie każdego dopuszczonego preparatu.' }
+      ],
+      [
+        { period: 'W czasie dojrzewania', category: 'Zbiory', plants: 'Jabłonie, maliny jesienne, winogrona', task: 'Zbieraj dojrzałe owoce i regularnie usuwaj opadłe, uszkodzone jabłka.' },
+        { period: 'Po zbiorach truskawek', category: 'Pielęgnacja', plants: 'Truskawki', task: 'Odmłódź zagon tylko wtedy, gdy rośliny tego wymagają; nowe rozłogi ukorzeniaj w przygotowanej, zdrowej glebie.' },
+        { period: 'Początek miesiąca', category: 'Nawożenie', plants: 'Trawnik', task: 'Zastosuj nawóz jesienny o obniżonej zawartości azotu, zgodnie z etykietą. Nie stosuj późno nawozu pobudzającego miękki wzrost.' },
+        { period: 'Przez cały miesiąc', category: 'Odchwaszczanie', plants: 'Rabaty, żywopłot, trawnik', task: 'Usuń chwasty wieloletnie wraz z korzeniami i nie dopuszczaj do rozsiewania nasion przed jesiennym porządkowaniem.' },
+        { period: 'Po zbiorze', category: 'Choroby i szkodniki', plants: 'Jabłonie, róże, truskawki', task: 'Zbieraj opadłe i porażone liście, owoce oraz pędy. Ograniczysz w ten sposób zimowanie części patogenów i szkodników.' }
+      ],
+      [
+        { period: 'Początek miesiąca', category: 'Zbiory', plants: 'Jabłonie, winogrona, maliny jesienne', task: 'Dokończ zbiory późnych odmian zależnie od dojrzałości owoców i prognozy przymrozków.' },
+        { period: 'Po zbiorach', category: 'Pielęgnacja', plants: 'Borówki, maliny, porzeczki, agrest', task: 'Uzupełnij ściółkę, usuń chwasty i podlej zimozielone nasadzenia oraz krzewy, jeśli jesień jest sucha.' },
+        { period: 'Po pierwszych przymrozkach', category: 'Przycinanie', plants: 'Wrzosy kwitnące latem', task: 'Skróć lekko pędy poniżej przekwitłych kwiatostanów. Wrzosy zimowe przytnij dopiero po przekwitnięciu, wiosną.' },
+        { period: 'Przed zimą', category: 'Pielęgnacja', plants: 'Róże pienne, róże okrywowe', task: 'Kopczykuj podstawy róż po ochłodzeniu. Zabezpiecz miejsce szczepienia róż piennych przewiewnym materiałem przed silnymi mrozami.' },
+        { period: 'Przed zimą', category: 'Pielęgnacja', plants: 'Sosny na pniu, kosodrzewina, jałowce, sosny karłowate', task: 'Sprawdź stabilność podpór i usuń uszkodzone gałęzie. Nie owijaj szczelnie iglaków; przed zimą podlej je, jeśli jesień była sucha.' },
+        { period: 'Przez cały miesiąc', category: 'Odchwaszczanie', plants: 'Rabaty i warzywnik', task: 'Zakończ jesienne odchwaszczanie i usuń resztki roślin chore lub z nasionami; zdrowe resztki można kompostować.' }
+      ],
+      [
+        { period: 'Przed zamarznięciem gleby', category: 'Pielęgnacja', plants: 'Borówki, winogrona, maliny, truskawki', task: 'Podlej głęboko, jeśli jesień była sucha. Uzupełnij ściółkę wokół korzeni, nie zasypując nasad pędów.' },
+        { period: 'Przed silnymi mrozami', category: 'Pielęgnacja', plants: 'Róże pienne, róże okrywowe', task: 'Dokończ osłanianie wrażliwych miejsc i sprawdź, czy osłona róż piennych jest stabilna, sucha i przewiewna.' },
+        { period: 'Po opadnięciu liści', category: 'Choroby i szkodniki', plants: 'Jabłonie, róże, truskawki', task: 'Zgrab porażone liście i usuń mumie owoców z drzew. Nie zostawiaj chorych resztek na rabatach.' },
+        { period: 'Przez cały miesiąc', category: 'Odchwaszczanie', plants: 'Rabaty i obrzeża', task: 'W bezmroźne dni usuń widoczne chwasty i zabezpiecz odkrytą glebę ściółką.' }
+      ],
+      [
+        { period: 'Przez cały miesiąc', category: 'Pielęgnacja', plants: 'Iglaki, róże pienne, trawy ozdobne', task: 'Po opadach mokrego śniegu kontroluj podpory i osłony. Nie przycinaj roślin podczas mrozu.' },
+        { period: 'Przez cały miesiąc', category: 'Choroby i szkodniki', plants: 'Jabłonie i krzewy owocowe', task: 'Planuj cięcia sanitarne i sprawdź, czy na roślinach nie pozostały zaschnięte owoce lub chore pędy.' }
+      ],
+      [
+        { period: 'Przez cały miesiąc', category: 'Pielęgnacja', plants: 'Iglaki, róże pienne, trawy ozdobne', task: 'Po opadach mokrego śniegu kontroluj podpory i osłony. Nie przycinaj roślin podczas mrozu.' },
+        { period: 'Przez cały miesiąc', category: 'Choroby i szkodniki', plants: 'Jabłonie i krzewy owocowe', task: 'Planuj cięcia sanitarne i sprawdź, czy na roślinach nie pozostały zaschnięte owoce lub chore pędy.' }
+      ]
+    ];
+
+    const months = new Intl.DateTimeFormat('pl-PL', { month: 'long' });
+    let selectedMonth = new Date();
+    const monthTitle = document.getElementById('monthTitle');
+    const taskCategory = document.getElementById('taskCategory');
+    const plantSearch = document.getElementById('plantSearch');
+    const taskList = document.getElementById('taskList');
+    const taskCount = document.getElementById('taskCount');
+
+    function normalizeSearch(value) {
+      return value.trim().toLocaleLowerCase('pl-PL').normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
+    function renderTasks() {
+      const monthIndex = selectedMonth.getMonth();
+      monthTitle.textContent = `${months.format(selectedMonth)} ${selectedMonth.getFullYear()}`;
+      taskList.replaceChildren();
+
+      const search = normalizeSearch(plantSearch.value);
+      const searchRoot = search.length > 4 ? search.slice(0, -1) : search;
+      const tasks = (monthlyTasks[monthIndex] || []).filter(item => {
+        if (taskCategory.value !== 'all' && item.category !== taskCategory.value) return false;
+        if (!search) return true;
+        const searchableText = normalizeSearch(`${item.plants} ${item.task}`);
+        return searchableText.includes(search) || searchableText.includes(searchRoot);
+      });
+      taskCount.textContent = tasks.length
+        ? `${tasks.length} ${tasks.length === 1 ? 'zadanie' : tasks.length < 5 ? 'zadania' : 'zadań'} w tym miesiącu`
+        : 'Brak prac dla wybranych filtrów w tym miesiącu.';
+
+      tasks.forEach(item => {
+        const card = document.createElement('article');
+        card.className = 'garden-task';
+        const period = document.createElement('div');
+        period.className = 'garden-task-period';
+        period.textContent = item.period;
+        const detail = document.createElement('div');
+        const category = document.createElement('span');
+        category.className = 'garden-task-kind';
+        category.textContent = item.category;
+        const task = document.createElement('p');
+        task.textContent = item.task;
+        const plants = document.createElement('p');
+        plants.className = 'garden-task-plants';
+        plants.textContent = item.plants;
+        detail.append(category, task, plants);
+        card.append(period, detail);
+        taskList.append(card);
+      });
+
+      if (!tasks.length) {
+        const empty = document.createElement('p');
+        empty.className = 'garden-empty';
+        empty.textContent = 'Zmień filtry albo wybierz inny miesiąc, aby zobaczyć zaplanowane prace.';
+        taskList.append(empty);
+      }
+    }
+
+    document.getElementById('previousMonth').addEventListener('click', () => {
+      selectedMonth = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() - 1, 1);
+      renderTasks();
+    });
+    document.getElementById('nextMonth').addEventListener('click', () => {
+      selectedMonth = new Date(selectedMonth.getFullYear(), selectedMonth.getMonth() + 1, 1);
+      renderTasks();
+    });
+    taskCategory.addEventListener('change', renderTasks);
+    plantSearch.addEventListener('input', renderTasks);
+    renderTasks();
   </script>
 </body>
 </html>

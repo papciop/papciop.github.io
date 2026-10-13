@@ -496,19 +496,43 @@ body {
 
 
 @media (max-width:870px) {
+    :root {
+        --multiplier: 1.65;
+    }
+
     .start-btn-caption {
         font-size: 1rem;
     }
 }
 
 @media (max-width:620px) {
+    :root {
+        --multiplier: 1.15;
+    }
+
     .start-btn-caption {
         font-size: 0.8rem;
     }
 }
 
 @media (max-width:520px) {
+    :root {
+        --multiplier: 0.95;
+    }
+
     .start-btn-caption {
         font-size: 0.5rem;
+    }
+}
+
+@media (max-width:420px) {
+    :root {
+        --multiplier: 0.62;
+    }
+}
+
+@media (max-width:360px) {
+    :root {
+        --multiplier: 0.58;
     }
 }

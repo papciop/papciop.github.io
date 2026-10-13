@@ -137,6 +137,9 @@ class Game {
   }
 
   handleKeyDown(event) {
+    if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
+      event.preventDefault();
+    }
     switch (event.key) {
       case "ArrowLeft":
         game.wolf.moveLeft();

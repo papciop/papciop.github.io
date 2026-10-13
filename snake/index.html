@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Wąż</title>
+  <title>HAOS.SID</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     html,body{width:100%;height:100%;overflow:hidden;background:#050a14;font-family:'Courier New',monospace;touch-action:none;}
@@ -61,10 +62,10 @@
     /* WERSJA PIONOWA (PORTRAIT) */
     @media(max-width: 767px) and (orientation: portrait) {
       body { justify-content: flex-start; padding-top: 20px; }
-      #wrap { width: 92vw; height: 92vw; margin-bottom: 20px; }
+      #wrap { width: min(92vw, calc(100vh - 260px)); height: min(92vw, calc(100vh - 260px)); max-width: none; max-height: none; margin-bottom: 0; }
       #gPause { display: block; }
-      #mobile-left-panel { display: flex; flex-direction: column; position: fixed; bottom: 25px; left: 20px; }
-      #mobile-right-panel { display: flex; flex-direction: column; position: fixed; bottom: 25px; right: 20px; }
+      #mobile-left-panel { display: flex; flex-direction: column; position: fixed; bottom: 12px; left: 12px; }
+      #mobile-right-panel { display: flex; flex-direction: column; position: fixed; bottom: 12px; right: 12px; }
     }
 
     /* WERSJA POZIOMA (LANDSCAPE - SZTYWNY UKŁAD DLA KCIUKÓW) */
@@ -72,7 +73,7 @@
       body { position: relative; flex-direction: row; justify-content: center; align-items: center; padding: 5px; height: 100vh; width: 100vw; }
       #ui { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: auto; font-size: 13px; z-index: 5; margin: 0; }
       #speedbar { display: none; }
-      #wrap { width: 72vh; height: 72vh; margin: 0 auto; }
+      #wrap { width: min(72vh, calc(100vw - 260px)); height: min(72vh, calc(100vw - 260px)); max-width: none; max-height: none; margin: 0 auto; }
       #gPause { display: block; }
 
       #mobile-left-panel {
@@ -80,7 +81,7 @@
         flex-direction: column;
         gap: 12px;
         position: fixed;
-        left: 25px;
+        left: 8px;
         top: 50%;
         transform: translateY(-50%);
         z-index: 10;
@@ -91,7 +92,7 @@
         flex-direction: column;
         gap: 6px;
         position: fixed;
-        right: 25px;
+        right: 8px;
         top: 50%;
         transform: translateY(-50%);
         z-index: 10;
@@ -148,6 +149,20 @@ const COLS=20,ROWS=20,CELL=20;
 const canvas=document.getElementById('c');
 const ctx=canvas.getContext('2d');
 canvas.width=COLS*CELL; canvas.height=ROWS*CELL;
+
+function fitMobileBoard() {
+  const wrap = document.getElementById('wrap');
+  if (!window.matchMedia('(max-width: 767px) and (orientation: portrait)').matches) {
+    wrap.style.removeProperty('width');
+    wrap.style.removeProperty('height');
+    return;
+  }
+  const size = Math.min(window.innerWidth * 0.92, Math.max(100, window.innerHeight - 300));
+  wrap.style.width = `${size}px`;
+  wrap.style.height = `${size}px`;
+}
+fitMobileBoard();
+window.addEventListener('resize', fitMobileBoard);
 
 const overlay=document.getElementById('overlay');
 const scoreEl=document.getElementById('score'),bestEl=document.getElementById('best'),curSpeedEl=document.getElementById('curspeed');

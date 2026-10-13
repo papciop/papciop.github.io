@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <title>Tanki</title>
+  <title>HAOS.SID</title>
+  <link rel="icon" href="../favicon.svg" type="image/svg+xml">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     html,body{height:100%;background:#050a14;font-family:'Courier New',monospace;overflow:hidden;touch-action:none;}
@@ -117,7 +118,7 @@
     /* TELEFONY (PIONOWO) */
     @media(max-width: 767px) and (orientation: portrait) {
       body { justify-content: flex-start; padding-top: 40px; }
-      #wrap { width: 96vw; height: 96vw; margin-bottom: 20px; }
+      #wrap { width: min(96vw, calc(100vh - 260px)); height: min(96vw, calc(100vh - 260px)); max-width: none; margin-bottom: 0; }
       #mobile-fire-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; bottom: 20px; left: 15px; }
       #mobile-move-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; bottom: 20px; right: 15px; }
     }
@@ -126,9 +127,9 @@
     @media(max-width: 950px) and (orientation: landscape) {
       body { position: relative; flex-direction: row; justify-content: center; align-items: center; padding: 5px; height: 100vh; width: 100vw; }
       #ui { position: absolute; top: 5px; left: 50%; transform: translateX(-50%); width: auto; font-size: 14px; z-index: 5; }
-      #wrap { width: 75vh; height: 75vh; margin: 0 auto; }
-      #mobile-fire-panel { display: flex; flex-direction: column; gap: 12px; position: fixed; left: 20px; top: 50%; transform: translateY(-50%); z-index: 10; }
-      #mobile-move-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; right: 20px; top: 50%; transform: translateY(-50%); z-index: 10; }
+      #wrap { width: min(75vh, calc(100vw - 260px)); height: min(75vh, calc(100vw - 260px)); max-width: none; margin: 0 auto; }
+      #mobile-fire-panel { display: flex; flex-direction: column; gap: 12px; position: fixed; left: 8px; top: 50%; transform: translateY(-50%); z-index: 10; }
+      #mobile-move-panel { display: flex; flex-direction: column; gap: 8px; position: fixed; right: 8px; top: 50%; transform: translateY(-50%); z-index: 10; }
       .gpbtn { width: 60px; height: 52px; font-size: 22px; }
       .gpbtn.fire { width: 95px; height: 52px; }
     }
@@ -182,6 +183,20 @@ const CV=document.getElementById('c'), ctx=CV.getContext('2d');
 const overlay=document.getElementById('overlay');
 const uLives=document.getElementById('ulives'),uScore=document.getElementById('uscore'),uLevel=document.getElementById('ulevel'),uEnemies=document.getElementById('uenemies'),uBonus=document.getElementById('ubonus');
 const nickInput=document.getElementById('nickInput');
+
+function fitMobileBoard() {
+  const wrap = document.getElementById('wrap');
+  if (!window.matchMedia('(max-width: 767px) and (orientation: portrait)').matches) {
+    wrap.style.removeProperty('width');
+    wrap.style.removeProperty('height');
+    return;
+  }
+  const size = Math.min(window.innerWidth * 0.96, Math.max(100, window.innerHeight - 300));
+  wrap.style.width = `${size}px`;
+  wrap.style.height = `${size}px`;
+}
+fitMobileBoard();
+window.addEventListener('resize', fitMobileBoard);
 
 const CELL=32, COLS=15, ROWS=15;
 CV.width=COLS*CELL; CV.height=ROWS*CELL;
