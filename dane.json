@@ -1,9 +1,11 @@
 {
-  "aktualizacja": "19.10.2026 18:15",
+  "aktualizacja": "19.10.2026 18:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
-    "wejscia_naruszone": []
+    "wejscia_naruszone": [
+      "Wejście 1"
+    ]
   },
   "rekuperator": {
     "bypass": "Zamknięty (auto)",
@@ -16,7 +18,7 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "65.2",
+    "cpu_ha": "62.8",
     "czerpnia": "10.3",
     "garaz": "unknown",
     "kotlownia": "unknown",
