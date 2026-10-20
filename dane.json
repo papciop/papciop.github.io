@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "20.10.2026 11:00",
+  "aktualizacja": "20.10.2026 11:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -36,13 +36,13 @@
     "sypialnia": "23.01",
     "sypialnia_klima": "25",
     "wiatrolap": "unknown",
-    "wyciag": "23.8",
-    "wyrzutnia": "13.7",
+    "wyciag": "23.9",
+    "wyrzutnia": "13.8",
     "zewnetrzna_polnoc": "unknown",
     "zewnetrzna_wschod": "unknown"
   },
   "wilgotnosc": {
-    "lazienka": "46",
+    "lazienka": "45",
     "piwnica": "64",
     "powietrze": "43.0",
     "stacja": "unavailable"
