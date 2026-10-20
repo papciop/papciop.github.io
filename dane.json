@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "20.10.2026 08:00",
+  "aktualizacja": "20.10.2026 08:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -17,7 +17,7 @@
   },
   "temperatury": {
     "cpu_ha": "64.3",
-    "czerpnia": "9.2",
+    "czerpnia": "9.3",
     "garaz": "unknown",
     "kotlownia": "unknown",
     "lazienka": "24.2",
@@ -44,7 +44,7 @@
   "wilgotnosc": {
     "lazienka": "49",
     "piwnica": "65",
-    "powietrze": "45.0",
+    "powietrze": "44.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
