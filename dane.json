@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "22.10.2026 15:00",
+  "aktualizacja": "22.10.2026 15:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,7 +16,7 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "65.2",
+    "cpu_ha": "63.8",
     "czerpnia": "11.1",
     "garaz": "unknown",
     "kotlownia": "unknown",
@@ -37,12 +37,12 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unknown",
     "wyciag": "24.0",
-    "wyrzutnia": "14.3",
+    "wyrzutnia": "14.2",
     "zewnetrzna_polnoc": "unknown",
     "zewnetrzna_wschod": "unknown"
   },
   "wilgotnosc": {
-    "lazienka": "50",
+    "lazienka": "51",
     "piwnica": "64",
     "powietrze": "44.0",
     "stacja": "unavailable"
