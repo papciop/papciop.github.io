@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#172d36" />
+    <title>Super Labirynt — gra planszowa</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body class="embedded-game">
+    <div class="page-shell">
+      <header class="topbar">
+        <a class="brand" href="#" aria-label="Super Labirynt — początek gry">
+          <span class="brand-mark" aria-hidden="true">𓂀</span>
+          <span>
+            <span class="brand-name">SUPER <b>LABIRYNT</b></span>
+            <span class="brand-caption">Wyprawa do skarbów faraonów</span>
+          </span>
+        </a>
+        <div class="top-actions">
+          <button class="quiet-button" id="rules-button" type="button">
+            <span aria-hidden="true">?</span> Zasady
+          </button>
+          <button class="quiet-button" id="new-game-button" type="button">
+            <span aria-hidden="true">↻</span> Nowa gra
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <section class="intro">
+          <div class="intro-copy">
+            <p class="eyebrow"><span></span> Starożytne skarby czekają</p>
+            <h1>Odnajdź drogę<br /><em>przez labirynt.</em></h1>
+            <p class="intro-text">
+              Przesuwaj korytarze, odkrywaj skarby i wróć bezpiecznie do swojej
+              bramy.
+            </p>
+          </div>
+          <div class="box-art" aria-label="Oryginalne pudełko gry Super Labirynt">
+            <img src="./assets/cover.webp" alt="Okładka gry Super Labirynt" />
+            <div class="box-art-caption">ORYGINALNA GRA<br />TOWARZYSKA</div>
+          </div>
+          <div class="intro-stats" aria-label="Informacje o grze">
+            <span><b>2–4</b> graczy</span>
+            <i></i>
+            <span><b>7 × 7</b> pól</span>
+            <i></i>
+            <span><b>24</b> skarby</span>
+          </div>
+        </section>
+
+        <section class="game-layout" aria-label="Gra Super Labirynt">
+          <div class="board-column">
+            <div class="board-heading">
+              <div>
+                <p class="eyebrow">Plansza wyprawy</p>
+                <h2>Wielki labirynt</h2>
+              </div>
+              <div class="turn-pill" id="turn-status" aria-live="polite">
+                <span class="turn-dot"></span>
+                <span>Przygotuj ruch</span>
+              </div>
+            </div>
+
+            <div class="board-wrap">
+              <div class="board-frame">
+                <div class="board-grid" id="board" aria-label="Plansza 7 na 7"></div>
+                <div class="insertion-arrows" id="insertion-arrows" aria-label="Wybierz miejsce wsunięcia kafelka"></div>
+              </div>
+              <div class="board-compass" aria-hidden="true">N</div>
+            </div>
+
+            <div class="board-instructions">
+              <span class="instruction-number" id="step-number">01</span>
+              <p id="instruction-text">Wybierz strzałkę, aby wsunąć kafelek do labiryntu.</p>
+              <span class="instruction-key" id="instruction-key">WSUŃ KORYTARZ</span>
+            </div>
+          </div>
+
+          <aside class="sidebar">
+            <section class="side-card current-card">
+              <div class="card-heading">
+                <div>
+                  <p class="eyebrow">Teraz gra</p>
+                  <h2 id="active-player-name">Gracz 1</h2>
+                </div>
+                <span class="player-token" id="active-player-token">1</span>
+              </div>
+              <div class="target-area">
+                <div class="target-art" id="target-art" tabindex="0" role="button" aria-label="Powiększ kartę celu">
+                  <img class="composite-card-template" id="target-image" src="./czystakarta.jpeg" alt="" />
+                  <img class="composite-card-symbol" id="target-symbol" alt="" hidden />
+                </div>
+                <div class="target-copy">
+                  <span class="target-label">Twój cel</span>
+                  <strong id="target-title">Odkryj skarb</strong>
+                  <span id="target-count">Skarb 1 z 12</span>
+                </div>
+              </div>
+              <div class="progress-track"><span id="progress-fill"></span></div>
+            </section>
+
+            <section class="side-card spare-card">
+              <div class="card-heading">
+                <div>
+                  <p class="eyebrow">Kafelek zapasowy</p>
+                  <h2>Obróć przed wsunięciem</h2>
+                </div>
+                <span class="rotate-symbol" aria-hidden="true">⤾</span>
+              </div>
+              <div class="spare-content">
+                <div class="spare-tile tile" id="spare-tile" aria-label="Kafelek zapasowy"></div>
+                <div class="spare-help">
+                  <span id="spare-shape">Korytarz</span>
+                  <small>Możesz obracać kafelek o 90°.</small>
+                </div>
+              </div>
+              <button class="rotate-button" id="rotate-button" type="button">
+                <span aria-hidden="true">⟳</span> Obróć kafelek
+              </button>
+            </section>
+
+            <section class="side-card players-card">
+              <div class="card-heading players-heading">
+                <div>
+                  <p class="eyebrow">Wyprawa</p>
+                  <h2>Poszukiwacze</h2>
+                </div>
+                <label class="player-count-label" for="player-count">Osoby</label>
+                <select id="player-count" aria-label="Liczba graczy">
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                </select>
+              </div>
+              <div class="opponent-settings">
+                <label for="opponent-mode">Przeciwnicy</label>
+                <select id="opponent-mode" aria-label="Rodzaj przeciwników">
+                  <option value="human">Inni gracze</option>
+                  <option value="computer" selected>Komputer</option>
+                </select>
+                <label class="difficulty-label" for="computer-difficulty">Poziom</label>
+                <select id="computer-difficulty" aria-label="Poziom trudności komputera">
+                  <option value="amateur">Amator</option>
+                  <option value="normal" selected>Normalny</option>
+                  <option value="expert">Expert</option>
+                </select>
+              </div>
+              <ul class="player-list" id="player-list"></ul>
+              <p class="settings-hint">Zmiana ustawień rozpocznie nową grę. W trybie komputerowym pierwszy poszukiwacz to Ty.</p>
+            </section>
+
+            <div class="turn-actions">
+              <button class="primary-button" id="end-turn-button" type="button" disabled>
+                <span id="end-turn-icon" aria-hidden="true">↗</span>
+                <span id="end-turn-label">Najpierw przesuń labirynt</span>
+              </button>
+              <p class="action-hint" id="action-hint">Ruch zaczyna się od wsunięcia kafelka.</p>
+            </div>
+          </aside>
+        </section>
+
+      </main>
+
+      <footer class="footer">
+        <span>SUPER LABIRYNT</span>
+        <span>Wierna, przeglądarkowa wersja rodzinnej gry z Twoich zdjęć</span>
+        <span>✦ 1991 · EGIPT</span>
+      </footer>
+    </div>
+
+    <dialog class="modal" id="rules-dialog" aria-labelledby="rules-title">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Instrukcja wyprawy</p>
+          <h2 id="rules-title">Jak grać?</h2>
+        </div>
+        <button class="modal-close" type="button" data-close-dialog aria-label="Zamknij">×</button>
+      </div>
+      <ol class="rules-list">
+        <li><b>Wsuń korytarz.</b> Wybierz jedną ze strzałek przy planszy. Kafelek zapasowy wejdzie w ten rząd lub kolumnę, a drugi koniec planszy wysunie nowy kafelek zapasowy.</li>
+        <li><b>Otwórz przejście.</b> Przed wsunięciem możesz obracać wolny kafelek; symbol obraca się razem z nim. Nie można od razu cofnąć poprzedniego wsunięcia.</li>
+        <li><b>Przejdź do celu.</b> Kliknij dowolne osiągalne pole. Korytarze muszą łączyć się bez przerwy. Zbierz skarb z karty, którą właśnie widzisz. Kliknij symbol, aby obejrzeć kafelek w powiększeniu.</li>
+        <li><b>Wróć do bramy.</b> Po zebraniu wszystkich swoich kart wróć na pole startowe. Wygrywa pierwszy poszukiwacz, który dotrze do swojej bramy.</li>
+      </ol>
+      <p class="rules-note">Na 12 stałych kafelkach znajdują się skarby oznaczone wyciętymi symbolami; narożniki są kolorowymi polami startowymi. Pozostałe skarby są rozmieszczane na ruchomych kafelkach. W panelu poszukiwaczy możesz wybrać grę z komputerem i jeden z trzech poziomów trudności. Plansza i labirynt losują nowy układ przy każdej rozgrywce.</p>
+      <button class="primary-button modal-done" type="button" data-close-dialog>Rozumiem, ruszajmy!</button>
+    </dialog>
+
+    <dialog class="modal new-game-modal" id="new-game-dialog" aria-labelledby="new-game-title">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Nowa wyprawa</p>
+          <h2 id="new-game-title">Gotowi na przygodę?</h2>
+        </div>
+        <button class="modal-close" type="button" data-close-dialog aria-label="Zamknij">×</button>
+      </div>
+      <p>Rozpoczęcie nowej gry przetasuje labirynt i karty skarbów.</p>
+      <button class="primary-button modal-done" id="confirm-new-game" type="button">Rozpocznij nową grę</button>
+    </dialog>
+
+    <dialog class="modal victory-modal" id="victory-dialog" aria-labelledby="victory-title">
+      <div class="victory-sparkle" aria-hidden="true">✦</div>
+      <p class="eyebrow">Wyprawa zakończona</p>
+      <h2 id="victory-title">Skarby odnalezione!</h2>
+      <p id="victory-message"></p>
+      <button class="primary-button modal-done" id="victory-new-game" type="button">Zagraj jeszcze raz</button>
+    </dialog>
+
+    <dialog class="modal target-preview-dialog" id="target-preview-dialog" aria-labelledby="target-preview-title">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Cel poszukiwacza</p>
+          <h2 id="target-preview-title">Skarb</h2>
+        </div>
+        <button class="modal-close" type="button" data-close-dialog aria-label="Zamknij">×</button>
+      </div>
+      <div class="target-preview-stage">
+        <div class="target-preview-card">
+          <img class="composite-card-template" id="target-preview-image" src="./czystakarta.jpeg" alt="" />
+          <img class="composite-card-symbol" id="target-preview-symbol" alt="" hidden />
+        </div>
+      </div>
+      <p class="tile-preview-caption" id="target-preview-caption"></p>
+      <button class="primary-button modal-done" type="button" data-close-dialog>Wróć do gry</button>
+    </dialog>
+
+    <dialog class="modal tile-preview-dialog" id="tile-preview-dialog" aria-labelledby="tile-preview-title">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Szczegóły kafelka</p>
+          <h2 id="tile-preview-title">Korytarz</h2>
+        </div>
+        <button class="modal-close" type="button" data-close-dialog aria-label="Zamknij">×</button>
+      </div>
+      <div class="tile-preview-stage">
+        <div class="tile tile-preview-tile" id="tile-preview"></div>
+      </div>
+      <p class="tile-preview-caption" id="tile-preview-caption"></p>
+      <button class="primary-button modal-done" type="button" data-close-dialog>Wróć do gry</button>
+    </dialog>
+
+    <script src="./game.js"></script>
+  </body>
+</html>

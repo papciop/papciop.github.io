@@ -96,7 +96,14 @@
       { storageKey: 'snake_scores_v2',  icon: '≋', name: 'Wąż',          unit: 'pkt' },
       { storageKey: 'tanki_scores',     icon: '▣', name: 'Tanki',         unit: 'pkt' },
       { storageKey: 'wilk_scores',      icon: 'W', name: 'Wilk i Zając',  unit: 'pkt' },
-      { storageKey: 'labirynt_scores',  icon: '▦', name: 'Labirynt Pro',  unit: 'pkt' }
+      { storageKey: 'labirynt_scores',  icon: '▦', name: 'Labirynt Pro',  unit: 'pkt' },
+      {
+        storageKey: 'super_labirynt_scores',
+        icon: '▦',
+        name: 'Super Labirynt',
+        unit: 'wygranych',
+        emptyMessage: 'Brak zwycięstw — wygraj grę, aby pojawić się w rankingu!'
+      }
     ];
 
     function getScores(storageKey) {
@@ -122,7 +129,7 @@
         sec.className = 'game-section';
         const posClass = ['gold','silver','bronze'];
         const rows = scores.length === 0
-          ? '<tr><td colspan="4" class="empty-msg">Brak wyników — zagraj i wpisz swój nick!</td></tr>'
+          ? `<tr><td colspan="4" class="empty-msg">${g.emptyMessage || 'Brak wyników — zagraj i wpisz swój nick!'}</td></tr>`
           : scores.map((s, i) => `
             <tr>
               <td class="rank-pos ${posClass[i]||''}">${i + 1}.

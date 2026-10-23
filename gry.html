@@ -147,7 +147,18 @@
       scroll-margin-top: 72px;
     }
 
-    #game-container.active { display: block; }
+    #game-container.active {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 0;
+      padding: 8px;
+      background: rgba(3, 8, 16, 0.3);
+      animation: fadeIn 0.3s ease;
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(12px); }
@@ -157,13 +168,31 @@
     .game-frame {
       display: block;
       width: 100%;
-      height: 75vh;
+      height: 0;
+      min-height: 0;
+      flex: 1 1 auto;
       border: none;
       border-radius: 4px;
     }
 
+    .game-frame.super-labirynt-frame { height: auto; }
+
+    .game-exit-button {
+      align-self: flex-start;
+      flex: 0 0 auto;
+      padding: 6px 18px;
+      border: 1px solid rgba(0, 212, 255, 0.3);
+      border-radius: 2px;
+      background: rgba(0, 212, 255, 0.1);
+      color: #00d4ff;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      cursor: pointer;
+    }
+
     @media (max-width: 640px) {
-      .game-frame { height: 85vh; }
+      #game-container.active { padding: 8px; }
     }
   </style>
 </head>
@@ -300,10 +329,25 @@
           </div>
         </div>
 
+        <div class="game-card" onclick="openGame('super-labirynt/index.html')">
+          <div class="corner-deco tl"></div>
+          <div class="corner-deco tr"></div>
+          <div class="corner-deco bl"></div>
+          <div class="corner-deco br"></div>
+          <div class="game-preview" style="padding:0;font-size:0"><img src="tlo-super-labirynt.jpeg" alt="" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:0"></div>
+          <div class="game-info">
+            <div class="game-title"><span class="rank-game-icon" aria-hidden="true">▦</span>Super Labirynt</div>
+            <p class="game-desc">Przesuwaj korytarze, zbieraj skarby i wróć do swojej bramy. Zagraj samodzielnie lub z komputerowymi przeciwnikami.</p>
+            <span class="game-tag">Planszowa</span>
+            <span class="game-tag">Labirynt</span>
+            <div class="play-btn">▶ &nbsp; ZAGRAJ</div>
+          </div>
+        </div>
+
       </div>
 
       <div id="game-container">
-        <button onclick="closeGame()" style="margin-bottom:12px;padding:6px 18px;background:rgba(0,212,255,0.1);border:1px solid rgba(0,212,255,0.3);color:#00d4ff;font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.15em;cursor:pointer;border-radius:2px;">◀ &nbsp; LISTA GIER</button>
+        <button class="game-exit-button" onclick="closeGame()">◀ &nbsp; LISTA GIER</button>
         <iframe id="game-frame" class="game-frame" src="" title="Gra" allow="autoplay" allowtransparency="true"></iframe>
       </div>
     </div>
@@ -322,6 +366,7 @@
     function openGame(src) {
       document.getElementById('games-grid').style.display = 'none';
       const frame = document.getElementById('game-frame');
+      frame.classList.toggle('super-labirynt-frame', src === 'super-labirynt/index.html');
       frame.addEventListener('load', function focusGame() {
         frame.removeEventListener('load', focusGame);
         frame.focus();
