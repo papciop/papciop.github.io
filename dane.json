@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "24.10.2026 11:00",
+  "aktualizacja": "24.10.2026 11:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,8 +16,8 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "63.8",
-    "czerpnia": "10.5",
+    "cpu_ha": "64.8",
+    "czerpnia": "10.4",
     "garaz": "unknown",
     "kotlownia": "unknown",
     "lazienka": "24.2",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unknown"
   },
   "wilgotnosc": {
-    "lazienka": "48",
+    "lazienka": "47",
     "piwnica": "63",
     "powietrze": "44.0",
     "stacja": "unavailable"
