@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "24.10.2026 15:15",
+  "aktualizacja": "24.10.2026 15:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unknown"
   },
   "wilgotnosc": {
-    "lazienka": "47",
+    "lazienka": "44",
     "piwnica": "63",
     "powietrze": "43.0",
     "stacja": "unavailable"
