@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "26.10.2026 10:15",
+  "aktualizacja": "26.10.2026 10:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -20,7 +20,7 @@
     "czerpnia": "11.1",
     "garaz": "unknown",
     "kotlownia": "unknown",
-    "lazienka": "24.4",
+    "lazienka": "24.2",
     "nagrzewnica": "0.3",
     "nawiew": "22.6",
     "parownica": "unavailable",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unknown"
   },
   "wilgotnosc": {
-    "lazienka": "55",
+    "lazienka": "54",
     "piwnica": "64",
     "powietrze": "46.0",
     "stacja": "unavailable"
