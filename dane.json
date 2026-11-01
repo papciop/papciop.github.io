@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "01.11.2026 03:15",
+  "aktualizacja": "01.11.2026 03:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -37,7 +37,7 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unknown",
     "wyciag": "23.9",
-    "wyrzutnia": "11.7",
+    "wyrzutnia": "11.6",
     "zewnetrzna_polnoc": "unknown",
     "zewnetrzna_wschod": "unknown"
   },
@@ -48,7 +48,7 @@
     "stacja": "unavailable"
   },
   "zmiekczacz": {
-    "dni_do_konca": "39",
+    "dni_do_konca": "38",
     "sol_procent": "60.0"
   }
 }
