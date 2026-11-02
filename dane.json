@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "02.11.2026 05:15",
+  "aktualizacja": "02.11.2026 05:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,7 +16,7 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "63.3",
+    "cpu_ha": "65.2",
     "czerpnia": "8.1",
     "garaz": "unknown",
     "kotlownia": "unknown",
@@ -37,7 +37,7 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unknown",
     "wyciag": "23.9",
-    "wyrzutnia": "11.9",
+    "wyrzutnia": "11.8",
     "zewnetrzna_polnoc": "unknown",
     "zewnetrzna_wschod": "unknown"
   },
