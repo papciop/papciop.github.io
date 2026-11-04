@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "04.11.2026 02:15",
+  "aktualizacja": "04.11.2026 02:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unknown"
   },
   "wilgotnosc": {
-    "lazienka": "47",
+    "lazienka": "46",
     "piwnica": "61",
     "powietrze": "42.0",
     "stacja": "unavailable"
