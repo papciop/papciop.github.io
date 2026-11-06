@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "06.11.2026 02:00",
+  "aktualizacja": "06.11.2026 02:15",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -26,9 +26,9 @@
     "parownica": "unavailable",
     "piwnica": "20.1",
     "pokoj_franka": "22.78",
-    "pokoj_z_jaskolka": "22.31",
+    "pokoj_z_jaskolka": "22.28",
     "rekuperator": "21.1",
-    "salon": "22.84",
+    "salon": "22.76",
     "salon_klima": "24",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
@@ -42,13 +42,13 @@
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "55",
+    "lazienka": "54",
     "piwnica": "60",
     "powietrze": "41.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
-    "dni_do_konca": "34",
+    "dni_do_konca": "33",
     "sol_procent": "60.0"
   }
 }
