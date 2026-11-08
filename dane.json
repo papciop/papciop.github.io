@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "08.11.2026 07:30",
+  "aktualizacja": "08.11.2026 07:45",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -22,12 +22,12 @@
     "kotlownia": "unavailable",
     "lazienka": "23.6",
     "nagrzewnica": "0.3",
-    "nawiew": "19.2",
+    "nawiew": "19.1",
     "parownica": "unavailable",
     "piwnica": "20.0",
     "pokoj_franka": "22.78",
     "pokoj_z_jaskolka": "22.22",
-    "rekuperator": "19.2",
+    "rekuperator": "19.1",
     "salon": "22.8",
     "salon_klima": "24",
     "stacja_1": "unavailable",
@@ -37,7 +37,7 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unavailable",
     "wyciag": "23.3",
-    "wyrzutnia": "2.4",
+    "wyrzutnia": "2.3",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
