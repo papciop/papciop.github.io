@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "11.11.2026 05:45",
+  "aktualizacja": "11.11.2026 06:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -17,7 +17,7 @@
   },
   "temperatury": {
     "cpu_ha": "51.6",
-    "czerpnia": "4.8",
+    "czerpnia": "4.7",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "23.6",
@@ -43,8 +43,8 @@
   },
   "wilgotnosc": {
     "lazienka": "43",
-    "piwnica": "58",
-    "powietrze": "38.0",
+    "piwnica": "57",
+    "powietrze": "39.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
