@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "17.11.2026 04:15",
+  "aktualizacja": "17.11.2026 04:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -17,7 +17,7 @@
   },
   "temperatury": {
     "cpu_ha": "51.6",
-    "czerpnia": "8.0",
+    "czerpnia": "8.2",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "24.2",
@@ -28,8 +28,8 @@
     "pokoj_franka": "23.06",
     "pokoj_z_jaskolka": "22.5",
     "rekuperator": "22.2",
-    "salon": "22.86",
-    "salon_klima": "25",
+    "salon": "22.89",
+    "salon_klima": "24",
     "stacja_1": "unavailable",
     "stacja_2": "unavailable",
     "strych": "unavailable",
@@ -37,7 +37,7 @@
     "sypialnia_klima": "25",
     "wiatrolap": "unavailable",
     "wyciag": "23.9",
-    "wyrzutnia": "11.7",
+    "wyrzutnia": "11.9",
     "zewnetrzna_polnoc": "unavailable",
     "zewnetrzna_wschod": "unavailable"
   },
