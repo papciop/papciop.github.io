@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "24.11.2026 14:15",
+  "aktualizacja": "24.11.2026 14:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,11 +16,11 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "49.7",
-    "czerpnia": "3.3",
+    "cpu_ha": "50.6",
+    "czerpnia": "3.2",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
-    "lazienka": "22.7",
+    "lazienka": "22.8",
     "nagrzewnica": "0.3",
     "nawiew": "21.1",
     "parownica": "unavailable",
