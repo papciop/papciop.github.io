@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "28.11.2026 03:15",
+  "aktualizacja": "28.11.2026 03:30",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -16,8 +16,8 @@
     "wyciag": "90.0"
   },
   "temperatury": {
-    "cpu_ha": "61.3",
-    "czerpnia": "1.2",
+    "cpu_ha": "61.8",
+    "czerpnia": "1.1",
     "garaz": "unavailable",
     "kotlownia": "unavailable",
     "lazienka": "22.7",
@@ -42,7 +42,7 @@
     "zewnetrzna_wschod": "unavailable"
   },
   "wilgotnosc": {
-    "lazienka": "51",
+    "lazienka": "50",
     "piwnica": "55",
     "powietrze": "38.0",
     "stacja": "unavailable"
