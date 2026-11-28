@@ -1,5 +1,5 @@
 {
-  "aktualizacja": "28.11.2026 10:45",
+  "aktualizacja": "28.11.2026 11:00",
   "alarm": {
     "strefa_1": "disarmed",
     "strefa_2": "disarmed",
@@ -44,7 +44,7 @@
   "wilgotnosc": {
     "lazienka": "43",
     "piwnica": "54",
-    "powietrze": "38.0",
+    "powietrze": "37.0",
     "stacja": "unavailable"
   },
   "zmiekczacz": {
